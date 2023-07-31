@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Configurations\" />
+    <Folder Include="Contexts\" />
+    <Folder Include="Exceptions\StorageExceptions\" />
+    <Folder Include="ExtensionMethods\" />
+    <Folder Include="Implementations\Repositories\" />
+    <Folder Include="Implementations\Services\Storage\" />
+    <Folder Include="Interceptors\" />
+    <Folder Include="MapperProfiles\" />
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\CareerCompassAPI.Application\CareerCompassAPI.Application.csproj" />
+  </ItemGroup>
+
+</Project>

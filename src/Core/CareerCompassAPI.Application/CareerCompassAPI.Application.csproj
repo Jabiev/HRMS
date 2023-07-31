@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstraction\Storage\" />
+    <Folder Include="Abstraction\Services\" />
+    <Folder Include="Abstraction\Repositories\" />
+    <Folder Include="Validators\" />
+    <Folder Include="DTOs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CareerCompassAPI.Domain\CareerCompassAPI.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
