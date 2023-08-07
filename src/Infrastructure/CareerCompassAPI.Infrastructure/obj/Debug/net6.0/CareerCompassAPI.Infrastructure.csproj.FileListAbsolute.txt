@@ -1,0 +1,17 @@
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\bin\Debug\net6.0\CareerCompassAPI.Infrastructure.deps.json
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\bin\Debug\net6.0\CareerCompassAPI.Infrastructure.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\bin\Debug\net6.0\CareerCompassAPI.Infrastructure.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\bin\Debug\net6.0\CareerCompassAPI.Application.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\bin\Debug\net6.0\CareerCompassAPI.Domain.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\bin\Debug\net6.0\CareerCompassAPI.Application.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\bin\Debug\net6.0\CareerCompassAPI.Domain.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\CareerCompassAPI.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\CareerCompassAPI.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\CareerCompassAPI.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\CareerCompassAPI.Infrastructure.AssemblyInfo.cs
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\CareerCompassAPI.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\CareerCompassAPI.Infrastructure.csproj.CopyComplete
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\CareerCompassAPI.Infrastructure.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\refint\CareerCompassAPI.Infrastructure.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\CareerCompassAPI.Infrastructure.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Infrastructure\obj\Debug\net6.0\ref\CareerCompassAPI.Infrastructure.dll

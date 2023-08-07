@@ -1,0 +1,17 @@
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\bin\Debug\net6.0\CareerCompassAPI.Persistence.deps.json
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\bin\Debug\net6.0\CareerCompassAPI.Persistence.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\bin\Debug\net6.0\CareerCompassAPI.Persistence.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\bin\Debug\net6.0\CareerCompassAPI.Application.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\bin\Debug\net6.0\CareerCompassAPI.Domain.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\bin\Debug\net6.0\CareerCompassAPI.Application.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\bin\Debug\net6.0\CareerCompassAPI.Domain.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\CareerCompassAPI.Persistence.csproj.AssemblyReference.cache
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\CareerCompassAPI.Persistence.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\CareerCompassAPI.Persistence.AssemblyInfoInputs.cache
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\CareerCompassAPI.Persistence.AssemblyInfo.cs
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\CareerCompassAPI.Persistence.csproj.CoreCompileInputs.cache
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\CareerCompassAPI.Persistence.csproj.CopyComplete
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\CareerCompassAPI.Persistence.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\refint\CareerCompassAPI.Persistence.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\CareerCompassAPI.Persistence.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.Persistence\obj\Debug\net6.0\ref\CareerCompassAPI.Persistence.dll

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "YxMIgswCju3/g4HLyIkHbq3vAWpVnlwS5fQ7y7Lr5Mw=",
+  "Source": "CareerCompassAPI.API",
+  "BasePath": "_content/CareerCompassAPI.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
