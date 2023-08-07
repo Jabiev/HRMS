@@ -21,13 +21,20 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<CareerCompassDbContext>();
 
+builder.Services.AddScoped<CareerCompassDbContextInitialiser>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
-
+using (var scope = app.Services.CreateScope())
+{
+    var instance = scope.ServiceProvider.GetRequiredService<CareerCompassDbContextInitialiser>();
+    await instance.InitialiseAsync();
+    await instance.RoleSeedAsync();
+    await instance.UserSeedAsync();
+}
 
 if (app.Environment.IsDevelopment())
 {

@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Configurations\" />
-    <Folder Include="Contexts\" />
     <Folder Include="Exceptions\StorageExceptions\" />
     <Folder Include="ExtensionMethods\" />
     <Folder Include="Implementations\Repositories\" />
