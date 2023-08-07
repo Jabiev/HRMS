@@ -16,7 +16,8 @@ namespace CareerCompassAPI.Application.Abstraction.Repositories
                                               int skip,
                                               Expression<Func<T, bool>> orderExpression,
                                               bool isOrdered = true,
-                                              bool isTracking = true);
+                                              bool isTracking = true,
+                                              params string[] includes);
         Task<T> GetByIdAsync(Guid Id);
         Task<T> GetByExpressionAsync(Expression<Func<T, bool>> expression, bool isTracking = true);
     }

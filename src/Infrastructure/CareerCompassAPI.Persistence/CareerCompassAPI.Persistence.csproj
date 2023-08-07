@@ -10,14 +10,12 @@
     <Folder Include="Configurations\" />
     <Folder Include="Exceptions\StorageExceptions\" />
     <Folder Include="ExtensionMethods\" />
-    <Folder Include="Implementations\Repositories\" />
     <Folder Include="Implementations\Services\Storage\" />
-    <Folder Include="Interceptors\" />
-    <Folder Include="MapperProfiles\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.20" />

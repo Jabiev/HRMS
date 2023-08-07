@@ -8,10 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Abstraction\Storage\" />
-    <Folder Include="Abstraction\Services\" />
-    <Folder Include="Abstraction\Repositories\" />
     <Folder Include="Validators\" />
-    <Folder Include="DTOs\" />
   </ItemGroup>
 
   <ItemGroup>
