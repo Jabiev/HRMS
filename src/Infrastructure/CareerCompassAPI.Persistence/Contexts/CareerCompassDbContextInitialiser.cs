@@ -45,16 +45,6 @@ namespace CareerCompassAPI.Persistence.Contexts
                 }
             }
         }
-        public async Task UserSeedAsync()
-        {
-            AppUser appUser = new()
-            {
-                UserName = _configuration["Master:username"],
-                Email = _configuration["Master:email"]
-            };
-            await _userManager.CreateAsync(appUser, _configuration["Master:password"]);
-            await _userManager.AddToRoleAsync(appUser, Roles.Master.ToString());
-        }
         public async Task SubscriptionsSeedAsync()
         {
             var subscriptions = new List<Subscriptions>
@@ -73,6 +63,18 @@ namespace CareerCompassAPI.Persistence.Contexts
                     await _subscriptionWriteRepository.SaveChangesAsync();
                 }
             }
+        }
+        public async Task UserSeedAsync()
+        {
+            var proSubId = await _subscriptionReadRepository.GetByExpressionAsync(s => s.Name == "Pro");
+            AppUser appUser = new()
+            {
+                UserName = _configuration["Master:username"],
+                Email = _configuration["Master:email"],
+                Subscription = proSubId
+            };
+            await _userManager.CreateAsync(appUser, _configuration["Master:password"]);
+            await _userManager.AddToRoleAsync(appUser, Roles.Master.ToString());
         }
     }
 }
