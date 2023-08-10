@@ -1,27 +1,14 @@
-using CareerCompassAPI.Application.Abstraction.Repositories;
-using CareerCompassAPI.Application.Abstraction.Repositories.IJobSeekerRepositories;
-using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
-using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository;
-using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
-using CareerCompassAPI.Persistence.Implementations.Repositories;
-using CareerCompassAPI.Persistence.Implementations.Repositories.JobSeekerRepositories;
-using CareerCompassAPI.Persistence.Implementations.Repositories.RecruiterRepositories;
-using CareerCompassAPI.Persistence.Implementations.Repositories.SubscriptionRepositories;
-using CareerCompassAPI.Persistence.Implementations.Services;
-using CareerCompassAPI.Persistence.MapperProfiles;
+using CareerCompassAPI.Persistence.ExtensionMethods;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 
 builder.Services.AddControllers();
-
-builder.Services.AddDbContext<CareerCompassDbContext>(options =>
-options.UseSqlServer(builder.Services.BuildServiceProvider().GetService<IConfiguration>().GetConnectionString("Default")));
+builder.Services.AddPersistenceServices(builder.Configuration);
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
 {
@@ -32,20 +19,9 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<CareerCompassDbContext>();
 
-builder.Services.AddScoped<CareerCompassDbContextInitialiser>();
-builder.Services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
-builder.Services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
-builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
-builder.Services.AddScoped<ISubscriptionReadRepository, SubscriptionReadRepository>();
-builder.Services.AddScoped<ISubscriptionWriteRepository, SubscriptionWriteRepository>();
-builder.Services.AddScoped<IJobSeekerReadRepository, JobSeekerReadRepository>();
-builder.Services.AddScoped<IJobSeekerWriteRepository, JobSeekerWriteRepository>();
-builder.Services.AddScoped<IRecruiterWriteRepository, RecruiterWriteRepository>();
-builder.Services.AddScoped<IRecruiterReadRepository, RecruiterReadRepository>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(typeof(SubscriptionProfile).Assembly);
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
