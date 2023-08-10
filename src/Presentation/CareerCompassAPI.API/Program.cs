@@ -1,11 +1,13 @@
 using CareerCompassAPI.Application.Abstraction.Repositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IJobSeekerRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Implementations.Repositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.JobSeekerRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.RecruiterRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.SubscriptionRepositories;
 using CareerCompassAPI.Persistence.Implementations.Services;
 using CareerCompassAPI.Persistence.MapperProfiles;
@@ -38,6 +40,8 @@ builder.Services.AddScoped<ISubscriptionReadRepository, SubscriptionReadReposito
 builder.Services.AddScoped<ISubscriptionWriteRepository, SubscriptionWriteRepository>();
 builder.Services.AddScoped<IJobSeekerReadRepository, JobSeekerReadRepository>();
 builder.Services.AddScoped<IJobSeekerWriteRepository, JobSeekerWriteRepository>();
+builder.Services.AddScoped<IRecruiterWriteRepository, RecruiterWriteRepository>();
+builder.Services.AddScoped<IRecruiterReadRepository, RecruiterReadRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

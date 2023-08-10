@@ -10,6 +10,10 @@ namespace CareerCompassAPI.Persistence.Contexts
     {
         public CareerCompassDbContext(DbContextOptions<CareerCompassDbContext> options):base(options) { }
         public DbSet<Subscriptions> Subscriptions { get; set; }
+        public DbSet<JobSeeker> JobSeekers { get; set; }
+        public DbSet<Recruiter> Recruiters { get; set; }
+
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var datas = ChangeTracker.Entries<BaseEntity>();

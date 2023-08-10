@@ -1,4 +1,5 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Repositories.IJobSeekerRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Auth_DTOs;
@@ -16,13 +17,16 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly IJobSeekerWriteRepository _jobSeekerWriteRepository;
         private readonly ISubscriptionReadRepository _subscriptionReadRepository;
+        private readonly IRecruiterWriteRepository _recruiterWriteRepository;
         public AuthService(UserManager<AppUser> userManager,
                            IJobSeekerWriteRepository jobSeekerWriteRepository,
-                           ISubscriptionReadRepository subscriptionReadRepository)
+                           ISubscriptionReadRepository subscriptionReadRepository,
+                           IRecruiterWriteRepository recruiterWriteRepository)
         {
             _userManager = userManager;
             _jobSeekerWriteRepository = jobSeekerWriteRepository;
             _subscriptionReadRepository = subscriptionReadRepository;
+            _recruiterWriteRepository = recruiterWriteRepository;
         }
         public async Task Register(UserRegisterDto userRegisterDto)
         {
@@ -30,8 +34,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             AppUser appUser = new()
             {
                 UserName = userRegisterDto.email,
-                FirstName = userRegisterDto.firstName,
-                LastName = userRegisterDto.lastName,
                 Email = userRegisterDto.email,
                 Subscription = freeSubscription
             };
@@ -58,15 +60,25 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             if (userRegisterDto.role == Roles.JobSeeker)
             {
-                JobSeekers jobSeeker = new()
+                JobSeeker jobSeeker = new()
                 {
                     AppUserId = appUser.Id,
                     FirstName = userRegisterDto.firstName,
                     LastName = userRegisterDto.lastName,
-                    Email = userRegisterDto.email,
                 };
                 await _jobSeekerWriteRepository.AddAsync(jobSeeker);
                 await _jobSeekerWriteRepository.SaveChangesAsync();
+            }
+            if (userRegisterDto.role == Roles.Recruiter)
+            {
+                Recruiter recruiter = new()
+                {
+                    AppUserId = appUser.Id,
+                    FirstName = userRegisterDto.firstName,
+                    LastName = userRegisterDto.lastName,
+                };
+                await _recruiterWriteRepository.AddAsync(recruiter);
+                await _recruiterWriteRepository.SaveChangesAsync();
             }
         }
     }

@@ -2,7 +2,7 @@
 
 namespace CareerCompassAPI.Application.Abstraction.Repositories.IJobSeekerRepositories
 {
-    public interface IJobSeekerReadRepository:IReadRepository<JobSeekers>
+    public interface IJobSeekerReadRepository:IReadRepository<JobSeeker>
     {
     }
 }
