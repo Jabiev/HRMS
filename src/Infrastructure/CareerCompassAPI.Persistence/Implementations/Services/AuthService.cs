@@ -26,7 +26,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         }
         public async Task Register(UserRegisterDto userRegisterDto)
         {
-            var freeSubscription = await _subscriptionReadRepository.GetByExpressionAsync(s => s.Name == "Free");
+            var freeSubscription = await _subscriptionReadRepository.GetByExpressionAsync(s => s.Price == 0);
             AppUser appUser = new()
             {
                 UserName = userRegisterDto.email,
