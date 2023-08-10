@@ -48,22 +48,23 @@ namespace CareerCompassAPI.Persistence.Contexts
         public async Task SubscriptionsSeedAsync()
         {
             var subscriptions = new List<Subscriptions>
-            {
-                new Subscriptions{Name = "Free", Price = 0, PostLimit = 3},
-                new Subscriptions{Name = "Basic", Price = 29.99M, PostLimit = 10},
-                new Subscriptions{Name = "Pro", Price = 59.99M, PostLimit = -1}
-            };
+    {
+        new Subscriptions { Name = "Free", Price = 0, PostLimit = 3 },
+        new Subscriptions { Name = "Basic", Price = 29.99M, PostLimit = 10 },
+        new Subscriptions { Name = "Pro", Price = 59.99M, PostLimit = -1 }
+    };
             foreach (var subscription in subscriptions)
             {
                 var existingSubscription = await _subscriptionReadRepository.GetByExpressionAsync(s => s.Name == subscription.Name);
 
                 if (existingSubscription is null)
                 {
-                    await _subscriptionWriteRepository.AddAsync(subscription);
-                    await _subscriptionWriteRepository.SaveChangesAsync();
+                    await _subscriptionWriteRepository.AddAsync(subscription); 
                 }
             }
+            await _subscriptionWriteRepository.SaveChangesAsync();
         }
+
         public async Task UserSeedAsync()
         {
             var proSubId = await _subscriptionReadRepository.GetByExpressionAsync(s => s.Name == "Pro");
