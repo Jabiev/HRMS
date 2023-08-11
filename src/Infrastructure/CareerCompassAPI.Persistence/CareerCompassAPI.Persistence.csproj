@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\CareerCompassAPI.Application\CareerCompassAPI.Application.csproj" />
+    <ProjectReference Include="..\CareerCompassAPI.Infrastructure\CareerCompassAPI.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

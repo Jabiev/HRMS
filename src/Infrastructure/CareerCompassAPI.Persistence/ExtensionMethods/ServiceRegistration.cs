@@ -13,6 +13,7 @@ using CareerCompassAPI.Persistence.MapperProfiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using CareerCompassAPI.Infrastructure.Services.Token;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -25,6 +26,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             AddWriteRepositories(services);
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IJwtService, JwtService>();
             services.AddAutoMapper(typeof(SubscriptionProfile).Assembly);
             services.AddDbContext<CareerCompassDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("Default")));

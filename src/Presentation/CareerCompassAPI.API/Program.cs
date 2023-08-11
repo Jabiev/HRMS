@@ -22,6 +22,11 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -32,17 +37,16 @@ using (var scope = app.Services.CreateScope())
     await instance.SubscriptionsSeedAsync();
     await instance.UserSeedAsync();
 }
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
