@@ -12,7 +12,9 @@ namespace CareerCompassAPI.Persistence.Contexts
         public DbSet<Subscriptions> Subscriptions { get; set; }
         public DbSet<JobSeeker> JobSeekers { get; set; }
         public DbSet<Recruiter> Recruiters { get; set; }
-
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<Industry> Industries { get; set; }
+        public DbSet<CompanyDetails> CompanyDetails { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
