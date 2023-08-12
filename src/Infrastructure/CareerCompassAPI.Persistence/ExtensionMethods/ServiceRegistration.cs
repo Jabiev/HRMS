@@ -16,6 +16,8 @@ using Microsoft.Extensions.Configuration;
 using CareerCompassAPI.Infrastructure.Services.Token;
 using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.CompanyRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IIndustryRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.IndustryRepositories;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -29,6 +31,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IIndustryService, IndustryService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddAutoMapper(typeof(SubscriptionProfile).Assembly);
             services.AddDbContext<CareerCompassDbContext>(options =>
@@ -42,6 +45,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IJobSeekerReadRepository, JobSeekerReadRepository>();
             services.AddScoped<IRecruiterReadRepository, RecruiterReadRepository>();
             services.AddScoped<ICompanyReadRepository, CompanyReadRepository>();    
+            services.AddScoped<IIndustryReadRepository, IndustryReadRepository>();
         }
 
         private static void AddWriteRepositories(IServiceCollection services)
@@ -51,6 +55,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IJobSeekerWriteRepository, JobSeekerWriteRepository>();
             services.AddScoped<IRecruiterWriteRepository, RecruiterWriteRepository>();
             services.AddScoped<ICompanyWriteRepository, CompanyWriteRepository>();
+            services.AddScoped<IIndustryWriteRepository,IndustryWriteRepository>();
         }
     }
 }

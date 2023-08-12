@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Abstraction\Repositories\ICompanyRepositories\" />
     <Folder Include="Abstraction\Storage\" />
     <Folder Include="Validators\" />
   </ItemGroup>
