@@ -10,11 +10,14 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
     {
         private readonly ICompanyWriteRepository _companyWriteRepository;
         private readonly IIndustryReadRepository _industryReadRepository;
+        private readonly ICompanyReadRepository _companyReadRepository;
         public CompanyService(ICompanyWriteRepository companyWriteRepository,
-                              IIndustryReadRepository industryReadRepository)
+                              IIndustryReadRepository industryReadRepository,
+                              ICompanyReadRepository companyReadRepository)
         {
             _companyWriteRepository = companyWriteRepository;
             _industryReadRepository = industryReadRepository;
+            _companyReadRepository = companyReadRepository;
         }
         public async Task CreateAsync(CompanyCreateDto companyCreateDto)
         {
@@ -38,6 +41,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 Details = newCompanyDetails
             };
             await _companyWriteRepository.AddAsync(newCompany);
+            await _companyWriteRepository.SaveChangesAsync();
+        }
+
+        public async Task Remove(Guid companyId)
+        {
+            var company = await _companyReadRepository.GetByIdAsync(companyId);
+            if (company is not Company)
+            {
+                throw new ArgumentNullException();
+            }
+            _companyWriteRepository.Remove(company);
             await _companyWriteRepository.SaveChangesAsync();
         }
     }

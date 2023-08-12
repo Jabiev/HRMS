@@ -2,6 +2,7 @@
 using CareerCompassAPI.Application.DTOs.Company_DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace CareerCompassAPI.API.Controllers
 {
@@ -15,9 +16,15 @@ namespace CareerCompassAPI.API.Controllers
             _companyService = companyService;
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create(CompanyCreateDto companyCreateDto)
+        public async Task<IActionResult> Create([FromBody]CompanyCreateDto companyCreateDto)
         {
             await _companyService.CreateAsync(companyCreateDto);
+            return StatusCode((int)HttpStatusCode.Created);
+        }
+        [HttpDelete("[action]/{companyId}")]
+        public async Task<IActionResult> Remove(Guid companyId)
+        {
+            await _companyService.Remove(companyId);
             return Ok();
         }
     }
