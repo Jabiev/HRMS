@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CareerCompassAPI.Persistence.Migrations
 {
-    public partial class CompanyRecruitersIndustryTables : Migration
+    public partial class CompanyIndustryTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,12 +29,12 @@ namespace CareerCompassAPI.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Ceo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateFounded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Ceo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateFounded = table.Column<int>(type: "int", nullable: false),
                     CompanySize = table.Column<int>(type: "int", nullable: false),
                     IndustryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareerCompassAPI.Persistence.Migrations
 {
     [DbContext(typeof(CareerCompassDbContext))]
-    [Migration("20230812142835_CompanyRecruitersIndustryTables")]
-    partial class CompanyRecruitersIndustryTables
+    [Migration("20230812155446_CompanyIndustryTables")]
+    partial class CompanyIndustryTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -65,7 +65,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Ceo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CompanySize")
@@ -74,14 +73,13 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateFounded")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("DateFounded")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("IndustryId")
@@ -91,7 +89,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Link")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

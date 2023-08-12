@@ -71,8 +71,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateFounded")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("DateFounded")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");

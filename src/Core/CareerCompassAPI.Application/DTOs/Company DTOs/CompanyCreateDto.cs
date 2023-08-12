@@ -2,5 +2,5 @@
 
 namespace CareerCompassAPI.Application.DTOs.Company_DTOs
 {
-    public record CompanyCreateDto(string name,string ceoName,DateTime dateFounded, int companySize, Guid industryId, string websiteLink, string description);
+    public record CompanyCreateDto(string name,string ceoName,int dateFounded, int companySize, Guid industryId, string websiteLink, string description);
 }
