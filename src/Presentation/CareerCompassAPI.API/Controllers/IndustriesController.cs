@@ -1,6 +1,5 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Industry_DTOs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareerCompassAPI.API.Controllers

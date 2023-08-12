@@ -82,3 +82,6 @@ C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentatio
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\CareerCompassAPI.Infrastructure.dll
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\CareerCompassAPI.Infrastructure.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\FluentValidation.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll

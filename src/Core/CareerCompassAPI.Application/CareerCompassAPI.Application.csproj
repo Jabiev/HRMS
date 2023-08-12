@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <Folder Include="Abstraction\Storage\" />
-    <Folder Include="Validators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.7.0" />
   </ItemGroup>
 
   <ItemGroup>

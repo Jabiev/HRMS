@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "V26ajbt5tyrhyMkzMFB0HE/tLcxPtRsjISHhzM+I/82MH/fJQR17rPf+yiKo6cGcjRnlRxvmC8wHarOCUYL6xQ==",
+  "dgSpecHash": "8yjc9s5u/8vV7I4VCLEtVph/w5BcBlyMKDOaYoCMMpvF2LAR9jlu5i9VveHhVJ1QotRecN3KRfL9m03/4u752g==",
   "success": true,
   "projectFilePath": "C:\\Users\\Rhabi\\OneDrive\\Documents\\CareerCompass\\CareerCompassAPI\\src\\Infrastructure\\CareerCompassAPI.Infrastructure\\CareerCompassAPI.Infrastructure.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Rhabi\\.nuget\\packages\\fluentvalidation\\11.7.0\\fluentvalidation.11.7.0.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.20\\microsoft.aspnetcore.authentication.jwtbearer.6.0.20.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.20\\microsoft.aspnetcore.cryptography.internal.6.0.20.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\6.0.20\\microsoft.aspnetcore.cryptography.keyderivation.6.0.20.nupkg.sha512",

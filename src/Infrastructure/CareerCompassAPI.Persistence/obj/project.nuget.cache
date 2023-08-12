@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "hOdEv4y7LBMbuJ39FcDVsdhiOd4ffwb8c8dgpMiONlqrfhJs3HujaD0fK13qE8DJQwGViKF2rfzczxpl7/sk/Q==",
+  "dgSpecHash": "vuHzIDE8mCuT9tAuctd5RG5oBzZ21lldT/Erb63oMYph46yG6JVQKq63r5eaeP4w2B/+Oqpj48FKd2N9VCKUZA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Rhabi\\OneDrive\\Documents\\CareerCompass\\CareerCompassAPI\\src\\Infrastructure\\CareerCompassAPI.Persistence\\CareerCompassAPI.Persistence.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Rhabi\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
+    "C:\\Users\\Rhabi\\.nuget\\packages\\fluentvalidation\\11.7.0\\fluentvalidation.11.7.0.nupkg.sha512",
+    "C:\\Users\\Rhabi\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\Rhabi\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\microsoft.aspnetcore.authentication.cookies\\2.2.0\\microsoft.aspnetcore.authentication.cookies.2.2.0.nupkg.sha512",

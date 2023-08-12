@@ -28,6 +28,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 Ceo = companyCreateDto.ceoName,
                 DateFounded = companyCreateDto.dateFounded,
                 Industry = industry,
+                CompanySize = companyCreateDto.companySize,
                 Link = companyCreateDto.websiteLink,
                 Description = companyCreateDto.description
             };

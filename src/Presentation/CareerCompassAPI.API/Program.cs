@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddPersistenceServices(builder.Configuration);
-
+builder.Services.AddFluentValidationValidators();
 builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
 {
     identityOption.User.RequireUniqueEmail = true;
