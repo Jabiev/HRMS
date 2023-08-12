@@ -24,21 +24,22 @@ namespace CareerCompassAPI.Infrastructure.Services.Token
         {
             DateTime jwtExpiration = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:EXPIRATION_MINUTES"]));
             var roles = await _userManager.GetRolesAsync(user);
-            string userRole = roles.FirstOrDefault();
-            Claim[] claims = new Claim[]
+
+            List<Claim> claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // subject user id
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // new JWT ID
+        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()), // date time token generated
+        new Claim(ClaimTypes.NameIdentifier, user.Email.ToString()), // Unique name identifier of the user (email)
+    };
+
+            // Add a claim for each role
+            foreach (var role in roles)
             {
-                new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
-                // subject user id
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-                // new JWT ID
-                new Claim(JwtRegisteredClaimNames.Iat,DateTime.UtcNow.ToString()),
-                // date time token generated
-                new Claim(ClaimTypes.NameIdentifier,user.Email.ToString()),
-                // Unique name identifier of the user (email)
-                new Claim(ClaimTypes.Role, userRole)
-            };
-            var securityKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
             SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken tokenGenerator = new JwtSecurityToken(
@@ -54,10 +55,11 @@ namespace CareerCompassAPI.Infrastructure.Services.Token
 
             string refreshToken = GenerateRefeshToken();
 
-            //add expiration 
+            // add expiration 
             DateTime refreshTokenExpiration = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["RefreshToken:EXPIRATION_MINUTES"]));
             return new TokenResponseDto(token, jwtExpiration, refreshToken, refreshTokenExpiration);
         }
+
 
         private string GenerateRefeshToken()
         {
