@@ -27,7 +27,6 @@ public class NotificationService : INotificationService
 
     public async Task<NotificationResponseDto> CreateAsync(Guid userId, string title, string message)
     {
-        
         var notification = new Notification
         {
             Title = title,
@@ -38,15 +37,15 @@ public class NotificationService : INotificationService
         await _notificationWriteRepository.AddAsync(notification);
         await _notificationWriteRepository.SaveChangesAsync();
 
-        return new NotificationResponseDto(title, message);
+        return new NotificationResponseDto(title, message, DateTime.UtcNow);
     }
 
 
     public async Task<IEnumerable<NotificationResponseDto>> GetNotificationsAsync(Guid userId)
     {
         var notifications = await _notificationReadRepository.GetByUserIdAsync(userId);
-
-        return notifications.Select(n => new NotificationResponseDto(n.Title, n.Message));
+        return notifications.Select(n => new NotificationResponseDto(n.Title, n.Message, n.DateCreated));
     }
+
 
 }

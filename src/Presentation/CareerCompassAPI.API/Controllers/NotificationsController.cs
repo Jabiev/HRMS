@@ -15,9 +15,8 @@ namespace CareerCompassAPI.API.Controllers
         [HttpGet("[action]/{userId}")]
         public async Task<IActionResult> GetNotifications(Guid userId)
         {
-           var response = await _notificationService.GetNotificationsAsync(userId);
+            var response = await _notificationService.GetNotificationsAsync(userId);
             return Ok(response);
         }
-
     }
 }
