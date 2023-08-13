@@ -2,12 +2,14 @@
 
 namespace CareerCompassAPI.Domain.Entities
 {
-    public class Vacancy:BaseEntity
+    public class Vacancy : BaseEntity
     {
-        public ExperienceLevel ExperienceLevel { get; set; }
-        public Recruiter Recruiter { get; set; }
+        public string JobTitle { get; set; } = null!;
+        public ExperienceLevel ExperienceLevel { get; set; } = null!;
+        public Recruiter Recruiter { get; set; } = null!;
         public decimal Salary { get; set; }
-        public JobType JobType { get; set; }
-        public ICollection<ShiftAndScheduleTag> ShiftAndScheduleTags { get; set; }
+        public JobType JobType { get; set; } = null!;
+        public ICollection<ShiftAndSchedule> ShiftAndSchedules { get; set; } = null!;
+        public JobLocation JobLocation { get; set; }
     }
 }

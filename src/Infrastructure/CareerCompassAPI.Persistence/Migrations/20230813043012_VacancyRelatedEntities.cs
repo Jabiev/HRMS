@@ -5,16 +5,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CareerCompassAPI.Persistence.Migrations
 {
-    public partial class ExpShiftJobType : Migration
+    public partial class VacancyRelatedEntities : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_Subscriptions_SubscriptionsId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_SubscriptionsId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "SubscriptionsId",
+                table: "AspNetUsers");
+
             migrationBuilder.CreateTable(
                 name: "ExperienceLevels",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LevelName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -23,11 +34,23 @@ namespace CareerCompassAPI.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "JobLocations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobLocationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobLocations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TypeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -36,16 +59,15 @@ namespace CareerCompassAPI.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShiftAndScheduleTags",
+                name: "ShiftAndSchedules",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ShiftName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShiftAndScheduleTags", x => x.Id);
+                    table.PrimaryKey("PK_ShiftAndSchedules", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,10 +75,12 @@ namespace CareerCompassAPI.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExperienceLevelId = table.Column<int>(type: "int", nullable: false),
+                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExperienceLevelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RecruiterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    JobTypeId = table.Column<int>(type: "int", nullable: false),
+                    JobTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobLocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -68,6 +92,12 @@ namespace CareerCompassAPI.Persistence.Migrations
                         name: "FK_Vacancy_ExperienceLevels_ExperienceLevelId",
                         column: x => x.ExperienceLevelId,
                         principalTable: "ExperienceLevels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Vacancy_JobLocations_JobLocationId",
+                        column: x => x.JobLocationId,
+                        principalTable: "JobLocations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -85,23 +115,23 @@ namespace CareerCompassAPI.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShiftAndScheduleTagVacancy",
+                name: "ShiftAndScheduleVacancy",
                 columns: table => new
                 {
-                    ShiftAndScheduleTagsId = table.Column<int>(type: "int", nullable: false),
+                    ShiftAndSchedulesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VacanciesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShiftAndScheduleTagVacancy", x => new { x.ShiftAndScheduleTagsId, x.VacanciesId });
+                    table.PrimaryKey("PK_ShiftAndScheduleVacancy", x => new { x.ShiftAndSchedulesId, x.VacanciesId });
                     table.ForeignKey(
-                        name: "FK_ShiftAndScheduleTagVacancy_ShiftAndScheduleTags_ShiftAndScheduleTagsId",
-                        column: x => x.ShiftAndScheduleTagsId,
-                        principalTable: "ShiftAndScheduleTags",
+                        name: "FK_ShiftAndScheduleVacancy_ShiftAndSchedules_ShiftAndSchedulesId",
+                        column: x => x.ShiftAndSchedulesId,
+                        principalTable: "ShiftAndSchedules",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ShiftAndScheduleTagVacancy_Vacancy_VacanciesId",
+                        name: "FK_ShiftAndScheduleVacancy_Vacancy_VacanciesId",
                         column: x => x.VacanciesId,
                         principalTable: "Vacancy",
                         principalColumn: "Id",
@@ -109,14 +139,19 @@ namespace CareerCompassAPI.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShiftAndScheduleTagVacancy_VacanciesId",
-                table: "ShiftAndScheduleTagVacancy",
+                name: "IX_ShiftAndScheduleVacancy_VacanciesId",
+                table: "ShiftAndScheduleVacancy",
                 column: "VacanciesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vacancy_ExperienceLevelId",
                 table: "Vacancy",
                 column: "ExperienceLevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vacancy_JobLocationId",
+                table: "Vacancy",
+                column: "JobLocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vacancy_JobTypeId",
@@ -132,10 +167,10 @@ namespace CareerCompassAPI.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ShiftAndScheduleTagVacancy");
+                name: "ShiftAndScheduleVacancy");
 
             migrationBuilder.DropTable(
-                name: "ShiftAndScheduleTags");
+                name: "ShiftAndSchedules");
 
             migrationBuilder.DropTable(
                 name: "Vacancy");
@@ -144,7 +179,28 @@ namespace CareerCompassAPI.Persistence.Migrations
                 name: "ExperienceLevels");
 
             migrationBuilder.DropTable(
+                name: "JobLocations");
+
+            migrationBuilder.DropTable(
                 name: "JobTypes");
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "SubscriptionsId",
+                table: "AspNetUsers",
+                type: "uniqueidentifier",
+                nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_SubscriptionsId",
+                table: "AspNetUsers",
+                column: "SubscriptionsId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Subscriptions_SubscriptionsId",
+                table: "AspNetUsers",
+                column: "SubscriptionsId",
+                principalTable: "Subscriptions",
+                principalColumn: "Id");
         }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace CareerCompassAPI.Domain.Entities
 {
-    public class ShiftAndScheduleTag
+    public class ShiftAndSchedule
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string ShiftName { get; set; }
         public ICollection<Vacancy> Vacancies { get; set; }
     }
