@@ -201,6 +201,44 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.ToTable("JobTypes");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReadStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Recruiter", b =>
                 {
                     b.Property<Guid>("Id")
@@ -595,6 +633,15 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Recruiter", b =>
                 {
                     b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "AppUser")
@@ -756,6 +803,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                 {
                     b.Navigation("JobSeekers")
                         .IsRequired();
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("Recruiters")
                         .IsRequired();

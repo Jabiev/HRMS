@@ -18,6 +18,9 @@ using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories
 using CareerCompassAPI.Persistence.Implementations.Repositories.CompanyRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IIndustryRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.IndustryRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.INotificationRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.NotificationRepositories;
+using Hangfire;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -33,9 +36,16 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IIndustryService, IndustryService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<INotificationService, NotificationService>();
             services.AddAutoMapper(typeof(SubscriptionProfile).Assembly);
             services.AddDbContext<CareerCompassDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("Default")));
+            services.AddHangfire(x =>
+            {
+                x.UseSqlServerStorage(configuration.GetConnectionString("Default"));
+            });
+            services.AddHangfireServer();
+            services.AddHttpContextAccessor();
         }
 
         private static void AddReadRepositories(IServiceCollection services)
@@ -46,6 +56,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IRecruiterReadRepository, RecruiterReadRepository>();
             services.AddScoped<ICompanyReadRepository, CompanyReadRepository>();    
             services.AddScoped<IIndustryReadRepository, IndustryReadRepository>();
+            services.AddScoped<INotificationReadRepository, NotificationReadRepository>();
         }
 
         private static void AddWriteRepositories(IServiceCollection services)
@@ -56,6 +67,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IRecruiterWriteRepository, RecruiterWriteRepository>();
             services.AddScoped<ICompanyWriteRepository, CompanyWriteRepository>();
             services.AddScoped<IIndustryWriteRepository,IndustryWriteRepository>();
+            services.AddScoped<INotificationWriteRepository,NotificationWriteRepository>();
         }
     }
 }

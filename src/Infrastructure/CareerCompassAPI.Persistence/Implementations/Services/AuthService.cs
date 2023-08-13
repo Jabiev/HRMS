@@ -9,6 +9,7 @@ using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions.AuthExceptions;
+using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
@@ -24,13 +25,15 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IJwtService _jwtService;
         private readonly CareerCompassDbContext _context;
+        private readonly INotificationService _notificationService;
         public AuthService(UserManager<AppUser> userManager,
                            IJobSeekerWriteRepository jobSeekerWriteRepository,
                            ISubscriptionReadRepository subscriptionReadRepository,
                            IRecruiterWriteRepository recruiterWriteRepository,
                            SignInManager<AppUser> signInManager,
                            IJwtService jwtService,
-                           CareerCompassDbContext context)
+                           CareerCompassDbContext context,
+                           INotificationService notificationService)
         {
             _userManager = userManager;
             _jobSeekerWriteRepository = jobSeekerWriteRepository;
@@ -39,6 +42,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _signInManager = signInManager;
             _jwtService = jwtService;
             _context = context;
+            _notificationService = notificationService;
         }
 
         public async Task<TokenResponseDto> Login(UserSignInDto userSignInDto)
@@ -111,6 +115,11 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 };
                 await _recruiterWriteRepository.AddAsync(recruiter);
                 await _recruiterWriteRepository.SaveChangesAsync();
+
+                var userId = Guid.Parse(appUser.Id);
+                var title = "Welcome to Career Compass";
+                var message = "Please register your company's name before proceeding to post any job vacancies.";
+                BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(userId,title, message), TimeSpan.FromSeconds(30));
             }
         }
 

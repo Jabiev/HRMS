@@ -19,6 +19,7 @@ namespace CareerCompassAPI.Persistence.Contexts
         public DbSet<ExperienceLevel> ExperienceLevels { get; set; }
         public DbSet<ShiftAndSchedule> ShiftAndSchedules { get; set; }
         public DbSet<JobLocation> JobLocations { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
