@@ -8,6 +8,6 @@ namespace CareerCompassAPI.Domain.Entities
         public string Name { get; set; }
         public decimal Price { get; set; }
         public int PostLimit { get; set; }
-        public ICollection<AppUser> Users { get; set; }
+        public ICollection<Recruiter> Recruiters { get; set; }
     }
 }

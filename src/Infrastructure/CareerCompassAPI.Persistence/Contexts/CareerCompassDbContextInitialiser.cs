@@ -59,7 +59,7 @@ namespace CareerCompassAPI.Persistence.Contexts
 
                 if (existingSubscription is null)
                 {
-                    await _subscriptionWriteRepository.AddAsync(subscription); 
+                    await _subscriptionWriteRepository.AddAsync(subscription);
                 }
             }
             await _subscriptionWriteRepository.SaveChangesAsync();
@@ -67,15 +67,56 @@ namespace CareerCompassAPI.Persistence.Contexts
 
         public async Task UserSeedAsync()
         {
-            var proSubId = await _subscriptionReadRepository.GetByExpressionAsync(s => s.Name == "Pro");
+            var proSubId = await _subscriptionReadRepository.GetByExpressionAsync(s => s.PostLimit == -1);
             AppUser appUser = new()
             {
                 UserName = _configuration["Master:username"],
                 Email = _configuration["Master:email"],
-                Subscription = proSubId
             };
             await _userManager.CreateAsync(appUser, _configuration["Master:password"]);
             await _userManager.AddToRoleAsync(appUser, Roles.Master.ToString());
         }
+        public async Task JobTypeSeed()
+        {
+            var jobTypes = new List<JobType>()
+            {
+                new JobType {TypeName = "PartTime"},
+                new JobType {TypeName = "FullTime"},
+            };
+
+            foreach (var jobType in jobTypes)
+            {
+                var existingType = await _context.JobTypes
+                    .AnyAsync(j => j.TypeName == jobType.TypeName);
+
+                if (!existingType)
+                {
+                     _context.JobTypes.Add(jobType);
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
+        public async Task ExperienceLevelSeed()
+        {
+            var experienceLevels = new List<ExperienceLevel>
+    {
+        new ExperienceLevel { LevelName = "Entry"},
+        new ExperienceLevel { LevelName = "Mid"},
+        new ExperienceLevel { LevelName = "Senior"},
+        new ExperienceLevel { LevelName = "No Experience"},
+    };
+
+            foreach (var experience in experienceLevels)
+            {
+                var existingLevel = await _context.ExperienceLevels
+                    .AnyAsync(e => e.LevelName == experience.LevelName);
+                if (!existingLevel)
+                {
+                    _context.ExperienceLevels.Add(experience);
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

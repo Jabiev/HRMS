@@ -15,5 +15,6 @@ namespace CareerCompassAPI.Domain.Entities
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Location { get; set; }
+        public Subscriptions Subscription { get; set; } = null!;
     }
 }

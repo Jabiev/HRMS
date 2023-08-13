@@ -67,7 +67,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 UserName = userRegisterDto.email,
                 Email = userRegisterDto.email,
-                Subscription = freeSubscription
             };
             IdentityResult identityResult = await _userManager.CreateAsync(appUser,userRegisterDto.password);
             
@@ -108,6 +107,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                     AppUserId = appUser.Id,
                     FirstName = userRegisterDto.firstName,
                     LastName = userRegisterDto.lastName,
+                    Subscription = freeSubscription
                 };
                 await _recruiterWriteRepository.AddAsync(recruiter);
                 await _recruiterWriteRepository.SaveChangesAsync();

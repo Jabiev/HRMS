@@ -7,7 +7,6 @@ namespace CareerCompassAPI.Domain.Identity
     {
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiration { get; set; }
-        public Subscriptions Subscription { get; set; } = null!;
         public JobSeeker JobSeekers { get; set; }
         public Recruiter Recruiters { get; set; }
     }  
