@@ -59,8 +59,10 @@ using (var scope = app.Services.CreateScope())
     await instance.InitialiseAsync();
     await instance.RoleSeedAsync();
     await instance.SubscriptionsSeedAsync();
+    await instance.IndustrySeed();
     await instance.JobTypeSeed();
     await instance.ExperienceLevelSeed();
+    await instance.ShiftAndScheduleSeed();
     await instance.UserSeedAsync();
 
 }

@@ -1,4 +1,5 @@
 ﻿using CareerCompassAPI.Domain.Entities.Common;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CareerCompassAPI.Domain.Entities
 {
@@ -10,6 +11,9 @@ namespace CareerCompassAPI.Domain.Entities
         public decimal Salary { get; set; }
         public JobType JobType { get; set; } = null!;
         public ICollection<ShiftAndSchedule> ShiftAndSchedules { get; set; } = null!;
+        [ForeignKey(nameof(JobLocation))]
+        public Guid JobLocationId { get; set; }
         public JobLocation JobLocation { get; set; }
+
     }
 }

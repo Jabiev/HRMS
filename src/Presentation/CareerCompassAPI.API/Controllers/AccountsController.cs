@@ -21,7 +21,7 @@ namespace CareerCompassAPI.API.Controllers
             _signInManager = signInManager;
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> Register(UserRegisterDto userRegisterDto)
+        public async Task<IActionResult> Register([FromBody]UserRegisterDto userRegisterDto)
         {
             await _authService.Register(userRegisterDto);
             return Ok();
@@ -32,13 +32,13 @@ namespace CareerCompassAPI.API.Controllers
             TokenResponseDto tokenResponse = await _authService.Login(signInDto);
             return Ok(tokenResponse);
         }
-        [HttpPost("[action]")]
-        [Authorize]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return Ok();
-        }
+            [HttpPost("[action]")]
+            [Authorize]
+            public async Task<IActionResult> Logout()
+            {
+                await _signInManager.SignOutAsync();
+                return Ok();
+            }
         [HttpGet("[action]")]
         public async Task<IActionResult> RefreshToken([FromQuery] string token)
         {

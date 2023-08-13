@@ -145,7 +145,7 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("JobLocationType")
+                    b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -215,7 +215,7 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("CompanyId")
+                    b.Property<Guid?>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreated")
@@ -230,10 +230,10 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("JobLocationId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Location")
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SubscriptionId")
@@ -245,6 +245,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsUnique();
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("JobLocationId");
 
                     b.HasIndex("SubscriptionId");
 
@@ -607,9 +609,11 @@ namespace CareerCompassAPI.Persistence.Migrations
 
                     b.HasOne("CareerCompassAPI.Domain.Entities.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("CareerCompassAPI.Domain.Entities.JobLocation", "Location")
+                        .WithMany()
+                        .HasForeignKey("JobLocationId");
 
                     b.HasOne("CareerCompassAPI.Domain.Entities.Subscriptions", "Subscription")
                         .WithMany("Recruiters")
@@ -620,6 +624,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Navigation("AppUser");
 
                     b.Navigation("Company");
+
+                    b.Navigation("Location");
 
                     b.Navigation("Subscription");
                 });

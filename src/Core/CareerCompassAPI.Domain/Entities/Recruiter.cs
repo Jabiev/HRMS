@@ -10,11 +10,13 @@ namespace CareerCompassAPI.Domain.Entities
         public string AppUserId { get; set; } = null!;
         public AppUser AppUser { get; set; } = null!;
         [ForeignKey("Company")]
-        public Guid CompanyId { get; set; }
+        public Guid? CompanyId { get; set; }
         public Company? Company { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public string? Location { get; set; }
+        [ForeignKey(nameof(JobLocation))]
+        public Guid? JobLocationId { get; set; }
+        public JobLocation? Location { get; set; }
         public Subscriptions Subscription { get; set; } = null!;
     }
 }
