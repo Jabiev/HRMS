@@ -13,11 +13,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Repositories.Notification
             _context = context;
         }
 
-        public async Task<IEnumerable<Notification>> GetByUserIdAsync(Guid userId)
+        public async Task<IQueryable<Notification>> GetByUserIdAsync(Guid userId)
         {
-            return await _context.Notifications
-            .Where(n => n.UserId == userId)
-            .ToListAsync();
+            return _context.Notifications
+                .Where(n => n.UserId == userId);
         }
     }
 }

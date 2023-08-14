@@ -24,7 +24,6 @@ public class NotificationService : INotificationService
         _notificationWriteRepository = notificationWriteRepository;
         _notificationReadRepository = notificationReadRepository;
     }
-
     public async Task<NotificationResponseDto> CreateAsync(Guid userId, string title, string message)
     {
         var notification = new Notification
@@ -34,18 +33,29 @@ public class NotificationService : INotificationService
             UserId = userId,
             ReadStatus = ReadStatus.Unread
         };
+
         await _notificationWriteRepository.AddAsync(notification);
         await _notificationWriteRepository.SaveChangesAsync();
 
-        return new NotificationResponseDto(title, message, DateTime.UtcNow);
+        return new NotificationResponseDto(notification.Id, title, message, DateTime.UtcNow, ReadStatus.Unread);
     }
+
 
 
     public async Task<IEnumerable<NotificationResponseDto>> GetNotificationsAsync(Guid userId)
     {
         var notifications = await _notificationReadRepository.GetByUserIdAsync(userId);
-        return notifications.Select(n => new NotificationResponseDto(n.Title, n.Message, n.DateCreated));
+        return notifications.Select(n => new NotificationResponseDto(n.Id, n.Title, n.Message, n.DateCreated, n.ReadStatus)).ToList();
     }
 
 
+    public async Task MarkAsReadAsync(Guid notificationId)
+    {
+        var notification = await _notificationReadRepository.GetByIdAsync(notificationId);
+        if (notification is not null)
+        {
+            notification.ReadStatus = ReadStatus.Read;
+            await _notificationWriteRepository.SaveChangesAsync();
+        }
+    }
 }

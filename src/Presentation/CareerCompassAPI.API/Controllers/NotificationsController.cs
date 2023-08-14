@@ -18,5 +18,11 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _notificationService.GetNotificationsAsync(userId);
             return Ok(response);
         }
+        [HttpPost("[action]/{notificationId}")]
+        public async Task<IActionResult> MarkNotificationAsRead(Guid notificationId)
+        {
+            await _notificationService.MarkAsReadAsync(notificationId);
+            return Ok();
+        }
     }
 }

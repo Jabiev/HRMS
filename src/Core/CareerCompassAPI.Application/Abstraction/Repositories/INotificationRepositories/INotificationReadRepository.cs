@@ -7,6 +7,6 @@ namespace CareerCompassAPI.Application.Abstraction.Repositories.INotificationRep
 {
     public interface INotificationReadRepository : IReadRepository<Notification>
     {
-        Task<IEnumerable<Notification>> GetByUserIdAsync(Guid userId);
+        Task<IQueryable<Notification>> GetByUserIdAsync(Guid userId);
     }
 }
