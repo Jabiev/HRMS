@@ -8,6 +8,6 @@ namespace CareerCompassAPI.Application.DTOs.Recruiter_DTOs
         string? FirstName,
         string? LastName,
         Guid? JobLocationId,
-        Subscriptions Subscription
+        Guid SubscriptionId
     );
 }

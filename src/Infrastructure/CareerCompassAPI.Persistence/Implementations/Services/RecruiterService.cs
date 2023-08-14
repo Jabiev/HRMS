@@ -19,6 +19,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new ArgumentNullException();
             }
+            Guid subscriptionId = recruiter.Subscription.Id;
 
             RecruiterGetDto recruiterGetDto = new(
                 AppUserId: recruiter.AppUserId,
@@ -26,10 +27,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 FirstName: recruiter.FirstName,
                 LastName: recruiter.LastName,
                 JobLocationId: recruiter.JobLocationId,
-                Subscription: recruiter.Subscription
+                SubscriptionId: subscriptionId
             );
-
             return recruiterGetDto;
         }
+
     }
 }

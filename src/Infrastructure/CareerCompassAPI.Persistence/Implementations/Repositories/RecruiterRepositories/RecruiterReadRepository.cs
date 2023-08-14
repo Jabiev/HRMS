@@ -18,6 +18,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Repositories.RecruiterRep
             return await _context.Recruiters
                 .Include(r => r.AppUser) 
                 .Include(r => r.Company)
+                .Include(r => r.Subscription)
                 .FirstOrDefaultAsync(r => r.AppUserId == userId.ToString());
         }
     }

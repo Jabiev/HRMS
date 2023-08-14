@@ -13,7 +13,7 @@ namespace CareerCompassAPI.API.Controllers
         {
             _recruiterService = recruiterService;
         }
-        [HttpGet("action/{userId}")]
+        [HttpGet("[action]/{userId}")]
         public async Task<IActionResult> GetRecruiter(Guid userId)
         {
             var recruiter = await _recruiterService.GetRecruiterByUserId(userId);
