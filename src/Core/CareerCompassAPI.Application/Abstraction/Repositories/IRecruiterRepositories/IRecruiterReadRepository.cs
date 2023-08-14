@@ -4,5 +4,6 @@ namespace CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterReposi
 {
     public interface IRecruiterReadRepository:IReadRepository<Recruiter>
     {
+        Task<Recruiter?> GetByUserIdAsync(Guid userId);
     }
 }
