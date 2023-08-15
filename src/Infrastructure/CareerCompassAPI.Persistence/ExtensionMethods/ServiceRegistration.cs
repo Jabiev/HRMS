@@ -38,6 +38,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IRecruiterService, RecruiterService>();
+            services.AddScoped<ILocationService, LocationService>();
             services.AddAutoMapper(typeof(SubscriptionProfile).Assembly);
             services.AddDbContext<CareerCompassDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("Default")));

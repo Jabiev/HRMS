@@ -24,10 +24,6 @@ namespace CareerCompassAPI.Application.Validators.CompanyValidators
             RuleFor(x => x.dateFounded)
                 .LessThanOrEqualTo(DateTime.Now.Year)
                 .WithMessage("Date founded cannot be after the current year.");
-
-            RuleFor(x => x.companySize)
-              .GreaterThan(0)
-              .WithMessage("Company size must be greater than 0.");
         }
     }
 }

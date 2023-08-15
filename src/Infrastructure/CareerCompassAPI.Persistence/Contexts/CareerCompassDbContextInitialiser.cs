@@ -91,7 +91,7 @@ namespace CareerCompassAPI.Persistence.Contexts
 
                 if (!existingType)
                 {
-                     _context.JobTypes.Add(jobType);
+                    _context.JobTypes.Add(jobType);
                 }
             }
             await _context.SaveChangesAsync();
@@ -131,7 +131,7 @@ namespace CareerCompassAPI.Persistence.Contexts
                 new ShiftAndSchedule {ShiftName = "10 Hour Shift"},
                 new ShiftAndSchedule {ShiftName = "12 Hour Shift"},
             };
-            foreach(var shift in shifts)
+            foreach (var shift in shifts)
             {
                 var existingShift = await _context.ShiftAndSchedules
                     .AnyAsync(s => s.ShiftName == shift.ShiftName);
@@ -181,5 +181,24 @@ namespace CareerCompassAPI.Persistence.Contexts
             }
             await _context.SaveChangesAsync();
         }
+        public async Task LocationsSeed()
+        {
+            var locations = new List<JobLocation>
+    {
+        new JobLocation { Location = "Baku,Azerbaijan" },
+    };
+
+            foreach (var location in locations)
+            {
+                var existingLocation = await _context.JobLocations.AnyAsync(j => j.Location.Equals(location.Location));
+                if (!existingLocation)
+                {
+                    _context.JobLocations.Add(location);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

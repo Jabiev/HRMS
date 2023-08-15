@@ -14,9 +14,6 @@ namespace CareerCompassAPI.Domain.Entities
         public Company? Company { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        [ForeignKey(nameof(JobLocation))]
-        public Guid? JobLocationId { get; set; }
-        public JobLocation? Location { get; set; }
         public Subscriptions Subscription { get; set; } = null!;
     }
 }

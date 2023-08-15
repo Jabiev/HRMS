@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CareerCompassAPI.Persistence.Migrations
 {
-    public partial class NotificationsTableAdded : Migration
+    public partial class CompanySizeEnum : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

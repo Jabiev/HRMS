@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareerCompassAPI.Persistence.Migrations
 {
     [DbContext(typeof(CareerCompassDbContext))]
-    [Migration("20230813144005_NotificationsTableAdded")]
-    partial class NotificationsTableAdded
+    [Migration("20230815153702_CompanyDetailsModified")]
+    partial class CompanyDetailsModified
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,6 +64,9 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Ceo")
                         .HasColumnType("nvarchar(max)");
 
@@ -91,9 +94,14 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<string>("Link")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IndustryId");
+
+                    b.HasIndex("LocationId");
 
                     b.ToTable("CompanyDetails");
                 });
@@ -266,9 +274,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("JobLocationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -281,8 +286,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsUnique();
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("JobLocationId");
 
                     b.HasIndex("SubscriptionId");
 
@@ -621,7 +624,13 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CareerCompassAPI.Domain.Entities.JobLocation", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
                     b.Navigation("Industry");
+
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.JobSeeker", b =>
@@ -656,10 +665,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("CompanyId");
 
-                    b.HasOne("CareerCompassAPI.Domain.Entities.JobLocation", "Location")
-                        .WithMany()
-                        .HasForeignKey("JobLocationId");
-
                     b.HasOne("CareerCompassAPI.Domain.Entities.Subscriptions", "Subscription")
                         .WithMany("Recruiters")
                         .HasForeignKey("SubscriptionId")
@@ -669,8 +674,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Navigation("AppUser");
 
                     b.Navigation("Company");
-
-                    b.Navigation("Location");
 
                     b.Navigation("Subscription");
                 });

@@ -26,7 +26,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 CompanyId: recruiter.CompanyId,
                 FirstName: recruiter.FirstName,
                 LastName: recruiter.LastName,
-                JobLocationId: recruiter.JobLocationId,
                 SubscriptionId: subscriptionId
             );
             return recruiterGetDto;
