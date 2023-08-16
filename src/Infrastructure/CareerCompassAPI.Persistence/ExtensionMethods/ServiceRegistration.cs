@@ -21,6 +21,7 @@ using CareerCompassAPI.Persistence.Implementations.Repositories.IndustryReposito
 using CareerCompassAPI.Application.Abstraction.Repositories.INotificationRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.NotificationRepositories;
 using Hangfire;
+using CareerCompassAPI.Infrastructure.Services;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -39,6 +40,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IRecruiterService, RecruiterService>();
             services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IMailService, MailService>();
             services.AddAutoMapper(typeof(SubscriptionProfile).Assembly);
             services.AddDbContext<CareerCompassDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("Default")));

@@ -1,3 +1,4 @@
+using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.ExtensionMethods;
@@ -42,7 +43,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddFluentValidationValidators();
-
+var emailConfig = builder.Configuration
+        .GetSection("EmailConfiguration")
+        .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
 
 
 builder.Services.AddEndpointsApiExplorer();
