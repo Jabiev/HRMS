@@ -4,7 +4,8 @@ namespace CareerCompassAPI.Application.Abstraction.Services
 {
     public interface ICompanyService
     {
-        Task CreateAsync(CompanyCreateDto companyCreateDto);
+        Task CreateAsync(CompanyCreateDto companyCreateDto, string userId);
         Task Remove(Guid companyId);
+        Task<CompanyGetDto> GetCompanyDetailsById(Guid companyId);
     }
 }

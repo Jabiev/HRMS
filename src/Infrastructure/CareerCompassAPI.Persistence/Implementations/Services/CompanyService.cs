@@ -1,5 +1,7 @@
-﻿using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
+﻿using AutoMapper;
+using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IIndustryRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Company_DTOs;
 using CareerCompassAPI.Domain.Entities;
@@ -14,17 +16,23 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IIndustryReadRepository _industryReadRepository;
         private readonly ICompanyReadRepository _companyReadRepository;
         private readonly CareerCompassDbContext _context;
+        private readonly IRecruiterWriteRepository _recruiterWriteRepository;
+        private readonly IMapper _mapper;
         public CompanyService(ICompanyWriteRepository companyWriteRepository,
                               IIndustryReadRepository industryReadRepository,
                               ICompanyReadRepository companyReadRepository,
-                              CareerCompassDbContext context)
+                              CareerCompassDbContext context,
+                              IRecruiterWriteRepository recruiterWriteRepository,
+                              IMapper mapper)
         {
             _companyWriteRepository = companyWriteRepository;
             _industryReadRepository = industryReadRepository;
             _companyReadRepository = companyReadRepository;
             _context = context;
+            _mapper = mapper;
+            _recruiterWriteRepository = recruiterWriteRepository;
         }
-        public async Task CreateAsync(CompanyCreateDto companyCreateDto)
+        public async Task CreateAsync(CompanyCreateDto companyCreateDto, string userId)
         {
             if (companyCreateDto is null)
             {
@@ -32,6 +40,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             var industry = await _industryReadRepository.GetByExpressionAsync(i => i.Id == companyCreateDto.industryId);
             var jobLocation = await _context.JobLocations.FirstOrDefaultAsync(j => j.Id == companyCreateDto.locationId);
+            var recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.AppUserId == userId);
 
             CompanyDetails newCompanyDetails = new()
             {
@@ -51,6 +60,27 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             };
             await _companyWriteRepository.AddAsync(newCompany);
             await _companyWriteRepository.SaveChangesAsync();
+
+            recruiter.CompanyId = newCompany.Id;
+            await _recruiterWriteRepository.SaveChangesAsync();
+        }
+
+        public async Task<CompanyGetDto> GetCompanyDetailsById(Guid companyId)
+        {
+            var company = await _context.Companies
+                 .Include(c => c.Details)
+                 .ThenInclude(d => d.Industry)
+                 .FirstOrDefaultAsync(c => c.Id == companyId);
+            if (company is not Company)
+            {
+                throw new ArgumentNullException();
+            }
+            var details = company.Details;
+            var industryName = details.Industry.Name;
+            CompanyGetDto companyGetDto = new(
+                company.Name, details.Ceo, details.DateFounded, details.CompanySize, industryName, details.Link, details.Description, details.Address
+                );
+            return companyGetDto;
         }
 
         public async Task Remove(Guid companyId)
