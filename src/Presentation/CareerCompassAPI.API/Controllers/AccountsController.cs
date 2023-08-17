@@ -67,5 +67,11 @@ namespace CareerCompassAPI.API.Controllers
             await _authService.ForgotPassword(forgotPasswordDto);
             return Ok();
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto, [FromQuery] string userId, [FromQuery] string urlEncodedToken)
+        {
+            await _authService.ResetPassword(resetPasswordDto, userId, urlEncodedToken);
+            return Ok("Password reset successfully");
+        }
     }
 }
