@@ -142,6 +142,31 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
         }
 
+        public async Task ResetPassword(ResetPasswordDto resetPasswordDto, string userId, string token)
+        {
+            if (resetPasswordDto.password != resetPasswordDto.confirmPassword)
+            {
+                throw new ArgumentException("Passwords do not match.");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, token, resetPasswordDto.password);
+            if (!result.Succeeded)
+            {
+                StringBuilder errorMessage = new StringBuilder();
+                foreach (var error in result.Errors)
+                {
+                    errorMessage.AppendLine(error.Description);
+                }
+                throw new InvalidOperationException(errorMessage.ToString());
+            }
+        }
+
+
         public async Task<TokenResponseDto> ValidateRefreshToken(string refreshToken)
         {
             if (refreshToken is null)

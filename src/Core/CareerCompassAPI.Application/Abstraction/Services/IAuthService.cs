@@ -10,5 +10,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<TokenResponseDto> Login(UserSignInDto userSignInDto);
         Task<TokenResponseDto> ValidateRefreshToken(string refreshToken);
         Task ForgotPassword(ForgotPasswordDto forgotPasswordDto);
+        Task ResetPassword(ResetPasswordDto resetPasswordDto);
     }
 }

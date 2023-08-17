@@ -23,6 +23,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<CareerCompassDbContext>();
 
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+   opt.TokenLifespan = TimeSpan.FromHours(2));
 
 builder.Services.AddAuthentication(options =>
 {
