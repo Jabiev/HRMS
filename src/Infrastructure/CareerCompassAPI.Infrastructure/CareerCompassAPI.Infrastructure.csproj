@@ -15,4 +15,8 @@
     <ProjectReference Include="..\..\Core\CareerCompassAPI.Application\CareerCompassAPI.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Storage\Azure\" />
+  </ItemGroup>
+
 </Project>

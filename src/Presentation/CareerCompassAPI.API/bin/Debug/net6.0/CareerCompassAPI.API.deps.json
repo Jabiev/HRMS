@@ -910,7 +910,8 @@
       "CareerCompassAPI.Application/1.0.0": {
         "dependencies": {
           "CareerCompassAPI.Domain": "1.0.0",
-          "FluentValidation": "11.7.0"
+          "FluentValidation": "11.7.0",
+          "Microsoft.AspNetCore.Http.Features": "2.2.0"
         },
         "runtime": {
           "CareerCompassAPI.Application.dll": {}

@@ -34,7 +34,6 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             AddWriteRepositories(services);
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IIndustryService, IndustryService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<INotificationService, NotificationService>();

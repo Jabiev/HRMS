@@ -20,6 +20,7 @@ namespace CareerCompassAPI.Persistence.Contexts
         public DbSet<ShiftAndSchedule> ShiftAndSchedules { get; set; }
         public DbSet<JobLocation> JobLocations { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Domain.Entities.File> Files { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

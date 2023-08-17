@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "YxMIgswCju3/g4HLyIkHbq3vAWpVnlwS5fQ7y7Lr5Mw=",
+  "Hash": "mzXvyO038C4xikJcDt7UgjrrdrtivEuH65UzbnyAlTY=",
   "Source": "CareerCompassAPI.API",
   "BasePath": "_content/CareerCompassAPI.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "CareerCompassAPI.API\\wwwroot",
+      "Source": "CareerCompassAPI.API",
+      "ContentRoot": "C:\\Users\\Rhabi\\OneDrive\\Documents\\CareerCompass\\CareerCompassAPI\\src\\Presentation\\CareerCompassAPI.API\\wwwroot\\",
+      "BasePath": "_content/CareerCompassAPI.API",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

@@ -119,6 +119,38 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.ToTable("ExperienceLevels");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.File", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Storage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Industry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -341,11 +373,18 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ExperienceLevelId")
                         .HasColumnType("uniqueidentifier");
@@ -370,6 +409,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("ExperienceLevelId");
 
@@ -678,6 +719,12 @@ namespace CareerCompassAPI.Persistence.Migrations
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Vacancy", b =>
                 {
+                    b.HasOne("CareerCompassAPI.Domain.Entities.Company", "Company")
+                        .WithMany("Vacanies")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CareerCompassAPI.Domain.Entities.ExperienceLevel", "ExperienceLevel")
                         .WithMany("Vacancies")
                         .HasForeignKey("ExperienceLevelId")
@@ -701,6 +748,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasForeignKey("RecruiterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Company");
 
                     b.Navigation("ExperienceLevel");
 
@@ -775,6 +824,11 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasForeignKey("VacanciesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Company", b =>
+                {
+                    b.Navigation("Vacanies");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.ExperienceLevel", b =>

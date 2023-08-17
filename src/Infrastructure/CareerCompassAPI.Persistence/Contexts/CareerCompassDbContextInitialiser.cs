@@ -82,6 +82,9 @@ namespace CareerCompassAPI.Persistence.Contexts
             {
                 new JobType {TypeName = "PartTime"},
                 new JobType {TypeName = "FullTime"},
+                new JobType {TypeName = "Contract"},
+                new JobType {TypeName = "Temporary"},
+                new JobType {TypeName = "Internship"},
             };
 
             foreach (var jobType in jobTypes)

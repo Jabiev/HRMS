@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareerCompassAPI.Persistence.Migrations
 {
     [DbContext(typeof(CareerCompassDbContext))]
-    [Migration("20230813134042_JobLocationDescriptionRemoved")]
-    partial class JobLocationDescriptionRemoved
+    [Migration("20230817212832_File")]
+    partial class File
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,6 +64,9 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Ceo")
                         .HasColumnType("nvarchar(max)");
 
@@ -91,9 +94,14 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<string>("Link")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IndustryId");
+
+                    b.HasIndex("LocationId");
 
                     b.ToTable("CompanyDetails");
                 });
@@ -111,6 +119,38 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ExperienceLevels");
+                });
+
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.File", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Storage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Industry", b =>
@@ -203,6 +243,44 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.ToTable("JobTypes");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReadStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Recruiter", b =>
                 {
                     b.Property<Guid>("Id")
@@ -228,9 +306,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("JobLocationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -243,8 +318,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsUnique();
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("JobLocationId");
 
                     b.HasIndex("SubscriptionId");
 
@@ -302,11 +375,18 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ExperienceLevelId")
                         .HasColumnType("uniqueidentifier");
@@ -331,6 +411,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("ExperienceLevelId");
 
@@ -583,7 +665,13 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CareerCompassAPI.Domain.Entities.JobLocation", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
                     b.Navigation("Industry");
+
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.JobSeeker", b =>
@@ -595,6 +683,15 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Recruiter", b =>
@@ -609,10 +706,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("CompanyId");
 
-                    b.HasOne("CareerCompassAPI.Domain.Entities.JobLocation", "Location")
-                        .WithMany()
-                        .HasForeignKey("JobLocationId");
-
                     b.HasOne("CareerCompassAPI.Domain.Entities.Subscriptions", "Subscription")
                         .WithMany("Recruiters")
                         .HasForeignKey("SubscriptionId")
@@ -623,13 +716,17 @@ namespace CareerCompassAPI.Persistence.Migrations
 
                     b.Navigation("Company");
 
-                    b.Navigation("Location");
-
                     b.Navigation("Subscription");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Vacancy", b =>
                 {
+                    b.HasOne("CareerCompassAPI.Domain.Entities.Company", "Company")
+                        .WithMany("Vacanies")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CareerCompassAPI.Domain.Entities.ExperienceLevel", "ExperienceLevel")
                         .WithMany("Vacancies")
                         .HasForeignKey("ExperienceLevelId")
@@ -653,6 +750,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasForeignKey("RecruiterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Company");
 
                     b.Navigation("ExperienceLevel");
 
@@ -729,6 +828,11 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Company", b =>
+                {
+                    b.Navigation("Vacanies");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.ExperienceLevel", b =>
                 {
                     b.Navigation("Vacancies");
@@ -758,6 +862,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                 {
                     b.Navigation("JobSeekers")
                         .IsRequired();
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("Recruiters")
                         .IsRequired();

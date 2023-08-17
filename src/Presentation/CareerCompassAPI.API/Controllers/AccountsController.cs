@@ -1,4 +1,5 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
+using CareerCompassAPI.Application.Abstraction.Storage;
 using CareerCompassAPI.Application.DTOs.Auth_DTOs;
 using CareerCompassAPI.Application.DTOs.Password_DTOs;
 using CareerCompassAPI.Application.DTOs.Response_DTOs;
@@ -16,13 +17,16 @@ namespace CareerCompassAPI.API.Controllers
         private readonly IAuthService _authService;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMailService _mailService;
+        private readonly IStorageService _storageService;
         public AccountsController(IAuthService authService,
                                   SignInManager<AppUser> signInManager,
-                                  IMailService mailService)
+                                  IMailService mailService,
+                                  IStorageService storageService)
         {
             _authService = authService;
             _signInManager = signInManager;
             _mailService = mailService;
+            _storageService = storageService;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegisterDto)
@@ -73,5 +77,10 @@ namespace CareerCompassAPI.API.Controllers
             await _authService.ResetPassword(resetPasswordDto, userId, urlEncodedToken);
             return Ok("Password reset successfully");
         }
+        //[HttpPost("[action]")]
+        //public async Task<IActionResult> Upload()
+        //{
+        //     await _storageService.UploadAsync("resourse/files", Request.Form.Files);
+        //}
     }
 }

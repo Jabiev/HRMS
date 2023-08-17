@@ -1,5 +1,7 @@
 using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Identity;
+using CareerCompassAPI.Infrastructure.Services;
+using CareerCompassAPI.Infrastructure.Services.Storage.Local;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.ExtensionMethods;
 using Hangfire;
@@ -14,6 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddInfrastructureServices();
+builder.Services.AddStorage<LocalStorage>(); 
+
 builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
 {
     identityOption.User.RequireUniqueEmail = true;
@@ -88,5 +93,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseStaticFiles();
 app.MapHangfireDashboard("/hangfire", new DashboardOptions());
 app.Run();

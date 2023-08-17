@@ -14,6 +14,8 @@ namespace CareerCompassAPI.Domain.Entities
         [ForeignKey(nameof(JobLocation))]
         public Guid JobLocationId { get; set; }
         public JobLocation JobLocation { get; set; }
+        public string Description { get; set; } = null!;
+        public Company Company { get; set; } = null!;
 
     }
 }

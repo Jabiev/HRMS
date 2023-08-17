@@ -51,6 +51,10 @@
             "FluentValidation": {
               "target": "Package",
               "version": "[11.7.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             }
           },
           "imports": [
