@@ -2,22 +2,30 @@
 using CareerCompassAPI.Domain.Concretes;
 using MimeKit;
 using MailKit.Net.Smtp;
-
+using CareerCompassAPI.Application.DTOs.Password_DTOs;
+using Microsoft.AspNetCore.Identity;
+using CareerCompassAPI.Domain.Identity;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace CareerCompassAPI.Infrastructure.Services
 {
     public class MailService : IMailService
     {
         private readonly EmailConfiguration _emailConfig;
+        private readonly UserManager<AppUser> _userManager;
 
-        public MailService(EmailConfiguration emailConfig)
+        public MailService(EmailConfiguration emailConfig,
+                           UserManager<AppUser> userManager)
         {
             _emailConfig = emailConfig;
+            _userManager = userManager;
         }
-        public void SendEmail(Message message)
+
+        public async Task SendEmailAsync(Message message)
         {
             var emailMessage = CreateEmailMessage(message);
-            Send(emailMessage);
+            await Send(emailMessage);
         }
         private MimeMessage CreateEmailMessage(Message message)
         {
@@ -26,27 +34,25 @@ namespace CareerCompassAPI.Infrastructure.Services
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
 
-            var htmlContent = "Hello";
-
             var bodyBuilder = new BodyBuilder();
-            bodyBuilder.HtmlBody = htmlContent;
+            bodyBuilder.HtmlBody = message.Content; 
 
             emailMessage.Body = bodyBuilder.ToMessageBody();
 
             return emailMessage;
         }
-        private void Send(MimeMessage mailMessage)
+        private async Task Send(MimeMessage mailMessage)
         {
             using (var client = new SmtpClient())
             {
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                 try
                 {
-                    client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
+                    await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
+                    await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
 
-                    client.Send(mailMessage);
+                    await client.SendAsync(mailMessage);
                 }
                 catch (Exception)
                 {
@@ -54,7 +60,7 @@ namespace CareerCompassAPI.Infrastructure.Services
                 }
                 finally
                 {
-                    client.Disconnect(true);
+                    await client.DisconnectAsync(true);
                     client.Dispose();
                 }
             }

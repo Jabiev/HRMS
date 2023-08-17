@@ -3,6 +3,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositori
 using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Auth_DTOs;
+using CareerCompassAPI.Application.DTOs.Password_DTOs;
 using CareerCompassAPI.Application.DTOs.Response_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
@@ -13,6 +14,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using System.Web;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -24,6 +26,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IRecruiterWriteRepository _recruiterWriteRepository;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IJwtService _jwtService;
+        private readonly IMailService _mailService;
         private readonly CareerCompassDbContext _context;
         private readonly INotificationService _notificationService;
         public AuthService(UserManager<AppUser> userManager,
@@ -33,7 +36,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                            SignInManager<AppUser> signInManager,
                            IJwtService jwtService,
                            CareerCompassDbContext context,
-                           INotificationService notificationService)
+                           INotificationService notificationService,
+                           IMailService mailService)
         {
             _userManager = userManager;
             _jobSeekerWriteRepository = jobSeekerWriteRepository;
@@ -43,6 +47,21 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _jwtService = jwtService;
             _context = context;
             _notificationService = notificationService;
+            _mailService = mailService;
+        }
+
+        public async Task ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            var user = await _userManager.FindByEmailAsync(forgotPasswordDto.email);
+            if (user == null) { return; }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callbackUrl = GenerateResetPasswordUrl(user.Id, token);
+
+            var message = new Message(new string[] { forgotPasswordDto.email },
+                                      "Reset Password",
+                                      $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+            await _mailService.SendEmailAsync(message);
         }
 
         public async Task<TokenResponseDto> Login(UserSignInDto userSignInDto)
@@ -143,6 +162,12 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             user.RefreshTokenExpiration = tokenResponse.refreshTokenExpiration;
             await _userManager.UpdateAsync(user);
             return tokenResponse;
+        }
+        private string GenerateResetPasswordUrl(string userId, string token)
+        {
+            var baseUrl = "https://localhost:7013";
+            var resetPasswordPath = $"/reset-password?userId={userId}&token={HttpUtility.UrlEncode(token)}";
+            return baseUrl + resetPasswordPath;
         }
     }
 }

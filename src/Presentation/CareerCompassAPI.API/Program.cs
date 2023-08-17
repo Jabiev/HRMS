@@ -22,6 +22,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
 })
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<CareerCompassDbContext>();
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

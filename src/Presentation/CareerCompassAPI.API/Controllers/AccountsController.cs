@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Auth_DTOs;
+using CareerCompassAPI.Application.DTOs.Password_DTOs;
 using CareerCompassAPI.Application.DTOs.Response_DTOs;
 using CareerCompassAPI.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -57,10 +58,14 @@ namespace CareerCompassAPI.API.Controllers
 
             var emailMessage = new Message(emailAddresses, emailSubject, emailContent);
 
-            _mailService.SendEmail(emailMessage);  
+            await _mailService.SendEmailAsync(emailMessage);  
             return Ok();
         }
-
-
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
+        {
+            await _authService.ForgotPassword(forgotPasswordDto);
+            return Ok();
+        }
     }
 }

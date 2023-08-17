@@ -1,7 +1,9 @@
-﻿namespace CareerCompassAPI.Application.Abstraction.Services
+﻿using CareerCompassAPI.Application.DTOs.Password_DTOs;
+
+namespace CareerCompassAPI.Application.Abstraction.Services
 {
     public interface IMailService
     {
-        void SendEmail(Message message);
+        Task SendEmailAsync(Message message);
     }
 }
