@@ -22,6 +22,8 @@ using CareerCompassAPI.Application.Abstraction.Repositories.INotificationReposit
 using CareerCompassAPI.Persistence.Implementations.Repositories.NotificationRepositories;
 using Hangfire;
 using CareerCompassAPI.Infrastructure.Services;
+using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.VacancyRepositories;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -44,6 +46,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IJobTypeService, JobTypeService>();
             services.AddScoped<IShiftScheduleService, ShiftScheduleService>();
             services.AddScoped<IVacancyService, VacancyService>();
+
             services.AddAutoMapper(typeof(SubscriptionProfile).Assembly);
             services.AddDbContext<CareerCompassDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("Default")));
@@ -65,6 +68,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IIndustryReadRepository, IndustryReadRepository>();
             services.AddScoped<INotificationReadRepository, NotificationReadRepository>();
             services.AddScoped<IRecruiterReadRepository, RecruiterReadRepository>();
+            services.AddScoped<IVacancyReadRepository, VacancyReadRepository>();
         }
 
         private static void AddWriteRepositories(IServiceCollection services)
@@ -77,6 +81,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IIndustryWriteRepository,IndustryWriteRepository>();
             services.AddScoped<INotificationWriteRepository,NotificationWriteRepository>();
             services.AddScoped<IRecruiterWriteRepository, RecruiterWriteRepository>();
+            services.AddScoped<IVacancyWriteRepository, VacancyWriteRepository>();
         }
     }
 }

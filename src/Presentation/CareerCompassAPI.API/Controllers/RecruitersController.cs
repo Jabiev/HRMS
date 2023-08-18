@@ -6,6 +6,7 @@ namespace CareerCompassAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class RecruitersController : ControllerBase
     {
         private readonly IRecruiterService _recruiterService;

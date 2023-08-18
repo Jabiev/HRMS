@@ -33,10 +33,14 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new ArgumentNullException();
             }
+            Guid recruiterAppUserId = Guid.Parse(userId);
+            var recruiter = await _recruiterReadRepository.GetByUserIdAsync(recruiterAppUserId);
+            var company = await _companyReadRepository.GetByIdAsync(companyId);
             var experience = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.Id == vacancyCreateDto.experienceLevelId);
             var jobLocation = await _context.JobLocations.FirstOrDefaultAsync(l => l.Id == vacancyCreateDto.jobLocationId);
-            var recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.AppUserId == userId);
-            var company = await _companyReadRepository.GetByIdAsync(companyId);
+
+            //var recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.AppUserId == userId);
+            //var company = await _companyReadRepository.GetByIdAsync(companyId);
             // Handle not found
 
             List<JobType> jobTypes = await _context.JobTypes.Where(j => vacancyCreateDto.jobTypeIds.Contains(j.Id)).ToListAsync();
@@ -53,6 +57,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 Company = company,
                 ShiftAndSchedules = shifts
             };
+            newVacancy.Company = company;
+            newVacancy.Recruiter = recruiter;
             await _vacancyWriteRepository.AddAsync(newVacancy);
             await _vacancyWriteRepository.SaveChangesAsync();
         }

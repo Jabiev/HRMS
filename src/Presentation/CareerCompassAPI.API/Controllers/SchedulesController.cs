@@ -14,7 +14,7 @@ namespace CareerCompassAPI.API.Controllers
         {
             _shiftScheduleService = shiftScheduleService;
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetAll()
         {
             var response = await _shiftScheduleService.GetAllAsync();
