@@ -33,24 +33,25 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new ArgumentNullException();
             }
-            ExperienceLevel experience = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.Id == vacancyCreateDto.experienceLevelId);
-            JobType jobType = await _context.JobTypes.FirstOrDefaultAsync(j => j.Id == vacancyCreateDto.jobTypeId);
-            JobLocation jobLocation = await _context.JobLocations.FirstOrDefaultAsync(l => l.Id == vacancyCreateDto.jobLocationId);
-            Recruiter recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.AppUserId == userId);
-            Company company = await _companyReadRepository.GetByIdAsync(companyId);
+            var experience = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.Id == vacancyCreateDto.experienceLevelId);
+            var jobLocation = await _context.JobLocations.FirstOrDefaultAsync(l => l.Id == vacancyCreateDto.jobLocationId);
+            var recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.AppUserId == userId);
+            var company = await _companyReadRepository.GetByIdAsync(companyId);
             // Handle not found
 
+            List<JobType> jobTypes = await _context.JobTypes.Where(j => vacancyCreateDto.jobTypeIds.Contains(j.Id)).ToListAsync();
+            List<ShiftAndSchedule> shifts = await _context.ShiftAndSchedules.Where(s => vacancyCreateDto.shiftIds.Contains(s.Id)).ToListAsync();
             Vacancy newVacancy = new()
             {
                 JobTitle = vacancyCreateDto.jobTitle,
                 ExperienceLevel = experience,
                 Recruiter = recruiter,
                 Salary = vacancyCreateDto.salary,
-                JobType = jobType,
+                JobType = jobTypes,
                 JobLocation = jobLocation,
                 Description = vacancyCreateDto.description,
                 Company = company,
-                ShiftAndSchedules = vacancyCreateDto.shifts.ToList(),
+                ShiftAndSchedules = shifts
             };
             await _vacancyWriteRepository.AddAsync(newVacancy);
             await _vacancyWriteRepository.SaveChangesAsync();

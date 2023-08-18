@@ -1,6 +1,9 @@
 ﻿using CareerCompassAPI.Domain.Entities;
+using System;
+using System.Collections.Generic;
 
 namespace CareerCompassAPI.Application.DTOs.Vacancy_DTOs
 {
-    public record VacancyCreateDto(string jobTitle, Guid experienceLevelId, decimal salary, Guid jobTypeId, Guid jobLocationId, string description,ICollection<ShiftAndSchedule> shifts);
- }
+    public record VacancyCreateDto(string jobTitle,Guid experienceLevelId,decimal salary,ICollection<Guid> jobTypeIds,Guid jobLocationId,string description,ICollection<Guid> shiftIds
+    );
+}

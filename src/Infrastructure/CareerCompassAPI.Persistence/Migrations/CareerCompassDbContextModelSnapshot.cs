@@ -399,9 +399,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("JobTypeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("RecruiterId")
                         .HasColumnType("uniqueidentifier");
 
@@ -415,8 +412,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.HasIndex("ExperienceLevelId");
 
                     b.HasIndex("JobLocationId");
-
-                    b.HasIndex("JobTypeId");
 
                     b.HasIndex("RecruiterId");
 
@@ -492,6 +487,21 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("JobTypeVacancy", b =>
+                {
+                    b.Property<Guid>("JobTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VacanciesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("JobTypeId", "VacanciesId");
+
+                    b.HasIndex("VacanciesId");
+
+                    b.ToTable("JobTypeVacancy");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -737,14 +747,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CareerCompassAPI.Domain.Entities.JobType", "JobType")
-                        .WithMany("Vacancies")
-                        .HasForeignKey("JobTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CareerCompassAPI.Domain.Entities.Recruiter", "Recruiter")
-                        .WithMany()
+                        .WithMany("Vacancies")
                         .HasForeignKey("RecruiterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -755,9 +759,22 @@ namespace CareerCompassAPI.Persistence.Migrations
 
                     b.Navigation("JobLocation");
 
-                    b.Navigation("JobType");
-
                     b.Navigation("Recruiter");
+                });
+
+            modelBuilder.Entity("JobTypeVacancy", b =>
+                {
+                    b.HasOne("CareerCompassAPI.Domain.Entities.JobType", null)
+                        .WithMany()
+                        .HasForeignKey("JobTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CareerCompassAPI.Domain.Entities.Vacancy", null)
+                        .WithMany()
+                        .HasForeignKey("VacanciesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -846,7 +863,7 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Navigation("Vacancies");
                 });
 
-            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.JobType", b =>
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Recruiter", b =>
                 {
                     b.Navigation("Vacancies");
                 });

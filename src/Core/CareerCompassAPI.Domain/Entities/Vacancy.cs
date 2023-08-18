@@ -9,7 +9,7 @@ namespace CareerCompassAPI.Domain.Entities
         public ExperienceLevel ExperienceLevel { get; set; } = null!;
         public Recruiter Recruiter { get; set; } = null!;
         public decimal Salary { get; set; }
-        public JobType JobType { get; set; } = null!;
+        public ICollection<JobType> JobType { get; set; } = null!;
         public ICollection<ShiftAndSchedule> ShiftAndSchedules { get; set; } = null!;
         [ForeignKey(nameof(JobLocation))]
         public Guid JobLocationId { get; set; }

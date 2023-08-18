@@ -12,7 +12,7 @@
     "CareerCompassAPI.API": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
+      "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7013;http://localhost:5194",
       "environmentVariables": {
