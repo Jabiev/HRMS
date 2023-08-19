@@ -189,6 +189,8 @@ namespace CareerCompassAPI.Persistence.Contexts
             var locations = new List<JobLocation>
     {
         new JobLocation { Location = "Baku,Azerbaijan" },
+        new JobLocation { Location = "Istanbul,Turkey" },
+        new JobLocation { Location = "London,UK" },
     };
 
             foreach (var location in locations)

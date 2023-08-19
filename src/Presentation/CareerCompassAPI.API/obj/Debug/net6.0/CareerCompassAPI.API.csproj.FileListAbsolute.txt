@@ -109,3 +109,9 @@ C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentatio
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\NETCore.MailKit.dll
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\BouncyCastle.Crypto.dll
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\CareerCompassAPI.API.staticwebassets.runtime.json
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\Azure.Core.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\Azure.Storage.Blobs.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\Azure.Storage.Common.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\System.IO.Hashing.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\System.Memory.Data.dll

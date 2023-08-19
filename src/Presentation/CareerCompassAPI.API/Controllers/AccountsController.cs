@@ -12,6 +12,7 @@ namespace CareerCompassAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AccountsController : ControllerBase
     {
         private readonly IAuthService _authService;
