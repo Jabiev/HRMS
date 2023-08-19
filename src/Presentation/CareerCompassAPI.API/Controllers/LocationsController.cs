@@ -19,5 +19,11 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _locationService.GetAll();
             return Ok(response);
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetBySearch(string search)
+        {
+            var response = await _locationService.GetBySearch(search);
+            return Ok(response);
+        }
     }
 }

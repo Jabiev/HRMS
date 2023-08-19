@@ -23,5 +23,13 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             List<LocationGetDto> list = _mapper.Map<List<LocationGetDto>>(locations);
             return list;
         }
+
+        public async Task<List<LocationGetDto>> GetBySearch(string search)
+        {
+            var locations = await _context.JobLocations
+                .Where(locations => locations.Location.Contains(search))
+                .ToListAsync();
+            return _mapper.Map<List<LocationGetDto>>(locations);
+        }
     }
 }

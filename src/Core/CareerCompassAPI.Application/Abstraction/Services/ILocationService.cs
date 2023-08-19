@@ -5,5 +5,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
     public interface ILocationService
     {
         Task<List<LocationGetDto>> GetAll();
+        Task<List<LocationGetDto>> GetBySearch(string search);
     }
 }
