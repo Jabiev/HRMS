@@ -1,4 +1,4 @@
 ﻿namespace CareerCompassAPI.Application.DTOs.Location_DTOs
 {
-    public record LocationGetDto(string location);
+    public record LocationGetDto(Guid id, string location);
 }

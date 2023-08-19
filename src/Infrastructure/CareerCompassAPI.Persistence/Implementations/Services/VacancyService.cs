@@ -37,7 +37,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var recruiter = await _recruiterReadRepository.GetByUserIdAsync(recruiterAppUserId);
             var company = await _companyReadRepository.GetByIdAsync(companyId);
             var experience = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.Id == vacancyCreateDto.experienceLevelId);
-            var jobLocation = await _context.JobLocations.FirstOrDefaultAsync(l => l.Id == vacancyCreateDto.jobLocationId);
+            var jobLocation = await _context.JobLocations.FirstOrDefaultAsync(l => l.Id == vacancyCreateDto.locationId);
 
             //var recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.AppUserId == userId);
             //var company = await _companyReadRepository.GetByIdAsync(companyId);

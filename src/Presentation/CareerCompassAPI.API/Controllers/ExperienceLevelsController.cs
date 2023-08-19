@@ -13,7 +13,7 @@ namespace CareerCompassAPI.API.Controllers
         {
             _experienceLevelService = experienceLevelService;
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetAll()
         {
             var response = await _experienceLevelService.GetAllAsync();

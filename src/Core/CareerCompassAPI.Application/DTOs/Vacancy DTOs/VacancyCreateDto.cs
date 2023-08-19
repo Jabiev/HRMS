@@ -4,6 +4,6 @@ using System.Collections.Generic;
 
 namespace CareerCompassAPI.Application.DTOs.Vacancy_DTOs
 {
-    public record VacancyCreateDto(string jobTitle,Guid experienceLevelId,decimal salary,ICollection<Guid> jobTypeIds,Guid jobLocationId,string description,ICollection<Guid> shiftIds
+    public record VacancyCreateDto(string jobTitle,Guid experienceLevelId,decimal salary,ICollection<Guid> jobTypeIds,Guid locationId,string description,ICollection<Guid> shiftIds
     );
 }
