@@ -142,9 +142,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
         }
 
-        public async Task ResetPassword(ResetPasswordDto resetPasswordDto, string userId, string urlEncodedToken)
+        public async Task ResetPassword(ResetPasswordDto resetPasswordDto, string userId, string token)
         {
-            var token = HttpUtility.UrlDecode(urlEncodedToken);
             if (resetPasswordDto.password != resetPasswordDto.confirmPassword)
             {
                 throw new ArgumentException("Passwords do not match.");
@@ -192,7 +191,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private string GenerateResetPasswordUrl(string userId, string token)
         {
             var baseUrl = "http://localhost:3000";
-            var resetPasswordPath = $"/passwordreset?userId={userId}&token={HttpUtility.UrlEncode(token)}";
+            var resetPasswordPath = $"/passwordreset?userId={userId}&token={token}";
             return baseUrl + resetPasswordPath;
         }
     }

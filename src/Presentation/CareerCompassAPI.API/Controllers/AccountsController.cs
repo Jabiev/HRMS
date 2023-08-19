@@ -12,22 +12,25 @@ namespace CareerCompassAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   
     public class AccountsController : ControllerBase
     {
         private readonly IAuthService _authService;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMailService _mailService;
         private readonly IStorageService _storageService;
+        private readonly ILogger<AccountsController> _logger;
         public AccountsController(IAuthService authService,
                                   SignInManager<AppUser> signInManager,
                                   IMailService mailService,
-                                  IStorageService storageService)
+                                  IStorageService storageService,
+                                  ILogger<AccountsController> logger)
         {
             _authService = authService;
             _signInManager = signInManager;
             _mailService = mailService;
             _storageService = storageService;
+            _logger = logger;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegisterDto)
@@ -73,9 +76,10 @@ namespace CareerCompassAPI.API.Controllers
             return Ok();
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto, [FromQuery] string userId, [FromQuery] string urlEncodedToken)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto, [FromQuery] string userId, [FromQuery] string token)
         {
-            await _authService.ResetPassword(resetPasswordDto, userId, urlEncodedToken);
+            _logger.LogInformation($"Received token: {token}");
+            await _authService.ResetPassword(resetPasswordDto, userId, token);
             return Ok("Password reset successfully");
         }
         //[HttpPost("[action]")]
