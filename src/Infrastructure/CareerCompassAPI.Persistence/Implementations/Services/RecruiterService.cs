@@ -23,6 +23,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             Guid subscriptionId = recruiter.Subscription.Id;
 
             RecruiterGetDto recruiterGetDto = new(
+                id: recruiter.Id,
                 AppUserId: recruiter.AppUserId,
                 CompanyId: recruiter.CompanyId,
                 FirstName: recruiter.FirstName,
