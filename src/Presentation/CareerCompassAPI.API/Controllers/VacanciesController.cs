@@ -23,5 +23,12 @@ namespace CareerCompassAPI.API.Controllers
             await _vacancyService.Create(vacancyCreateDto, userId, companyId);
             return Ok();
         }
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetBySearch(string jobTitle)
+        {
+            var response = await _vacancyService.GetBySearch(jobTitle);
+            return Ok(response);
+        }
     }
 }

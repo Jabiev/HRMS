@@ -78,10 +78,11 @@ namespace CareerCompassAPI.API.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto, [FromQuery] string userId, [FromQuery] string token)
         {
-            _logger.LogInformation($"Received token: {token}");
-            await _authService.ResetPassword(resetPasswordDto, userId, token);
+            string correctedToken = token.Replace(" ", "+");
+            await _authService.ResetPassword(resetPasswordDto, userId, correctedToken);
             return Ok("Password reset successfully");
         }
+
         //[HttpPost("[action]")]
         //public async Task<IActionResult> Upload()
         //{

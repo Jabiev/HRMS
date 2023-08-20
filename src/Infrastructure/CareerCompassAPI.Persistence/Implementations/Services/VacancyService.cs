@@ -1,4 +1,5 @@
-﻿using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
+﻿using AutoMapper;
+using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
@@ -15,16 +16,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IRecruiterReadRepository _recruiterReadRepository;
         private readonly ICompanyReadRepository _companyReadRepository;
         private readonly IVacancyWriteRepository _vacancyWriteRepository;
+        private readonly IMapper _mapper;
 
         public VacancyService(CareerCompassDbContext context,
                               IRecruiterReadRepository recruiterReadRepository,
                               ICompanyReadRepository companyReadRepository,
-                              IVacancyWriteRepository vacancyWriteRepository)
+                              IVacancyWriteRepository vacancyWriteRepository,
+                              IMapper mapper)
         {
             _context = context;
             _recruiterReadRepository = recruiterReadRepository;
             _companyReadRepository = companyReadRepository;
             _vacancyWriteRepository = vacancyWriteRepository;
+            _mapper = mapper;
         }
 
         public async Task Create(VacancyCreateDto vacancyCreateDto, string userId, Guid companyId)
@@ -61,6 +65,14 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             newVacancy.Recruiter = recruiter;
             await _vacancyWriteRepository.AddAsync(newVacancy);
             await _vacancyWriteRepository.SaveChangesAsync();
+        }
+
+        public async Task<List<VacancyGetDto>> GetBySearch(string jobTitle)
+        {
+            var vacancies = await _context.Vacancy
+                .Where(vacancy => vacancy.JobTitle.Contains(jobTitle))
+                .ToListAsync();
+            return _mapper.Map<List<VacancyGetDto>>(vacancies);
         }
     }
 }
