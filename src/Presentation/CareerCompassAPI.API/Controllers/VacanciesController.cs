@@ -3,6 +3,7 @@ using CareerCompassAPI.Application.DTOs.Vacancy_DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace CareerCompassAPI.API.Controllers
 {
@@ -37,5 +38,6 @@ namespace CareerCompassAPI.API.Controllers
             var vacancies = await _vacancyService.GetDetailsBySearch(jobTitle, locationId);
             return Ok(vacancies);
         }
+
     }
 }
