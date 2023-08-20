@@ -74,5 +74,40 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 .ToListAsync();
             return _mapper.Map<List<VacancyGetDto>>(vacancies);
         }
+
+        public async Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle, Guid? locationId)
+        {
+            IQueryable<Vacancy> query = _context.Vacancy
+                .Include(v => v.Company)
+                    .ThenInclude(c => c.Details)
+                .Include(v => v.JobLocation)
+                .Include(v => v.JobType)
+                .Include(v => v.ShiftAndSchedules);
+
+            if (!string.IsNullOrEmpty(jobTitle))
+            {
+                query = query.Where(v => v.JobTitle.ToLower().Contains(jobTitle.ToLower()));
+            }
+
+            if (locationId.HasValue)
+            {
+                query = query.Where(v => v.JobLocationId == locationId.Value);
+            }
+
+            var vacancies = await query.ToListAsync();
+
+            return vacancies.Select(v => new VacancyGetDetailsDto(
+                v.Id,
+                v.JobTitle,
+                v.Company.Name,
+                v.JobLocation.Location,
+                v.Salary,
+                v.JobType.Select(jt => jt.TypeName).ToList(), 
+                v.ShiftAndSchedules.Select(ss => ss.ShiftName).ToList(),
+                v.Description,
+                v.Company.Details.Link,
+                v.DateCreated
+            )).ToList();
+        }
     }
 }

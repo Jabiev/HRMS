@@ -6,5 +6,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
     {
         Task Create(VacancyCreateDto vacancyCreateDto,string userId, Guid companyId);
         Task<List<VacancyGetDto>> GetBySearch(string jobTitle);
+        Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle, Guid? locationId);
     }
 }

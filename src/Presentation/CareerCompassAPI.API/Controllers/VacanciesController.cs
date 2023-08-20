@@ -30,5 +30,12 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _vacancyService.GetBySearch(jobTitle);
             return Ok(response);
         }
+        [HttpGet("GetFilteredSearch")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFilteredSearch([FromQuery] string? jobTitle, [FromQuery] Guid? locationId)
+        {
+            var vacancies = await _vacancyService.GetDetailsBySearch(jobTitle, locationId);
+            return Ok(vacancies);
+        }
     }
 }
