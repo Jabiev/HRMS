@@ -46,6 +46,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IJobTypeService, JobTypeService>();
             services.AddScoped<IShiftScheduleService, ShiftScheduleService>();
             services.AddScoped<IVacancyService, VacancyService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddAutoMapper(typeof(SubscriptionProfile).Assembly);
             services.AddDbContext<CareerCompassDbContext>(options =>

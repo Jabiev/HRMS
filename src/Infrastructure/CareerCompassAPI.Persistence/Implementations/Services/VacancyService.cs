@@ -3,6 +3,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories
 using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
+using CareerCompassAPI.Application.DTOs.Location_DTOs;
 using CareerCompassAPI.Application.DTOs.Vacancy_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Persistence.Contexts;
@@ -16,19 +17,22 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IRecruiterReadRepository _recruiterReadRepository;
         private readonly ICompanyReadRepository _companyReadRepository;
         private readonly IVacancyWriteRepository _vacancyWriteRepository;
+        private readonly IVacancyReadRepository _vacancyReadRepository;
         private readonly IMapper _mapper;
 
         public VacancyService(CareerCompassDbContext context,
                               IRecruiterReadRepository recruiterReadRepository,
                               ICompanyReadRepository companyReadRepository,
                               IVacancyWriteRepository vacancyWriteRepository,
-                              IMapper mapper)
+                              IMapper mapper,
+                              IVacancyReadRepository vacancyReadRepository)
         {
             _context = context;
             _recruiterReadRepository = recruiterReadRepository;
             _companyReadRepository = companyReadRepository;
             _vacancyWriteRepository = vacancyWriteRepository;
             _mapper = mapper;
+            _vacancyReadRepository = vacancyReadRepository;
         }
 
         public async Task Create(VacancyCreateDto vacancyCreateDto, string userId, Guid companyId)
@@ -109,5 +113,14 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 v.DateCreated
             )).ToList();
         }
+        public async Task<List<VacancyGetByIdDto>> GetVacancyByRecruiterId(Guid id)
+        {
+            var list = await _context.Vacancy
+                            .Include(v => v.Company)
+                            .Where(v => v.Recruiter.Id == id)
+                            .ToListAsync();
+            return _mapper.Map<List<VacancyGetByIdDto>>(list);
+        }
+
     }
 }

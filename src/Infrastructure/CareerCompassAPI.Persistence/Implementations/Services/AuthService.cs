@@ -14,7 +14,6 @@ using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
-using System.Web;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -63,7 +62,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                                       $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
             await _mailService.SendEmailAsync(message);
         }
-
         public async Task<TokenResponseDto> Login(UserSignInDto userSignInDto)
         {
             AppUser user = await _userManager.FindByEmailAsync(userSignInDto.email);
@@ -82,7 +80,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _userManager.UpdateAsync(user);
             return tokenResponse;
         }
-
         public async Task Register(UserRegisterDto userRegisterDto)
         {
             var freeSubscription = await _subscriptionReadRepository.GetByExpressionAsync(s => s.Price == 0);
@@ -141,7 +138,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(userId, title, message), TimeSpan.FromSeconds(10));
             }
         }
-
         public async Task ResetPassword(ResetPasswordDto resetPasswordDto, string userId, string token)
         {
             if (resetPasswordDto.password != resetPasswordDto.confirmPassword)
@@ -164,9 +160,11 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 }
                 throw new InvalidOperationException(errorMessage.ToString());
             }
+            var parsedId = Guid.Parse(userId);
+            var title = "Password Reset Success";
+            var message = "You have successfully reset your password, if it was not you please contact support urgently.";
+            BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(parsedId, title, message), TimeSpan.FromSeconds(1));
         }
-
-
         public async Task<TokenResponseDto> ValidateRefreshToken(string refreshToken)
         {
             if (refreshToken is null)

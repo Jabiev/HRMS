@@ -9,6 +9,7 @@ namespace CareerCompassAPI.Persistence.MapperProfiles
         public VacancyProfile()
         {
             CreateMap<Vacancy,VacancyGetDto>().ReverseMap();
+            CreateMap<Vacancy,VacancyGetByIdDto>().ReverseMap();
         }
     }
 }
