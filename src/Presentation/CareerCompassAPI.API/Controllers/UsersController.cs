@@ -15,7 +15,7 @@ namespace CareerCompassAPI.API.Controllers
             _userService = userService;
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetUserDetails(string userId)
+        public async Task<IActionResult> GetUserDetails([FromQuery]string userId)
         {
             var response = await _userService.GetDetailsAsync(userId);
             return Ok(response);
