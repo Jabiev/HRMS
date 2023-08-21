@@ -16,5 +16,7 @@ namespace CareerCompassAPI.Domain.Entities
         public string? LastName { get; set; }
         public Subscriptions Subscription { get; set; } = null!;
         public ICollection<Vacancy>? Vacancies { get; set; }
+        public int CurrentPostCount { get; set; }
+        public DateTime SubscriptionStartDate { get; set; }
     }
 }

@@ -292,6 +292,9 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<Guid?>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("CurrentPostCount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -309,6 +312,9 @@ namespace CareerCompassAPI.Persistence.Migrations
 
                     b.Property<Guid>("SubscriptionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("SubscriptionStartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

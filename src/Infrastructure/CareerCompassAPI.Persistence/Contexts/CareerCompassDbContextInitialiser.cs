@@ -50,8 +50,8 @@ namespace CareerCompassAPI.Persistence.Contexts
             var subscriptions = new List<Subscriptions>
     {
         new Subscriptions { Name = "Free", Price = 0, PostLimit = 3 },
-        new Subscriptions { Name = "Basic", Price = 29.99M, PostLimit = 10 },
-        new Subscriptions { Name = "Pro", Price = 59.99M, PostLimit = -1 }
+        new Subscriptions { Name = "Basic", Price = 149.99M, PostLimit = 10 },
+        new Subscriptions { Name = "Pro", Price = 349.99M, PostLimit = -1 }
     };
             foreach (var subscription in subscriptions)
             {

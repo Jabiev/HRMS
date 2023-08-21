@@ -41,10 +41,12 @@ namespace CareerCompassAPI.Infrastructure.Services.Azure
             List<(string fileName, string pathOrContainerName)> datas = new();
             foreach (IFormFile file in files)
             {
-                BlobClient blobClient = _blobContainerClient.GetBlobClient(file.Name);
-                await blobClient.UploadAsync(file.OpenReadStream());
-                datas.Add((file.Name, containerName));
+                string fileName = file.FileName; 
+                BlobClient blobClient = _blobContainerClient.GetBlobClient(fileName);
+                await blobClient.UploadAsync(file.OpenReadStream(), overwrite: true);
+                datas.Add((fileName, containerName));
             }
+
             return datas;
         }
     }
