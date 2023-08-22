@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
+    <PackageReference Include="Stripe.net" Version="42.1.0" />
   </ItemGroup>
 
   <ItemGroup>

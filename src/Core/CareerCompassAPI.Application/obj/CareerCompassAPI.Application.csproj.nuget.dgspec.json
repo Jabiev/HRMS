@@ -55,6 +55,10 @@
             "Microsoft.AspNetCore.Http.Features": {
               "target": "Package",
               "version": "[2.2.0, )"
+            },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[42.1.0, )"
             }
           },
           "imports": [

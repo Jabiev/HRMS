@@ -24,6 +24,7 @@ using Hangfire;
 using CareerCompassAPI.Infrastructure.Services;
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.VacancyRepositories;
+using Stripe;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -34,7 +35,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<CareerCompassDbContextInitialiser>();
             AddReadRepositories(services);
             AddWriteRepositories(services);
-            services.AddScoped<ISubscriptionService, SubscriptionService>();
+            services.AddScoped<ISubscriptionService, Implementations.Services.SubscriptionService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IIndustryService, IndustryService>();
             services.AddScoped<ICompanyService, CompanyService>();
@@ -47,6 +48,12 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IShiftScheduleService, ShiftScheduleService>();
             services.AddScoped<IVacancyService, VacancyService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IStripeAppService, StripeAppService>();
+            services.AddTransient<Stripe.Checkout.SessionService>();
+            StripeConfiguration.ApiKey = configuration.GetValue<string>("StripeSettings:SecretKey");
+            services.AddScoped<CustomerService>()
+                   .AddScoped<ChargeService>()
+                   .AddScoped<TokenService>();
 
             services.AddAutoMapper(typeof(SubscriptionProfile).Assembly);
             services.AddDbContext<CareerCompassDbContext>(options =>
