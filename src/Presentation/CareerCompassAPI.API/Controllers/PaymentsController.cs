@@ -4,6 +4,7 @@ using CareerCompassAPI.Domain.Stripe;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
+using Stripe.Checkout;
 
 namespace CareerCompassAPI.API.Controllers
 {
@@ -12,6 +13,7 @@ namespace CareerCompassAPI.API.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly IStripeAppService _stripeService;
+        private const string WebhookSecret = "whsec_587bf44d90eabd10e52b11efb70476cd2e945a394a3d5cd005a236097741f3bd";
         public PaymentsController(IStripeAppService stripeService)
         {
             _stripeService = stripeService;
@@ -37,5 +39,45 @@ namespace CareerCompassAPI.API.Controllers
             string sessionId = await _stripeService.CreateCheckoutSessionAsync(plan, ct);
             return Ok(new { sessionId = sessionId }); 
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> HandleWebhook(CancellationToken ct)
+        {
+            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+
+            try
+            {
+                var stripeEvent = EventUtility.ConstructEvent(
+                    json,
+                    Request.Headers["Stripe-Signature"],
+                    WebhookSecret
+                );
+
+                if (stripeEvent.Type == Events.CheckoutSessionCompleted)
+                {
+                    var session = stripeEvent.Data.Object as Session;
+                    if (session != null)
+                    {
+                        var sessionId = session.Id;
+                        var planName = session.Metadata["plan_name"];
+                        if (string.IsNullOrEmpty(planName))
+                        {
+                           // errors
+                        }
+                        else
+                        {
+                            await _stripeService.UpdateSubscriptionAsync(sessionId, planName); 
+                        }
+                    }
+                }
+
+                return Ok();
+            }
+            catch (StripeException e)
+            {
+                Console.WriteLine($"StripeException: {e.Message}");
+                return BadRequest();
+            }
+        }
+
     }
 }

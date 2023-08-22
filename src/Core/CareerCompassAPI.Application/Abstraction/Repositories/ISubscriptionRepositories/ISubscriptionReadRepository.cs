@@ -2,5 +2,8 @@
 
 namespace CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository
 {
-    public interface ISubscriptionReadRepository : IReadRepository<Subscriptions> { }
+    public interface ISubscriptionReadRepository : IReadRepository<Subscriptions>
+    {
+        Task<Subscriptions?> GetByIdAsync(Guid subscriptionId); 
+    }
 }

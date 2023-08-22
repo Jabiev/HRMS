@@ -21,5 +21,11 @@ namespace CareerCompassAPI.Persistence.Implementations.Repositories.RecruiterRep
                 .Include(r => r.Subscription)
                 .FirstOrDefaultAsync(r => r.AppUserId == userId.ToString());
         }
+
+        public async Task<Guid?> GetSubscriptionIdByPlanName(string planName)
+        {
+            var subscription = await _context.Subscriptions.Where(s => s.Name == planName).FirstOrDefaultAsync();
+            return subscription?.Id;
+        }
     }
 }

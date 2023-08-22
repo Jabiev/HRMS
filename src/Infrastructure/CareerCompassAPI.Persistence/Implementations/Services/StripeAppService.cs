@@ -1,4 +1,6 @@
-﻿using CareerCompassAPI.Application.Abstraction.Services;
+﻿using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository;
+using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Payment_DTOs;
 using CareerCompassAPI.Domain.Stripe;
 using Stripe;
@@ -6,22 +8,34 @@ using Stripe.Checkout;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
-    public class StripeAppService:IStripeAppService
+    public class StripeAppService : IStripeAppService
     {
         private readonly ChargeService _chargeService;
         private readonly CustomerService _customerService;
         private readonly TokenService _tokenService;
         private readonly SessionService _sessionService;
+        private readonly ISubscriptionReadRepository _subscriptionReadRepository;
+        private readonly ISubscriptionWriteRepository _subscriptionWriteRepository;
+        private readonly IRecruiterReadRepository _recruiterReadRepository;
+        private readonly IRecruiterWriteRepository _recruiterWriteRepository;
         public StripeAppService(
             ChargeService chargeService,
             CustomerService customerService,
             TokenService tokenService,
-            SessionService sessionService)
+            SessionService sessionService,
+            ISubscriptionReadRepository subscriptionReadRepository,
+            ISubscriptionWriteRepository subscriptionWriteRepository,
+            IRecruiterWriteRepository recruiterWriteRepository,
+            IRecruiterReadRepository recruiterReadRepository)
         {
             _chargeService = chargeService;
             _customerService = customerService;
             _tokenService = tokenService;
             _sessionService = sessionService;
+            _subscriptionReadRepository = subscriptionReadRepository;
+            _subscriptionWriteRepository = subscriptionWriteRepository;
+            _recruiterWriteRepository = recruiterWriteRepository;
+            _recruiterReadRepository = recruiterReadRepository;
         }
         public async Task<StripeCustomer> AddStripeCustomerAsync(AddStripeCustomer customer, CancellationToken ct)
         {
@@ -99,11 +113,49 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 Mode = "payment",
                 SuccessUrl = "http://localhost:3000/paymentsuccess",
                 CancelUrl = "http://localhost:3000/paymenterror",
+                Metadata = new Dictionary<string, string>
+        {
+            { "recruiter_id", plan.RecruiterId.ToString() },
+            { "plan_name", plan.Name } 
+        },
             };
 
             var session = await _sessionService.CreateAsync(options, cancellationToken: ct);
 
             return session.Id;
+        }
+
+        public async Task<Session> RetrieveSessionAsync(string sessionId)
+        {
+            var sessionService = new SessionService();
+            var session = await sessionService.GetAsync(sessionId);
+            var recruiterId = Guid.Parse(session.Metadata["recruiter_id"]);
+
+            return session;
+        }
+        public async Task UpdateSubscriptionAsync(string sessionId, string planName)
+        {
+            var session = await RetrieveSessionAsync(sessionId);
+            var recruiterId = Guid.Parse(session.Metadata["recruiter_id"]);
+
+            if (string.IsNullOrEmpty(planName))
+            {
+                throw new ArgumentException("Plan name must not be empty.", nameof(planName));
+            }
+
+            var subscriptionId = await _recruiterReadRepository.GetSubscriptionIdByPlanName(planName);
+            if (subscriptionId == null) throw new InvalidOperationException("Subscription not found for the plan name.");
+
+            var recruiter = await _recruiterReadRepository.GetByIdAsync(recruiterId);
+            if (recruiter == null) throw new InvalidOperationException("Recruiter not found.");
+
+            var subscription = await _subscriptionReadRepository.GetByIdAsync(subscriptionId.Value);
+            if (subscription == null) throw new InvalidOperationException("Subscription object not found.");
+
+            recruiter.Subscription = subscription;
+
+            _recruiterWriteRepository.Update(recruiter);
+            await _recruiterWriteRepository.SaveChangesAsync();
         }
 
     }
