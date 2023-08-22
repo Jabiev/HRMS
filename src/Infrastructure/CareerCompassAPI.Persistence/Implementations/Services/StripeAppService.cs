@@ -16,7 +16,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly TokenService _tokenService;
         private readonly SessionService _sessionService;
         private readonly ISubscriptionReadRepository _subscriptionReadRepository;
-        private readonly ISubscriptionWriteRepository _subscriptionWriteRepository;
         private readonly IRecruiterReadRepository _recruiterReadRepository;
         private readonly IRecruiterWriteRepository _recruiterWriteRepository;
         public StripeAppService(
@@ -150,6 +149,14 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var recruiter = await _recruiterReadRepository.GetByIdAsync(recruiterId);
             if (recruiter == null) throw new InvalidOperationException("Recruiter not found.");
 
+            if (recruiter.Subscription != null && recruiter.SubscriptionStartDate != default(DateTime))
+            {
+                var subscriptionEndDate = recruiter.SubscriptionStartDate.AddDays(30);
+                if (DateTime.Now < subscriptionEndDate)
+                {
+                    throw new InvalidOperationException("The user is already subscribed, and the subscription is not yet expired.");
+                }
+            }
             var appUserId = Guid.Parse(recruiter.AppUserId);
 
             var subscription = await _subscriptionReadRepository.GetByIdAsync(subscriptionId.Value);
@@ -165,6 +172,5 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var message = "Congratulations! Your subscription has been successfully updated. Thank you for choosing our service.";
             BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(appUserId, title, message), TimeSpan.FromSeconds(10));
         }
-
     }
 }
