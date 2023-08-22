@@ -33,5 +33,9 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return recruiterGetDto;
         }
 
+        public bool IsSubscriptionActive(Recruiter recruiter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

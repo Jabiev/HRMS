@@ -13,10 +13,12 @@ namespace CareerCompassAPI.API.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly IStripeAppService _stripeService;
+        private readonly ISubscriptionService _subscriptionService;
         private const string WebhookSecret = "whsec_587bf44d90eabd10e52b11efb70476cd2e945a394a3d5cd005a236097741f3bd";
-        public PaymentsController(IStripeAppService stripeService)
+        public PaymentsController(IStripeAppService stripeService, ISubscriptionService subscriptionService)
         {
             _stripeService = stripeService;
+            _subscriptionService = subscriptionService;
         }
         [HttpPost("[action]")]
         public async Task<ActionResult<StripeCustomer>> AddStripeCustomer([FromBody] AddStripeCustomer customer, CancellationToken ct)

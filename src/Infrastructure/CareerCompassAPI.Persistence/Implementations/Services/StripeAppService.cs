@@ -3,6 +3,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionReposit
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Payment_DTOs;
 using CareerCompassAPI.Domain.Stripe;
+using Hangfire;
 using Stripe;
 using Stripe.Checkout;
 
@@ -149,13 +150,20 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var recruiter = await _recruiterReadRepository.GetByIdAsync(recruiterId);
             if (recruiter == null) throw new InvalidOperationException("Recruiter not found.");
 
+            var appUserId = Guid.Parse(recruiter.AppUserId);
+
             var subscription = await _subscriptionReadRepository.GetByIdAsync(subscriptionId.Value);
             if (subscription == null) throw new InvalidOperationException("Subscription object not found.");
 
             recruiter.Subscription = subscription;
+            recruiter.SubscriptionStartDate = DateTime.Now;
 
             _recruiterWriteRepository.Update(recruiter);
             await _recruiterWriteRepository.SaveChangesAsync();
+
+            var title = "Subscription Updated";
+            var message = "Congratulations! Your subscription has been successfully updated. Thank you for choosing our service.";
+            BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(appUserId, title, message), TimeSpan.FromSeconds(10));
         }
 
     }
