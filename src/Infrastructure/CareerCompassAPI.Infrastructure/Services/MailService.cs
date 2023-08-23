@@ -1,12 +1,9 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Domain.Concretes;
-using MimeKit;
-using MailKit.Net.Smtp;
-using CareerCompassAPI.Application.DTOs.Password_DTOs;
-using Microsoft.AspNetCore.Identity;
 using CareerCompassAPI.Domain.Identity;
-using Microsoft.AspNetCore.Http;
-using System;
+using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Identity;
+using MimeKit;
 
 namespace CareerCompassAPI.Infrastructure.Services
 {

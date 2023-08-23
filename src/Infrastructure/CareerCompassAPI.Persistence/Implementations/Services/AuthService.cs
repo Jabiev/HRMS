@@ -119,6 +119,11 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 };
                 await _jobSeekerWriteRepository.AddAsync(jobSeeker);
                 await _jobSeekerWriteRepository.SaveChangesAsync();
+
+                var userId = Guid.Parse(appUser.Id);
+                var title = "Welcome to Career Compass";
+                var message = "Please register your company's name before proceeding to post any job vacancies.";
+                BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(userId, title, message), TimeSpan.FromSeconds(10));
             }
             if (userRegisterDto.role == Roles.Recruiter)
             {
