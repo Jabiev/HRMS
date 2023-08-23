@@ -33,7 +33,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _tokenService = tokenService;
             _sessionService = sessionService;
             _subscriptionReadRepository = subscriptionReadRepository;
-            _subscriptionWriteRepository = subscriptionWriteRepository;
             _recruiterWriteRepository = recruiterWriteRepository;
             _recruiterReadRepository = recruiterReadRepository;
         }

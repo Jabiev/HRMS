@@ -3,7 +3,6 @@ using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories
 using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
-using CareerCompassAPI.Application.DTOs.Location_DTOs;
 using CareerCompassAPI.Application.DTOs.Vacancy_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Persistence.Contexts;
@@ -18,6 +17,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly ICompanyReadRepository _companyReadRepository;
         private readonly IVacancyWriteRepository _vacancyWriteRepository;
         private readonly IVacancyReadRepository _vacancyReadRepository;
+        private readonly IRecruiterWriteRepository _recruiterWriteRepository;
         private readonly IMapper _mapper;
 
         public VacancyService(CareerCompassDbContext context,
@@ -25,7 +25,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                               ICompanyReadRepository companyReadRepository,
                               IVacancyWriteRepository vacancyWriteRepository,
                               IMapper mapper,
-                              IVacancyReadRepository vacancyReadRepository)
+                              IVacancyReadRepository vacancyReadRepository,
+                              IRecruiterWriteRepository recruiterWriteRepository)
         {
             _context = context;
             _recruiterReadRepository = recruiterReadRepository;
@@ -33,6 +34,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _vacancyWriteRepository = vacancyWriteRepository;
             _mapper = mapper;
             _vacancyReadRepository = vacancyReadRepository;
+            _recruiterWriteRepository = recruiterWriteRepository;
         }
 
         public async Task Create(VacancyCreateDto vacancyCreateDto, string userId, Guid companyId)
@@ -43,6 +45,12 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             Guid recruiterAppUserId = Guid.Parse(userId);
             var recruiter = await _recruiterReadRepository.GetByUserIdAsync(recruiterAppUserId);
+            var subscription = await _context.Subscriptions.FirstOrDefaultAsync(s => s.Id == recruiter.Subscription.Id);
+            if (recruiter.CurrentPostCount >= subscription.PostLimit)
+            {
+                throw new InvalidOperationException("Post limit exceeded");
+            }
+
             var company = await _companyReadRepository.GetByIdAsync(companyId);
             var experience = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.Id == vacancyCreateDto.experienceLevelId);
             var jobLocation = await _context.JobLocations.FirstOrDefaultAsync(l => l.Id == vacancyCreateDto.locationId);
@@ -69,6 +77,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             newVacancy.Recruiter = recruiter;
             await _vacancyWriteRepository.AddAsync(newVacancy);
             await _vacancyWriteRepository.SaveChangesAsync();
+
+            recruiter.CurrentPostCount++;
+            _recruiterWriteRepository.Update(recruiter);
+            await _recruiterWriteRepository.SaveChangesAsync();
         }
 
         public async Task<List<VacancyGetDto>> GetBySearch(string jobTitle)
