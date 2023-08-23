@@ -67,6 +67,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 ExperienceLevel = experience,
                 Recruiter = recruiter,
                 Salary = vacancyCreateDto.salary,
+                ApplicationLimit = vacancyCreateDto.applicationLimit,
                 JobType = jobTypes,
                 JobLocation = jobLocation,
                 Description = vacancyCreateDto.description,

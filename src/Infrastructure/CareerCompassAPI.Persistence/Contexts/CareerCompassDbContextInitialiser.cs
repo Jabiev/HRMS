@@ -45,6 +45,7 @@ namespace CareerCompassAPI.Persistence.Contexts
                 }
             }
         }
+
         public async Task SubscriptionsSeedAsync()
         {
             var subscriptions = new List<Subscriptions>
@@ -64,7 +65,34 @@ namespace CareerCompassAPI.Persistence.Contexts
             }
             await _subscriptionWriteRepository.SaveChangesAsync();
         }
-
+        public async Task EducationLevelsSeed()
+        {
+            var educationLevels = new List<EducationLevel>
+            {
+             new EducationLevel { Name = "Preschool / Early Childhood Education" },
+            new EducationLevel { Name = "Primary / Elementary Education" },
+            new EducationLevel { Name = "Middle School / Junior High" },
+            new EducationLevel { Name = "High School Diploma / GED" },
+            new EducationLevel { Name = "Vocational / Technical Training" },
+            new EducationLevel { Name = "Associate's Degree" },
+            new EducationLevel { Name = "Bachelor's Degree" },
+            new EducationLevel { Name = "Master's Degree" },
+            new EducationLevel { Name = "Doctorate / Ph.D." },
+            new EducationLevel { Name = "Professional Certification" },
+            new EducationLevel { Name = "Some College (no degree)" },
+            new EducationLevel { Name = "Other" },
+             };
+            foreach (var level in educationLevels)
+            {
+                var existingLevel = await _context.EducationLevels
+                    .AnyAsync(el => el.Name == level.Name);
+                if (!existingLevel)
+                {
+                    _context.EducationLevels.Add(level);
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
         public async Task UserSeedAsync()
         {
             var proSubId = await _subscriptionReadRepository.GetByExpressionAsync(s => s.PostLimit == -1);
@@ -204,6 +232,6 @@ namespace CareerCompassAPI.Persistence.Contexts
 
             await _context.SaveChangesAsync();
         }
-
+  
     }
 }

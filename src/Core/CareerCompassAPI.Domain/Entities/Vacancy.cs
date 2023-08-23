@@ -16,6 +16,7 @@ namespace CareerCompassAPI.Domain.Entities
         public JobLocation JobLocation { get; set; }
         public string Description { get; set; } = null!;
         public Company Company { get; set; } = null!;
-
+        public int ApplicationLimit { get; set; }
+        public int CurrentApplicationCount { get; set; }
     }
 }
