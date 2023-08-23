@@ -1,3 +1,4 @@
+using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Infrastructure.Services;
@@ -95,4 +96,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseStaticFiles();
 app.MapHangfireDashboard("/hangfire", new DashboardOptions());
+
+RecurringJob.AddOrUpdate("check-subscription", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().CheckSubscriptions(), Cron.Hourly);
+
 app.Run();

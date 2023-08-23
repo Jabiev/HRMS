@@ -49,6 +49,8 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IVacancyService, VacancyService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStripeAppService, StripeAppService>();
+            services.AddScoped<IHangFireService, HangFireService>();
+
             services.AddTransient<Stripe.Checkout.SessionService>();
             StripeConfiguration.ApiKey = configuration.GetValue<string>("StripeSettings:SecretKey");
             services.AddScoped<CustomerService>()
