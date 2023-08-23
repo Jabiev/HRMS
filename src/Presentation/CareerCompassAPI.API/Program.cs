@@ -96,7 +96,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseStaticFiles();
 app.MapHangfireDashboard("/hangfire", new DashboardOptions());
-
 RecurringJob.AddOrUpdate("check-subscription", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().CheckSubscriptions(), Cron.Hourly);
-
 app.Run();
