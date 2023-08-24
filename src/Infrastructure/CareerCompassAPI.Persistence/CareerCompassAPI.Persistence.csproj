@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Configurations\" />
     <Folder Include="Exceptions\StorageExceptions\" />
     <Folder Include="Implementations\Services\Storage\" />
     <Folder Include="Resources\" />

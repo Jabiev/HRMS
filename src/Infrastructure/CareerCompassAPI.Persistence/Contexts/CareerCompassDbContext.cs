@@ -1,6 +1,7 @@
 ﻿using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Entities.Common;
 using CareerCompassAPI.Domain.Identity;
+using CareerCompassAPI.Persistence.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,5 +48,12 @@ namespace CareerCompassAPI.Persistence.Contexts
             }
             return await base.SaveChangesAsync(cancellationToken);
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder); 
+
+            modelBuilder.ApplyConfiguration(new JobApplicationConfiguration());
+        }
+
     }
 }
