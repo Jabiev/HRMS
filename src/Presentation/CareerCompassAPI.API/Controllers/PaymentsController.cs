@@ -1,10 +1,9 @@
-﻿using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
+﻿using CareerCompassAPI.Application.Abstraction.Repositories.IJobSeekerRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Payment_DTOs;
 using CareerCompassAPI.Domain.Enums;
-using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Domain.Stripe;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using Stripe.Checkout;
@@ -19,16 +18,19 @@ namespace CareerCompassAPI.API.Controllers
         private readonly ISubscriptionService _subscriptionService;
         private readonly IPaymentsService _paymentsService;
         private readonly IRecruiterReadRepository _recruiterReadRepository;
+        private readonly IJobSeekerReadRepository _jobSeekerReadRepository;
         private const string WebhookSecret = "whsec_587bf44d90eabd10e52b11efb70476cd2e945a394a3d5cd005a236097741f3bd";
         public PaymentsController(IStripeAppService stripeService,
                                   ISubscriptionService subscriptionService,
                                   IPaymentsService paymentsService,
-                                  IRecruiterReadRepository recruiterReadRepository)
+                                  IRecruiterReadRepository recruiterReadRepository,
+                                  IJobSeekerReadRepository jobSeekerReadRepository)
         {
             _stripeService = stripeService;
             _subscriptionService = subscriptionService;
             _paymentsService = paymentsService;
             _recruiterReadRepository = recruiterReadRepository;
+            _jobSeekerReadRepository = jobSeekerReadRepository;
         }
         [HttpPost("[action]")]
         public async Task<ActionResult<StripeCustomer>> AddStripeCustomer([FromBody] AddStripeCustomer customer, CancellationToken ct)
@@ -66,29 +68,46 @@ namespace CareerCompassAPI.API.Controllers
 
                 if (stripeEvent.Type == Events.CheckoutSessionCompleted)
                 {
-
                     var session = stripeEvent.Data.Object as Session;
                     if (session != null)
                     {
                         var sessionId = session.Id;
-                        var planName = session.Metadata["plan_name"];
-                        var recruiterId = Guid.Parse(session.Metadata["recruiter_id"]);
-                        var recruiter = await _recruiterReadRepository.GetByIdAsync(recruiterId);
-                        if (string.IsNullOrEmpty(planName))
-                        {
-                            // errors
-                        }
-                        else
-                        {
-                            long amountTotal = session.AmountTotal ?? throw new InvalidOperationException("Amount total is missing");
-                            await _stripeService.UpdateSubscriptionAsync(sessionId, planName);
-                            var paymentCreateDto = new PaymentCreateDto(
-                            recruiter.AppUserId,
-                            amountTotal,
-                            PaymentTypes.Subscription 
-                            );
 
-                            await _paymentsService.CreateAsync(paymentCreateDto);
+                        if (session.Metadata.ContainsKey("recruiter_id"))
+                        {
+                            var planName = session.Metadata["plan_name"];
+                            var recruiterId = Guid.Parse(session.Metadata["recruiter_id"]);
+                            var recruiter = await _recruiterReadRepository.GetByIdAsync(recruiterId);
+
+                            if (string.IsNullOrEmpty(planName))
+                            {
+                                // Handle errors related to missing plan name
+                            }
+                            else
+                            {
+                                long amountTotal = session.AmountTotal ?? throw new InvalidOperationException("Amount total is missing");
+                                await _stripeService.UpdateSubscriptionAsync(sessionId, planName);
+                                var paymentCreateDto = new PaymentCreateDto(
+                                    recruiter.AppUserId,
+                                    amountTotal,
+                                    PaymentTypes.Subscription
+                                );
+
+                                await _paymentsService.CreateAsync(paymentCreateDto);
+                            }
+                        }
+                        else if (session.Metadata.ContainsKey("job_seeker_id"))
+                        {
+                            var jobSeekerId = Guid.Parse(session.Metadata["job_seeker_id"]);
+                            long amountTotal = session.AmountTotal ?? throw new InvalidOperationException("Amount total is missing");
+                            var jobSeeker = Guid.Parse(session.Metadata["job_seeker_id"]);
+                            var js = await _jobSeekerReadRepository.GetByIdAsync(jobSeekerId);
+                            var paymentCreateDto = new PaymentCreateDto(
+                                js.AppUserId,
+                                amountTotal,
+                                PaymentTypes.Resume
+                                );
+                            await _paymentsService.CreateAsync (paymentCreateDto);
                         }
                     }
                 }
@@ -101,6 +120,15 @@ namespace CareerCompassAPI.API.Controllers
                 return BadRequest();
             }
         }
+
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<string>> CreateResumeCheckoutSession([FromBody] JobSeekerResumeCreateDto jobSeekerResume, CancellationToken ct)
+        {
+            string sessionId = await _stripeService.CreateCheckoutSessionForResumeAsync(jobSeekerResume, ct);
+            return Ok(new { sessionId = sessionId });
+        }
+
 
     }
 }

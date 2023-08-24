@@ -13,5 +13,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<string> CreateCheckoutSessionAsync(PlanDTO plan, CancellationToken ct);
         Task<Session> RetrieveSessionAsync(string sessionId);
         Task UpdateSubscriptionAsync(string sessionId,string planName);
+        Task<string> CreateCheckoutSessionForResumeAsync(JobSeekerResumeCreateDto jobSeekerResume, CancellationToken ct);
     }
 }

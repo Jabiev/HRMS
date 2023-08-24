@@ -26,6 +26,7 @@ namespace CareerCompassAPI.Persistence.Contexts
         public DbSet<EducationLevel> EducationLevels { get; set; }
         public DbSet<JobSeekerDetails> JobSeekerDetails { get; set; }
         public DbSet<Payments> Payments { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Domain.Entities.File> Files { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

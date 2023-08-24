@@ -171,5 +171,48 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var message = "Congratulations! Your subscription has been successfully updated. Thank you for choosing our service.";
             BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(appUserId, title, message), TimeSpan.FromSeconds(10));
         }
+        public async Task<string> CreateCheckoutSessionForResumeAsync(JobSeekerResumeCreateDto jobSeekerResume, CancellationToken ct)
+        {
+            if (jobSeekerResume == null || jobSeekerResume.amount <= 0)
+            {
+                throw new ArgumentException("Amount must be greater than 0", nameof(jobSeekerResume));
+            }
+
+            long unitAmount = (long)(jobSeekerResume.amount * 100m);
+
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = new List<SessionLineItemOptions>
+        {
+            new SessionLineItemOptions
+            {
+                PriceData = new SessionLineItemPriceDataOptions
+                {
+                    UnitAmount = unitAmount,
+                    Currency = "usd",
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = jobSeekerResume.name
+                    },
+                },
+                Quantity = 1,
+            },
+        },
+                Mode = "payment",
+                SuccessUrl = "http://localhost:3000/paymentsuccess",
+                CancelUrl = "http://localhost:3000/paymenterror",
+                Metadata = new Dictionary<string, string>
+        {
+            { "job_seeker_id", jobSeekerResume.jobSeekerId.ToString() },
+            { "resume_name", jobSeekerResume.name }
+        },
+            };
+
+            var session = await _sessionService.CreateAsync(options, cancellationToken: ct);
+
+            return session.Id;
+        }
+
     }
 }
