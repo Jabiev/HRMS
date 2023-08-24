@@ -87,6 +87,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 UserName = userRegisterDto.email,
                 Email = userRegisterDto.email,
+                PhoneNumber = userRegisterDto.phoneNumber,
             };
             IdentityResult identityResult = await _userManager.CreateAsync(appUser,userRegisterDto.password);
             
