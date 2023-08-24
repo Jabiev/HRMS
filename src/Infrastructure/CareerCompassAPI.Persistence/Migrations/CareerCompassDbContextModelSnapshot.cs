@@ -370,6 +370,37 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.ToTable("Notifications");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Payments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Recruiter", b =>
                 {
                     b.Property<Guid>("Id")
@@ -843,6 +874,15 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Payments", b =>
+                {
+                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "AppUser")
+                        .WithMany("Payments")
+                        .HasForeignKey("AppUserId");
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Recruiter", b =>
                 {
                     b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "AppUser")
@@ -1030,6 +1070,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("Payments");
 
                     b.Navigation("Recruiters")
                         .IsRequired();

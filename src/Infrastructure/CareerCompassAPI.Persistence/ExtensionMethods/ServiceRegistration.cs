@@ -25,6 +25,8 @@ using CareerCompassAPI.Infrastructure.Services;
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.VacancyRepositories;
 using Stripe;
+using CareerCompassAPI.Application.Abstraction.Repositories.IPaymentRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.PaymentRepositories;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -52,6 +54,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IHangFireService, HangFireService>();
             services.AddScoped<IEducationLevelService, EducationLevelService>();
             services.AddScoped<IJobSeekerService, JobSeekerService>();
+            services.AddScoped<IPaymentsService, PaymentService>();
 
             services.AddTransient<Stripe.Checkout.SessionService>();
             StripeConfiguration.ApiKey = configuration.GetValue<string>("StripeSettings:SecretKey");
@@ -81,6 +84,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<INotificationReadRepository, NotificationReadRepository>();
             services.AddScoped<IRecruiterReadRepository, RecruiterReadRepository>();
             services.AddScoped<IVacancyReadRepository, VacancyReadRepository>();
+            services.AddScoped<IPaymentReadRepository, PaymentReadRepository>();
         }
 
         private static void AddWriteRepositories(IServiceCollection services)
@@ -94,6 +98,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<INotificationWriteRepository,NotificationWriteRepository>();
             services.AddScoped<IRecruiterWriteRepository, RecruiterWriteRepository>();
             services.AddScoped<IVacancyWriteRepository, VacancyWriteRepository>();
+            services.AddScoped<IPaymentWriteRepository, PaymentWriteRepository>();
         }
     }
 }

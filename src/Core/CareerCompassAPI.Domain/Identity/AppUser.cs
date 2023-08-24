@@ -17,5 +17,6 @@ namespace CareerCompassAPI.Domain.Identity
         public JobSeeker JobSeekers { get; set; }
         public Recruiter Recruiters { get; set; }
         public ICollection<Notification> Notifications { get; set; }
+        public ICollection<Payments> Payments { get; set; }
     }
 }
