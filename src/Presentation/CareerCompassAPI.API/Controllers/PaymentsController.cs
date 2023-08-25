@@ -4,7 +4,9 @@ using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Payment_DTOs;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Stripe;
+using CareerCompassAPI.SignalR.Hubs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Stripe;
 using Stripe.Checkout;
 
@@ -15,6 +17,8 @@ namespace CareerCompassAPI.API.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly IStripeAppService _stripeService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IHubContext<PaymentHub> _hubContext;
         private readonly ISubscriptionService _subscriptionService;
         private readonly IPaymentsService _paymentsService;
         private readonly IRecruiterReadRepository _recruiterReadRepository;
@@ -24,13 +28,17 @@ namespace CareerCompassAPI.API.Controllers
                                   ISubscriptionService subscriptionService,
                                   IPaymentsService paymentsService,
                                   IRecruiterReadRepository recruiterReadRepository,
-                                  IJobSeekerReadRepository jobSeekerReadRepository)
+                                  IJobSeekerReadRepository jobSeekerReadRepository,
+                                  IHubContext<PaymentHub> hubContext,
+                                  IServiceProvider serviceProvider)
         {
             _stripeService = stripeService;
             _subscriptionService = subscriptionService;
             _paymentsService = paymentsService;
             _recruiterReadRepository = recruiterReadRepository;
             _jobSeekerReadRepository = jobSeekerReadRepository;
+            _hubContext = hubContext;
+            _serviceProvider = serviceProvider;
         }
         [HttpPost("[action]")]
         public async Task<ActionResult<StripeCustomer>> AddStripeCustomer([FromBody] AddStripeCustomer customer, CancellationToken ct)
@@ -108,6 +116,9 @@ namespace CareerCompassAPI.API.Controllers
                                 PaymentTypes.Resume
                                 );
                             await _paymentsService.CreateAsync (paymentCreateDto);
+
+                            var hubContext = _serviceProvider.GetService<IHubContext<PaymentHub>>();
+                            await hubContext.Clients.User(js.AppUserId.ToString()).SendAsync("PaymentSuccess");
                         }
                     }
                 }
@@ -128,7 +139,5 @@ namespace CareerCompassAPI.API.Controllers
             string sessionId = await _stripeService.CreateCheckoutSessionForResumeAsync(jobSeekerResume, ct);
             return Ok(new { sessionId = sessionId });
         }
-
-
     }
 }

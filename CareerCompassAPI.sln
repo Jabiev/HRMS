@@ -13,15 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8FE67DD8-FB84-4AD2-97EA-10F3B4A66D52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CareerCompassAPI.Application", "src\Core\CareerCompassAPI.Application\CareerCompassAPI.Application.csproj", "{28C499B4-42FB-4AEB-A62E-6EFB0E92FE69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareerCompassAPI.Application", "src\Core\CareerCompassAPI.Application\CareerCompassAPI.Application.csproj", "{28C499B4-42FB-4AEB-A62E-6EFB0E92FE69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CareerCompassAPI.Domain", "src\Core\CareerCompassAPI.Domain\CareerCompassAPI.Domain.csproj", "{63A10F6A-529F-48E5-9273-C68506CBF6CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareerCompassAPI.Domain", "src\Core\CareerCompassAPI.Domain\CareerCompassAPI.Domain.csproj", "{63A10F6A-529F-48E5-9273-C68506CBF6CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CareerCompassAPI.Infrastructure", "src\Infrastructure\CareerCompassAPI.Infrastructure\CareerCompassAPI.Infrastructure.csproj", "{AB2622F7-DD1C-4BA6-90D8-C171C7A070A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareerCompassAPI.Infrastructure", "src\Infrastructure\CareerCompassAPI.Infrastructure\CareerCompassAPI.Infrastructure.csproj", "{AB2622F7-DD1C-4BA6-90D8-C171C7A070A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CareerCompassAPI.Persistence", "src\Infrastructure\CareerCompassAPI.Persistence\CareerCompassAPI.Persistence.csproj", "{F19ABA3E-DCF0-420A-BC62-974528F8ED3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareerCompassAPI.Persistence", "src\Infrastructure\CareerCompassAPI.Persistence\CareerCompassAPI.Persistence.csproj", "{F19ABA3E-DCF0-420A-BC62-974528F8ED3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CareerCompassAPI.API", "src\Presentation\CareerCompassAPI.API\CareerCompassAPI.API.csproj", "{127811B7-F424-4DFB-9F8B-27564E980870}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareerCompassAPI.API", "src\Presentation\CareerCompassAPI.API\CareerCompassAPI.API.csproj", "{127811B7-F424-4DFB-9F8B-27564E980870}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CareerCompassAPI.SignalR", "src\Infrastructure\CareerCompassAPI.SignalR\CareerCompassAPI.SignalR.csproj", "{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{127811B7-F424-4DFB-9F8B-27564E980870}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{127811B7-F424-4DFB-9F8B-27564E980870}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{127811B7-F424-4DFB-9F8B-27564E980870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{AB2622F7-DD1C-4BA6-90D8-C171C7A070A7} = {3A8FE57A-CC26-4BF7-9B49-75A997CABC88}
 		{F19ABA3E-DCF0-420A-BC62-974528F8ED3E} = {3A8FE57A-CC26-4BF7-9B49-75A997CABC88}
 		{127811B7-F424-4DFB-9F8B-27564E980870} = {8B37B06C-5E25-4302-9BB3-7A6468AF741B}
+		{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD} = {3A8FE57A-CC26-4BF7-9B49-75A997CABC88}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E157B089-6192-42DF-9B25-B917DC6C9C50}

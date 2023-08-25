@@ -18,10 +18,15 @@ namespace CareerCompassAPI.Infrastructure.Services
             services.AddLogging(builder => {
                 builder.AddConsole();
             });
+     
         }
         public static void AddStorage<T>(this  IServiceCollection services) where T : class , IStorage
         {
             services.AddScoped<IStorage, T>();
+        }
+        public static void AddSignalRServices(this IServiceCollection services)
+        {
+            services.AddSignalR();
         }
     }
 }

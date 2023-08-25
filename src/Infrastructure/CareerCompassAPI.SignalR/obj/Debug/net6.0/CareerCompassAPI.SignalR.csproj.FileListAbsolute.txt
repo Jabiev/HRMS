@@ -1,0 +1,12 @@
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\bin\Debug\net6.0\CareerCompassAPI.SignalR.deps.json
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\bin\Debug\net6.0\CareerCompassAPI.SignalR.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\bin\Debug\net6.0\CareerCompassAPI.SignalR.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\CareerCompassAPI.SignalR.csproj.AssemblyReference.cache
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\CareerCompassAPI.SignalR.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\CareerCompassAPI.SignalR.AssemblyInfoInputs.cache
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\CareerCompassAPI.SignalR.AssemblyInfo.cs
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\CareerCompassAPI.SignalR.csproj.CoreCompileInputs.cache
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\CareerCompassAPI.SignalR.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\refint\CareerCompassAPI.SignalR.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\CareerCompassAPI.SignalR.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\ref\CareerCompassAPI.SignalR.dll
