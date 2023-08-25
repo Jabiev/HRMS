@@ -115,7 +115,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 Metadata = new Dictionary<string, string>
         {
             { "recruiter_id", plan.RecruiterId.ToString() },
-            { "plan_name", plan.Name } 
+            { "plan_name", plan.Name }
         },
             };
 
@@ -203,10 +203,12 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 SuccessUrl = "http://localhost:3000/paymentsuccess",
                 CancelUrl = "http://localhost:3000/paymenterror",
                 Metadata = new Dictionary<string, string>
-        {
-            { "job_seeker_id", jobSeekerResume.jobSeekerId.ToString() },
-            { "resume_name", jobSeekerResume.name }
-        },
+{
+    { "job_seeker_id", jobSeekerResume.jobSeekerId.ToString() },
+    { "resume_name", jobSeekerResume.name },
+    { "user_id", jobSeekerResume.jobSeekerId.ToString() }
+},
+
             };
 
             var session = await _sessionService.CreateAsync(options, cancellationToken: ct);

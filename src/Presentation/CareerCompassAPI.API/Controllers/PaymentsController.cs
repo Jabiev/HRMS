@@ -18,27 +18,24 @@ namespace CareerCompassAPI.API.Controllers
     {
         private readonly IStripeAppService _stripeService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IHubContext<PaymentHub> _hubContext;
-        private readonly ISubscriptionService _subscriptionService;
+        private readonly ILogger<PaymentsController> _logger;
         private readonly IPaymentsService _paymentsService;
         private readonly IRecruiterReadRepository _recruiterReadRepository;
         private readonly IJobSeekerReadRepository _jobSeekerReadRepository;
         private const string WebhookSecret = "whsec_587bf44d90eabd10e52b11efb70476cd2e945a394a3d5cd005a236097741f3bd";
         public PaymentsController(IStripeAppService stripeService,
-                                  ISubscriptionService subscriptionService,
                                   IPaymentsService paymentsService,
                                   IRecruiterReadRepository recruiterReadRepository,
                                   IJobSeekerReadRepository jobSeekerReadRepository,
-                                  IHubContext<PaymentHub> hubContext,
-                                  IServiceProvider serviceProvider)
+                                  IServiceProvider serviceProvider,
+                                  ILogger<PaymentsController> logger)
         {
             _stripeService = stripeService;
-            _subscriptionService = subscriptionService;
             _paymentsService = paymentsService;
             _recruiterReadRepository = recruiterReadRepository;
             _jobSeekerReadRepository = jobSeekerReadRepository;
-            _hubContext = hubContext;
             _serviceProvider = serviceProvider;
+            _logger = logger;
         }
         [HttpPost("[action]")]
         public async Task<ActionResult<StripeCustomer>> AddStripeCustomer([FromBody] AddStripeCustomer customer, CancellationToken ct)
@@ -111,14 +108,16 @@ namespace CareerCompassAPI.API.Controllers
                             var jobSeeker = Guid.Parse(session.Metadata["job_seeker_id"]);
                             var js = await _jobSeekerReadRepository.GetByUserIdAsync(jobSeekerId);
                             var paymentCreateDto = new PaymentCreateDto(
-                                js.AppUserId,
+                               jobSeeker.ToString(),
                                 amountTotal,
                                 PaymentTypes.Resume
                                 );
-                            await _paymentsService.CreateAsync (paymentCreateDto);
+                            await _paymentsService.CreateAsync(paymentCreateDto);
 
+                            _logger.LogInformation($"Sending PaymentSuccess message to user {jobSeekerId}.");
                             var hubContext = _serviceProvider.GetService<IHubContext<PaymentHub>>();
-                            await hubContext.Clients.User(js.AppUserId.ToString()).SendAsync("PaymentSuccess");
+                            await hubContext.Clients.User(jobSeekerId.ToString()).SendAsync("PaymentSuccess");
+
                         }
                     }
                 }
