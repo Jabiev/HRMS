@@ -109,7 +109,7 @@ namespace CareerCompassAPI.API.Controllers
                             var jobSeekerId = Guid.Parse(session.Metadata["job_seeker_id"]);
                             long amountTotal = session.AmountTotal ?? throw new InvalidOperationException("Amount total is missing");
                             var jobSeeker = Guid.Parse(session.Metadata["job_seeker_id"]);
-                            var js = await _jobSeekerReadRepository.GetByIdAsync(jobSeekerId);
+                            var js = await _jobSeekerReadRepository.GetByUserIdAsync(jobSeekerId);
                             var paymentCreateDto = new PaymentCreateDto(
                                 js.AppUserId,
                                 amountTotal,
