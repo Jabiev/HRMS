@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using File = CareerCompassAPI.Domain.Entities.File;
 
 namespace CareerCompassAPI.Domain.Identity
 {
@@ -18,5 +19,6 @@ namespace CareerCompassAPI.Domain.Identity
         public Recruiter Recruiters { get; set; }
         public ICollection<Notification> Notifications { get; set; }
         public ICollection<Payments> Payments { get; set; }
+        public ICollection<File> Files { get; set; }
     }
 }

@@ -140,28 +140,40 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("BlobPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContainerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Path")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Storage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Files");
                 });
@@ -862,6 +874,15 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Navigation("Location");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.File", b =>
+                {
+                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "User")
+                        .WithMany("Files")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.JobApplications", b =>
                 {
                     b.HasOne("CareerCompassAPI.Domain.Entities.JobSeeker", "JobSeeker")
@@ -1137,6 +1158,8 @@ namespace CareerCompassAPI.Persistence.Migrations
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Identity.AppUser", b =>
                 {
+                    b.Navigation("Files");
+
                     b.Navigation("JobSeekers")
                         .IsRequired();
 
