@@ -1,7 +1,9 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Repositories.IFileRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.File_DTOs;
+using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -15,10 +17,22 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _context = context;
             _fileWriteRepository = fileWriteRepository;
         }
-
-        public Task CreateAsync(FileCreateDto fileCreateDto)
+        public async Task CreateAsync(FileCreateDto fileCreateDto)
         {
-            throw new NotImplementedException();
+            if (fileCreateDto == null) throw new ArgumentNullException();
+
+            AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == fileCreateDto.appUserId);
+            Domain.Entities.File newFile = new()
+            {
+                Name = fileCreateDto.name,
+                BlobPath = fileCreateDto.blobPath,
+                ContainerName = fileCreateDto.containerName,
+                ContentType = fileCreateDto.contentType,
+                Size = fileCreateDto.size,
+                User = user,
+            };
+            await _fileWriteRepository.AddAsync(newFile);
+            await _fileWriteRepository.SaveChangesAsync();
         }
     }
 }

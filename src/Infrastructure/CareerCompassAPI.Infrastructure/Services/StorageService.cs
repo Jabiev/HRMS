@@ -1,4 +1,5 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Storage;
+using CareerCompassAPI.Application.DTOs.File_DTOs;
 using Microsoft.AspNetCore.Http;
 
 namespace CareerCompassAPI.Infrastructure.Services
@@ -21,7 +22,7 @@ namespace CareerCompassAPI.Infrastructure.Services
         public bool HasFile(string pathOrContainerName, string fileName)
             => _storage.HasFile(pathOrContainerName, fileName);
 
-        public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(string pathOrContainerName, IFormFileCollection files)
-            =>await _storage.UploadAsync(pathOrContainerName, files);
+        public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(FileUploadDto fileUploadDto)
+            =>await _storage.UploadAsync(fileUploadDto);
     }
 }

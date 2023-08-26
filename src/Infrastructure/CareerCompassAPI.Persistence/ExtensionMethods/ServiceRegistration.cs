@@ -27,6 +27,9 @@ using CareerCompassAPI.Persistence.Implementations.Repositories.VacancyRepositor
 using Stripe;
 using CareerCompassAPI.Application.Abstraction.Repositories.IPaymentRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.PaymentRepositories;
+using FileService = CareerCompassAPI.Persistence.Implementations.Services.FileService;
+using CareerCompassAPI.Application.Abstraction.Repositories.IFileRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.FileRepositories;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -55,6 +58,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IEducationLevelService, EducationLevelService>();
             services.AddScoped<IJobSeekerService, JobSeekerService>();
             services.AddScoped<IPaymentsService, PaymentService>();
+            services.AddScoped<IFileService, FileService>();
 
             services.AddTransient<Stripe.Checkout.SessionService>();
             StripeConfiguration.ApiKey = configuration.GetValue<string>("StripeSettings:SecretKey");
@@ -85,6 +89,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IRecruiterReadRepository, RecruiterReadRepository>();
             services.AddScoped<IVacancyReadRepository, VacancyReadRepository>();
             services.AddScoped<IPaymentReadRepository, PaymentReadRepository>();
+            services.AddScoped<IFileReadRepository, FileReadRepository>();
         }
 
         private static void AddWriteRepositories(IServiceCollection services)
@@ -99,6 +104,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IRecruiterWriteRepository, RecruiterWriteRepository>();
             services.AddScoped<IVacancyWriteRepository, VacancyWriteRepository>();
             services.AddScoped<IPaymentWriteRepository, PaymentWriteRepository>();
+            services.AddScoped<IFileWriteRepository, FileWriteRepository>();
         }
     }
 }
