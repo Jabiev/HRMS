@@ -11,6 +11,5 @@ namespace CareerCompassAPI.Domain.Entities
         public JobSeeker JobSeeker { get; set; } = null!;
         public Vacancy Vacancy { get; set; }=null!;
         public ApplicationStatus Status { get; set; }
-        public DateTime Expiration { get; set; }
     }
 }
