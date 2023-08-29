@@ -4,6 +4,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Application_DTOs;
 using CareerCompassAPI.Domain.Entities;
+using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -102,6 +103,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 var file = await _context.Files.FirstOrDefaultAsync(f => f.User.Id == jobSeekerAppUserId);
 
                 dtos.Add(new ApplicantsGetDto(
+                    application.Id,
                     application.JobSeeker.FirstName,
                     application.JobSeeker.LastName,
                     application.Vacancy.JobTitle,
@@ -109,6 +111,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 ));
             }
             return dtos;
+        }
+
+        public async Task UpdateAsync(ApplicationStatusUpdateDto applicationStatusUpdateDto)
+        {
+            JobApplications application = await _jobApplicationReadRepository.GetByIdAsync(applicationStatusUpdateDto.applicationId);
+
+            if (application == null)
+            {
+                throw new InvalidOperationException("The specified job application does not exist.");
+            }
+
+            application.Status = applicationStatusUpdateDto.newStatus;
+            await _jobApplicationWriteRepository.SaveChangesAsync();
         }
     }
 }

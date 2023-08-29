@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Application_DTOs;
+using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.SignalR.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -31,6 +32,12 @@ namespace CareerCompassAPI.API.Controllers
         {
             var response = await _applicationService.GetApplicationsByAppUserId(appUserId);
             return Ok(response);
+        }
+        [HttpPut("[action]")]
+        public async Task<IActionResult> UpdateStatus([FromBody] ApplicationStatusUpdateDto applicationStatusUpdateDto )
+        {
+            await _applicationService.UpdateAsync(applicationStatusUpdateDto);
+            return Ok();
         }
     }
 }
