@@ -5,7 +5,6 @@ using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Application_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Persistence.Contexts;
-using Microsoft.EntityFrameworkCore;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {

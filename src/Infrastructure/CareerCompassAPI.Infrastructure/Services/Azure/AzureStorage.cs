@@ -64,10 +64,7 @@ namespace CareerCompassAPI.Infrastructure.Services.Azure
 
                 await _fileService.CreateAsync(fileCreateDto);
             }
-
             return datas;
         }
-
-
     }
 }
