@@ -109,6 +109,7 @@ app.MapControllers();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<PaymentHub>("/payments");
+    endpoints.MapHub<ApplicationHub>("/application");
 });
 app.MapHangfireDashboard("/hangfire", new DashboardOptions());
 RecurringJob.AddOrUpdate("check-subscription", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().CheckSubscriptions(), Cron.Hourly);

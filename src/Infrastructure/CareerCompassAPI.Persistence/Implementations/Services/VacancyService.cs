@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿    using AutoMapper;
 using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
@@ -119,11 +119,13 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 v.Company.Name,
                 v.JobLocation.Location,
                 v.Salary,
-                v.JobType.Select(jt => jt.TypeName).ToList(), 
+                v.JobType.Select(jt => jt.TypeName).ToList(),
                 v.ShiftAndSchedules.Select(ss => ss.ShiftName).ToList(),
                 v.Description,
                 v.Company.Details.Link,
-                v.DateCreated
+                v.DateCreated,
+                v.ApplicationLimit,
+                v.CurrentApplicationCount
             )).ToList();
         }
         public async Task<List<VacancyGetByIdDto>> GetVacancyByRecruiterId(Guid id)
