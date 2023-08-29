@@ -30,13 +30,11 @@ namespace CareerCompassAPI.Infrastructure.Services.Azure
             _blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             return _blobContainerClient.GetBlobs().Select(b=>b.Name).ToList();
         }
-
         public bool HasFile(string containerName, string fileName)
         {
             _blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             return _blobContainerClient.GetBlobs().Any(b => b.Name == fileName);
         }
-
         public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(FileUploadDto fileUploadDto)
         {
             _blobContainerClient = _blobServiceClient.GetBlobContainerClient(fileUploadDto.containerName);
