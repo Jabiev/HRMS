@@ -33,6 +33,12 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _applicationService.GetApplicationsByAppUserId(appUserId);
             return Ok(response);
         }
+        [HttpGet("[action]/{appUserId}")]
+        public async Task<IActionResult> GetApprovedApplicants([FromRoute] string appUserId)
+        {
+            var response = await _applicationService.GetApprovedApplicantsByAppUserId(appUserId);
+            return Ok(response);
+        }
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdateStatus([FromBody] ApplicationStatusUpdateDto applicationStatusUpdateDto )
         {

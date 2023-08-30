@@ -6,6 +6,7 @@ using CareerCompassAPI.Application.DTOs.Application_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Persistence.Contexts;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -107,11 +108,41 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                     application.JobSeeker.FirstName,
                     application.JobSeeker.LastName,
                     application.Vacancy.JobTitle,
-                    file?.BlobPath ?? "NoFile"
+                    file?.BlobPath ?? "NoFile",
+                    application.Status
                 ));
             }
             return dtos;
         }
+
+        public async Task<List<ApprovedApplicantGetDto>> GetApprovedApplicantsByAppUserId(string appUserId)
+        {
+            var recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.AppUserId == appUserId);
+
+            if (recruiter == null)
+            {
+                return new List<ApprovedApplicantGetDto>();
+            }
+
+            var approvedApplications = await _context.Applications
+                .Where(ja => ja.Vacancy.Recruiter.Id == recruiter.Id && ja.Status == ApplicationStatus.Approved)
+                .Include(ja => ja.JobSeeker)
+                .Include(ja => ja.Vacancy)
+                .ToListAsync();
+
+            var approvedApplicantDtos = new List<ApprovedApplicantGetDto>();
+            foreach (var application in approvedApplications)
+            {
+                approvedApplicantDtos.Add(new ApprovedApplicantGetDto(
+                    application.Id,
+                    application.JobSeeker.FirstName,
+                    application.JobSeeker.LastName,
+                    application.Vacancy.JobTitle
+                ));
+            }
+            return approvedApplicantDtos;
+        }
+
 
         public async Task UpdateAsync(ApplicationStatusUpdateDto applicationStatusUpdateDto)
         {
@@ -121,9 +152,18 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new InvalidOperationException("The specified job application does not exist.");
             }
-
+            var jobseekerId = application.JobSeekerId;
+            var userId = await _jobSeekerReadRepository.GetByIdAsync(jobseekerId);
+            Guid parsedId = Guid.Parse(userId.AppUserId);
             application.Status = applicationStatusUpdateDto.newStatus;
             await _jobApplicationWriteRepository.SaveChangesAsync();
+            string title = "Career Compass - Application Status Changed!";
+            string message = $"Your application  has been {application.Status}.";
+
+            BackgroundJob.Schedule<INotificationService>(
+                x => x.CreateAsync(parsedId, title, message),
+                TimeSpan.FromSeconds(10)
+            );
         }
     }
 }
