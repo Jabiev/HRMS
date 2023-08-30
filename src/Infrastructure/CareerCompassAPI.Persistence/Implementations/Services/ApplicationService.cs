@@ -142,8 +142,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             return approvedApplicantDtos;
         }
-
-
         public async Task UpdateAsync(ApplicationStatusUpdateDto applicationStatusUpdateDto)
         {
             JobApplications application = await _jobApplicationReadRepository.GetByIdAsync(applicationStatusUpdateDto.applicationId);

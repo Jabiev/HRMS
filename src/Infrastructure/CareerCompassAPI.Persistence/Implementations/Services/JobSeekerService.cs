@@ -2,6 +2,7 @@
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.JobSeeker_DTOs;
 using CareerCompassAPI.Domain.Entities;
+using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +57,31 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             };
             await _context.JobSeekerDetails.AddAsync(jobSeekerDetails);
             await _context.SaveChangesAsync();
+        }
+        public async Task<List<JobseekerApprovedGetDto>> GetApprovedPositionsByAppUserId(string appUserId)
+        {
+            var jobSeeker = await _context.JobSeekers
+                .Include(js => js.JobApplications) 
+                .ThenInclude(ja => ja.Vacancy)    
+                .ThenInclude(v => v.Recruiter)  
+                .ThenInclude(r => r.Company)    
+                .FirstOrDefaultAsync(js => js.AppUserId == appUserId);
+
+            if (jobSeeker == null)
+            {
+                throw new InvalidOperationException("JobSeeker not found");
+            }
+
+            var approvedPositions = jobSeeker.JobApplications
+                .Where(ja => ja.Status == ApplicationStatus.Approved)
+                .Select(ja => new JobseekerApprovedGetDto(
+                    ja.Id,
+                    ja.Vacancy.Recruiter.FirstName,
+                    ja.Vacancy.Recruiter.LastName,
+                    ja.Vacancy.Recruiter.Company.Name
+                ))
+                .ToList();
+            return approvedPositions;
         }
 
         public async Task<JobSeekerGetDto> GetByUserId(Guid userId)

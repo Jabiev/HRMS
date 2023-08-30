@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Application_DTOs;
+using CareerCompassAPI.Application.DTOs.JobSeeker_DTOs;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.SignalR.Hubs;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,15 @@ namespace CareerCompassAPI.API.Controllers
     {
         private readonly IApplicationService _applicationService;
         private readonly IHubContext<ApplicationHub> _hubContext;
+        private readonly IJobSeekerService _jobSeekerService;
 
         public JobApplicationsController(IApplicationService applicationService,
-                                         IHubContext<ApplicationHub> hubContext)
+                                         IHubContext<ApplicationHub> hubContext,
+                                         IJobSeekerService jobSeekerService)
         {
             _applicationService = applicationService;
             _hubContext = hubContext;
+            _jobSeekerService = jobSeekerService;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> Post(ApplicationCreateDto applicationCreateDto)
@@ -44,6 +48,12 @@ namespace CareerCompassAPI.API.Controllers
         {
             await _applicationService.UpdateAsync(applicationStatusUpdateDto);
             return Ok();
+        }
+        [HttpGet("[action]/{appUserId}")]
+        public async Task<IActionResult> GetApprovedPositions([FromRoute] string appUserId)
+        {
+            var response = await _jobSeekerService.GetApprovedPositionsByAppUserId(appUserId);
+            return Ok(response);
         }
     }
 }

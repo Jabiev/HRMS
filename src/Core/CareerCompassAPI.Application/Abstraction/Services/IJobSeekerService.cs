@@ -6,5 +6,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
     {
         Task<JobSeekerGetDto> GetByUserId(Guid userId);
         Task CreateAsync(JobSeekerCreateDto dto, string jobseekerAppUserId);
+        Task<List<JobseekerApprovedGetDto>> GetApprovedPositionsByAppUserId(string appUserId);
     }
 }
