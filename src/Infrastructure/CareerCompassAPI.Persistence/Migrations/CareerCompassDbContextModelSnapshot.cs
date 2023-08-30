@@ -341,6 +341,50 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.ToTable("JobTypes");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MessageType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReadDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReceiverId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Notification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -927,6 +971,21 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Navigation("EducationLevel");
 
                     b.Navigation("JobSeeker");
+                });
+
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Message", b =>
+                {
+                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId");
+
+                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Notification", b =>
