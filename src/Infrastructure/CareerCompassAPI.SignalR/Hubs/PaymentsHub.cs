@@ -14,7 +14,7 @@ namespace CareerCompassAPI.SignalR.Hubs
 
         public async Task NotifyPaymentSuccess()
         {
-            _logger.LogInformation("Sending PaymentSuccess message to all clients."); // Assuming _logger is your logger instance
+            _logger.LogInformation("Sending PaymentSuccess message to all clients."); 
             await Clients.All.SendAsync("PaymentSuccess");
         }
 

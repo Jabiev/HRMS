@@ -17,22 +17,25 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _messageWriteRepository = messageWriteRepository;
             _context = context;
         }
-
         public async Task CreateAsync(MessageCreateDto messageCreateDto)
         {
             var senderUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == messageCreateDto.senderId);
             var receiverUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == messageCreateDto.receiverId);
+
+            if (senderUser == null || receiverUser == null)
+            {
+                throw new ArgumentException("Invalid sender or receiver ID");
+            }
+
             var newMessage = new Domain.Entities.Message
             {
                 Sender = senderUser,
                 Receiver = receiverUser,
                 Content = messageCreateDto.content,
-                IsRead = messageCreateDto.isRead,
+                IsRead = false,
                 MessageType = messageCreateDto.messageType,
-                DateCreated = DateTime.UtcNow,
-                DateModified = DateTime.UtcNow
             };
-             await _messageWriteRepository.AddAsync(newMessage);
+            await _messageWriteRepository.AddAsync(newMessage);
             await _messageWriteRepository.SaveChangesAsync();
         }
     }

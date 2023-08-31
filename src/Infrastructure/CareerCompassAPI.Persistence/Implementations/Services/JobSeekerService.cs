@@ -78,7 +78,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                     ja.Id,
                     ja.Vacancy.Recruiter.FirstName,
                     ja.Vacancy.Recruiter.LastName,
-                    ja.Vacancy.Recruiter.Company.Name
+                    ja.Vacancy.Recruiter.Company.Name,
+                    ja.Vacancy.Recruiter.AppUserId
                 ))
                 .ToList();
             return approvedPositions;

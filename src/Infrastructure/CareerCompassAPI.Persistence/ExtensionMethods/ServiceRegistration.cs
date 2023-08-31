@@ -32,6 +32,8 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IFileRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.FileRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IJobApplicationRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.JobApplicationRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IMessageRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.MessageRepositories;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -62,6 +64,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IPaymentsService, PaymentService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IApplicationService, ApplicationService>();
+            services.AddScoped<IMessageService, MessageService>();
             services.AddTransient<Stripe.Checkout.SessionService>();
             StripeConfiguration.ApiKey = configuration.GetValue<string>("StripeSettings:SecretKey");
             services.AddScoped<CustomerService>()
@@ -93,6 +96,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IPaymentReadRepository, PaymentReadRepository>();
             services.AddScoped<IFileReadRepository, FileReadRepository>();
             services.AddScoped<IJobApplicationReadRepository, JobApplicationReadRepository>();
+            services.AddScoped<IMessageReadRepository, MessageReadRepository>();
         }
 
         private static void AddWriteRepositories(IServiceCollection services)
@@ -109,6 +113,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IPaymentWriteRepository, PaymentWriteRepository>();
             services.AddScoped<IFileWriteRepository, FileWriteRepository>();
             services.AddScoped<IJobApplicationWriteRepository, JobApplicationWriteRepository>();
+            services.AddScoped<IMessageWriteRepository, MessageWriteRepository>();
         }
     }
 }

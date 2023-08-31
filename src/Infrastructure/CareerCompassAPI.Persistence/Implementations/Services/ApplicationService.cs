@@ -137,7 +137,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                     application.Id,
                     application.JobSeeker.FirstName,
                     application.JobSeeker.LastName,
-                    application.Vacancy.JobTitle
+                    application.Vacancy.JobTitle,
+                    application.JobSeeker.AppUserId
                 ));
             }
             return approvedApplicantDtos;
