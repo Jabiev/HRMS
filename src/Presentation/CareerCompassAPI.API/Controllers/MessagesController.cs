@@ -1,6 +1,8 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Message_DTOs;
+using CareerCompassAPI.SignalR.Hubs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CareerCompassAPI.API.Controllers
 {
@@ -9,15 +11,18 @@ namespace CareerCompassAPI.API.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly IMessageService _messageService;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-        public MessagesController(IMessageService messageService)
+        public MessagesController(IMessageService messageService, IHubContext<ChatHub> hubContext)
         {
             _messageService = messageService;
+            _hubContext = hubContext;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> Send(MessageCreateDto messageCreateDto)
         {
             await _messageService.CreateAsync(messageCreateDto);
+            //await _hubContext.Clients.All.SendAsync("ReceiveMessage");
             return Ok(new { Message = "Message successfully sent." });
         }
     }
