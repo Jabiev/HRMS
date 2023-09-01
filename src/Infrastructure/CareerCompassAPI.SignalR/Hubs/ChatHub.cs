@@ -39,5 +39,25 @@ namespace CareerCompassAPI.SignalR.Hubs
             var groupId = GenerateGroupId(userId1, userId2);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupId);
         }
+        public async Task SendCallOfferAsync(string senderId, string recipientId, string offer)
+        {
+            var groupId = GenerateGroupId(senderId, recipientId);
+            _logger.LogInformation($"Sending call offer from {senderId} to {recipientId} in group {groupId}");
+            await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveCallOffer", senderId, recipientId, offer);
+        }
+
+        public async Task SendCallAnswerAsync(string senderId, string recipientId, string answer)
+        {
+            var groupId = GenerateGroupId(senderId, recipientId);
+            _logger.LogInformation($"Sending call answer from {senderId} to {recipientId} in group {groupId}");
+            await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveCallAnswer", senderId, recipientId, answer);
+        }
+
+        public async Task SendIceCandidateAsync(string senderId, string recipientId, string iceCandidate)
+        {
+            var groupId = GenerateGroupId(senderId, recipientId);
+            _logger.LogInformation($"Sending ICE candidate from {senderId} to {recipientId} in group {groupId}");
+            await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveIceCandidate", senderId, recipientId, iceCandidate);
+        }
     }
 }
