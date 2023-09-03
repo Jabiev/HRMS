@@ -54,6 +54,12 @@ namespace CareerCompassAPI.SignalR.Hubs
 
             await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveDirectCallAnswer", callerId, answerJson);
         }
+        public async Task SendIceCandidate(string recipientId, string iceCandidateJson)
+        {
+            var groupId = GenerateGroupId(Context.UserIdentifier, recipientId);
+            await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveIceCandidate", iceCandidateJson);
+        }
+
         public async Task NotifyCallDeclined(string callerId)
         {
             _logger.LogInformation($"Call declined by {Context.UserIdentifier} for {callerId}");
