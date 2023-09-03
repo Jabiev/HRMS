@@ -1,18 +1,43 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Security.Claims;
+using CareerCompassAPI.Application.DTOs.RTC_DTOs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace CareerCompassAPI.SignalR.Hubs
 {
+
     public class ChatHub : Hub
     {
         private readonly ILogger<ChatHub> _logger;
+        private static readonly ConcurrentDictionary<string, string> UserConnectionMap = new ConcurrentDictionary<string, string>();
 
         public ChatHub(ILogger<ChatHub> logger)
         {
             _logger = logger;
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            string userId = Context.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+
+            if (userId != null)
+            {
+                UserConnectionMap.TryAdd(Context.ConnectionId, userId);
             }
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            string userId;
+            UserConnectionMap.TryRemove(Context.ConnectionId, out userId);
+            await base.OnDisconnectedAsync(exception);
+        }
+
         private string GenerateGroupId(string userId1, string userId2)
         {
             var list = new List<string> { userId1, userId2 };
@@ -67,10 +92,32 @@ namespace CareerCompassAPI.SignalR.Hubs
             await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveIceCandidate", senderId, recipientId, iceCandidate);
         }
 
-        public async Task StartDirectCallAsync(string userId, string recipientId, string offer)
+        public async Task StartDirectCallAsync(string userId, string recipientId, string offerJson)
         {
-            await Clients.User(recipientId).SendAsync("ReceiveDirectCall", userId, recipientId, offer);
-            _logger.LogInformation($"User {userId} started a direct call with {recipientId} and {offer}");
+            try
+            {
+                // Map the userId to the ConnectionId
+                UserConnectionMap.TryAdd(Context.ConnectionId, userId);
+
+                // ... the rest of your logic here
+                RTCSessionDescriptionDTO offer = JsonConvert.DeserializeObject<RTCSessionDescriptionDTO>(offerJson);
+
+                if (string.IsNullOrEmpty(offer.Type) || string.IsNullOrEmpty(offer.Sdp))
+                {
+                    _logger.LogWarning("Invalid offer received for starting a direct call.");
+                    return;
+                }
+
+                // Forwarding offer to the recipient
+                await Clients.User(recipientId).SendAsync("ReceiveDirectCall", userId, recipientId, offerJson);
+
+                _logger.LogInformation($"User {userId} started a direct call with {recipientId}. Offer forwarded.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while starting a direct call: {ex.Message}");
+                throw;
+            }
         }
 
     }
