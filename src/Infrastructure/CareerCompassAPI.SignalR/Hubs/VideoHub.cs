@@ -40,7 +40,7 @@ namespace CareerCompassAPI.SignalR.Hubs
         public async Task StartDirectCallAsync(string userId,string recipientId, string offerJson)
         {
             var groupId = GenerateGroupId(userId, recipientId);
-            _logger.LogInformation($"Starting a new video call between {userId} and {recipientId} in group {groupId}");
+            _logger.LogInformation($"Starting a new video call between {userId} and {recipientId} in group {groupId}    OFFER: {offerJson}");
 
             await JoinGroup(userId, recipientId);
 
@@ -54,5 +54,14 @@ namespace CareerCompassAPI.SignalR.Hubs
 
             await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveDirectCallAnswer", callerId, answerJson);
         }
+        public async Task NotifyCallDeclined(string callerId)
+        {
+            _logger.LogInformation($"Call declined by {Context.UserIdentifier} for {callerId}");
+
+            // Notify the caller that the call was declined.
+            // Assuming the caller has a connection ID mapped to their user ID.
+            await Clients.User(callerId).SendAsync("ReceiveCallDeclined", Context.UserIdentifier);
+        }
+
     }
 }
