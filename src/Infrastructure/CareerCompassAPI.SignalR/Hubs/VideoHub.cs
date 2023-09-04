@@ -57,15 +57,17 @@ namespace CareerCompassAPI.SignalR.Hubs
         public async Task SendIceCandidate(string recipientId, string iceCandidateJson)
         {
             var groupId = GenerateGroupId(Context.UserIdentifier, recipientId);
+            _logger.LogInformation($"Sending ICE Candidate to recipientId: {recipientId} within groupId: {groupId}. ICE Candidate JSON: {iceCandidateJson}");
+
             await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveIceCandidate", iceCandidateJson);
+
+            _logger.LogInformation("ICE Candidate sent successfully.");
         }
 
         public async Task NotifyCallDeclined(string callerId)
         {
             _logger.LogInformation($"Call declined by {Context.UserIdentifier} for {callerId}");
 
-            // Notify the caller that the call was declined.
-            // Assuming the caller has a connection ID mapped to their user ID.
             await Clients.User(callerId).SendAsync("ReceiveCallDeclined", Context.UserIdentifier);
         }
 
