@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Connections.Features;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace CareerCompassAPI.SignalR.Hubs
 {
+    [Authorize]
     public class VideoHub : Hub
     {
         private readonly ILogger<VideoHub> _logger;
@@ -41,6 +40,7 @@ namespace CareerCompassAPI.SignalR.Hubs
         {
             var groupId = GenerateGroupId(userId, recipientId);
             _logger.LogInformation($"Starting a new video call between {userId} and {recipientId} in group {groupId}    OFFER: {offerJson}");
+            _logger.LogInformation("Context.User.Claims: " + string.Join(", ", Context.User.Claims.Select(c => c.Type + ": " + c.Value)));
 
             await JoinGroup(userId, recipientId);
 
@@ -51,6 +51,10 @@ namespace CareerCompassAPI.SignalR.Hubs
         {
             var groupId = GenerateGroupId(Context.UserIdentifier, callerId);
             _logger.LogInformation($"Answer received. CallerId: {callerId}, AnswerJson: {answerJson}");
+
+            _logger.LogInformation($"Current GroupID: {groupId}");
+            _logger.LogInformation($"Current UserIdentifier: {Context.UserIdentifier}");
+            _logger.LogInformation($"Current ConnectionId: {Context.ConnectionId}");
 
             await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveDirectCallAnswer", callerId, answerJson);
         }
@@ -70,6 +74,22 @@ namespace CareerCompassAPI.SignalR.Hubs
 
             await Clients.User(callerId).SendAsync("ReceiveCallDeclined", Context.UserIdentifier);
         }
+        public override async Task OnConnectedAsync()
+        {
+            var httpContext = Context.Features.Get<IHttpContextFeature>()?.HttpContext;
+            if (httpContext != null)
+            {
+                var token = httpContext.Request.Query["access_token"];
+                _logger.LogInformation($"Token received from query string: {token}");
+            }
+            else
+            {
+                _logger.LogWarning("HttpContext is null. Could not retrieve token.");
+            }
+
+            await base.OnConnectedAsync();
+        }
+
 
     }
 }
