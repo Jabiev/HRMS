@@ -39,11 +39,7 @@ namespace CareerCompassAPI.SignalR.Hubs
         public async Task StartDirectCallAsync(string userId,string recipientId, string offerJson)
         {
             var groupId = GenerateGroupId(userId, recipientId);
-            _logger.LogInformation($"Starting a new video call between {userId} and {recipientId} in group {groupId}    OFFER: {offerJson}");
-            _logger.LogInformation("Context.User.Claims: " + string.Join(", ", Context.User.Claims.Select(c => c.Type + ": " + c.Value)));
-
             await JoinGroup(userId, recipientId);
-
             await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveDirectCall", userId, recipientId, offerJson);
         }
 
@@ -61,17 +57,11 @@ namespace CareerCompassAPI.SignalR.Hubs
         public async Task SendIceCandidate(string recipientId, string iceCandidateJson)
         {
             var groupId = GenerateGroupId(Context.UserIdentifier, recipientId);
-            _logger.LogInformation($"Sending ICE Candidate to recipientId: {recipientId} within groupId: {groupId}. ICE Candidate JSON: {iceCandidateJson}");
-
             await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveIceCandidate", iceCandidateJson);
-
-            _logger.LogInformation("ICE Candidate sent successfully.");
         }
 
         public async Task NotifyCallDeclined(string callerId)
         {
-            _logger.LogInformation($"Call declined by {Context.UserIdentifier} for {callerId}");
-
             await Clients.User(callerId).SendAsync("ReceiveCallDeclined", Context.UserIdentifier);
         }
         public override async Task OnConnectedAsync()
@@ -86,10 +76,7 @@ namespace CareerCompassAPI.SignalR.Hubs
             {
                 _logger.LogWarning("HttpContext is null. Could not retrieve token.");
             }
-
             await base.OnConnectedAsync();
         }
-
-
     }
 }

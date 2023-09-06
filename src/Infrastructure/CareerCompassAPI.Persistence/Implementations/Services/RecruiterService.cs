@@ -2,7 +2,6 @@
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Recruiter_DTOs;
 using CareerCompassAPI.Domain.Entities;
-using Microsoft.Extensions.Logging;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {

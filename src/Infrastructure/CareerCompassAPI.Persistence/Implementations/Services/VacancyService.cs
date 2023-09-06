@@ -132,10 +132,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             var list = await _context.Vacancy
                             .Include(v => v.Company)
+                            .Include(v => v.JobLocation)
                             .Where(v => v.Recruiter.Id == id)
                             .ToListAsync();
-            return _mapper.Map<List<VacancyGetByIdDto>>(list);
+
+            var mappedList = list.Select(vacancy => new VacancyGetByIdDto(
+                vacancy.JobTitle,
+                vacancy.Company.Name, 
+                vacancy.JobLocation.Location 
+            )).ToList();
+
+            return mappedList;
         }
+
 
     }
 }

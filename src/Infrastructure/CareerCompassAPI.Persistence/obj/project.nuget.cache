@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "6FMl/DIwWYgGognrPXN4fL9kbr0sIWuPnJbsyXYA6ugmR8gHztWadPA0y9Ncx2EjXdmju4SWGC2GcISw3MSzhg==",
+  "dgSpecHash": "XYo1ta2jouvp7NfgxGbaTDN9fKFuVRXxDp8cZeBbzfF/UI945UsO8TMWDCFdsiTz06IdEZlG3vT0Ct//tjoMHQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Rhabi\\OneDrive\\Documents\\CareerCompass\\CareerCompassAPI\\src\\Infrastructure\\CareerCompassAPI.Persistence\\CareerCompassAPI.Persistence.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\Rhabi\\.nuget\\packages\\azure.core\\1.33.0\\azure.core.1.33.0.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\azure.storage.blobs\\12.17.0\\azure.storage.blobs.12.17.0.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\azure.storage.common\\12.16.0\\azure.storage.common.12.16.0.nupkg.sha512",
+    "C:\\Users\\Rhabi\\.nuget\\packages\\bogus\\34.0.2\\bogus.34.0.2.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\fluentvalidation\\11.7.0\\fluentvalidation.11.7.0.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
     "C:\\Users\\Rhabi\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",

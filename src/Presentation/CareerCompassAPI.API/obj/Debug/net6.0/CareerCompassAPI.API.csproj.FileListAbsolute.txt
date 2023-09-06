@@ -119,3 +119,4 @@ C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentatio
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\CareerCompassAPI.SignalR.dll
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\CareerCompassAPI.SignalR.pdb
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\System.Net.WebSockets.WebSocketProtocol.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Presentation\CareerCompassAPI.API\bin\Debug\net6.0\Bogus.dll

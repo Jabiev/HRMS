@@ -1,7 +1,9 @@
-﻿using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository;
+﻿using Bogus;
+using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
+using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -50,9 +52,9 @@ namespace CareerCompassAPI.Persistence.Contexts
         {
             var subscriptions = new List<Subscriptions>
     {
-        new Subscriptions { Name = "Free", Price = 0, PostLimit = 3 },
-        new Subscriptions { Name = "Basic", Price = 149.99M, PostLimit = 10 },
-        new Subscriptions { Name = "Pro", Price = 349.99M, PostLimit = -1 }
+        new Subscriptions { Name = "Free", Price = 0, PostLimit = 1 },
+        new Subscriptions { Name = "Basic", Price = 149.99M, PostLimit = 3 },
+        new Subscriptions { Name = "Pro", Price = 349.99M, PostLimit = 10 }
     };
             foreach (var subscription in subscriptions)
             {
@@ -100,10 +102,40 @@ namespace CareerCompassAPI.Persistence.Contexts
             {
                 UserName = _configuration["Master:username"],
                 Email = _configuration["Master:email"],
+                PhoneNumber = "0502114242"
             };
             await _userManager.CreateAsync(appUser, _configuration["Master:password"]);
             await _userManager.AddToRoleAsync(appUser, Roles.Master.ToString());
         }
+        public async Task RecruiterUserSeedAsync(int count = 20)
+        {
+            var existingRecruiters = await _userManager.GetUsersInRoleAsync(Roles.Recruiter.ToString());
+
+            if (existingRecruiters.Any())
+            {
+                return;
+            }
+
+            var faker = new Faker();
+            var recruiters = new List<AppUser>();
+
+            for (int i = 0; i < count; i++)
+            {
+                var recruiterUser = new AppUser
+                {
+                    UserName = faker.Internet.UserName(),
+                    Email = faker.Internet.Email(),
+                    PhoneNumber = faker.Phone.PhoneNumber(),
+                };
+                var password = "Rahil123!";
+
+                recruiters.Add(recruiterUser);
+                await _userManager.CreateAsync(recruiterUser, password);
+                await _userManager.AddToRoleAsync(recruiterUser, Roles.Recruiter.ToString());
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task JobTypeSeed()
         {
             var jobTypes = new List<JobType>()
@@ -232,6 +264,6 @@ namespace CareerCompassAPI.Persistence.Contexts
 
             await _context.SaveChangesAsync();
         }
-  
+
     }
 }

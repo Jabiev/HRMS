@@ -92,6 +92,7 @@ using (var scope = app.Services.CreateScope())
     await instance.JobTypeSeed();
     await instance.ExperienceLevelSeed();
     await instance.ShiftAndScheduleSeed();
+    await instance.RecruiterUserSeedAsync();
     await instance.UserSeedAsync();
 }
 if (app.Environment.IsDevelopment())
