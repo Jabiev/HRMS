@@ -5,5 +5,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
     public interface ISubscriptionService
     {
         Task CreateAsync(SubscriptionCreateDto subscriptionCreateDto);
+        Task<List<SubscriptionGetDto>> GetAllAsync();
     }
 }

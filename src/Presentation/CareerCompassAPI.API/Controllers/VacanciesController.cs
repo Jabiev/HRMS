@@ -31,17 +31,30 @@ namespace CareerCompassAPI.API.Controllers
         }
         [HttpGet("GetFilteredSearch")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetFilteredSearch([FromQuery] string? jobTitle, [FromQuery] Guid? locationId)
+        public async Task<ActionResult<List<VacancyGetDetailsDto>>> GetFilteredSearch(
+          [FromQuery(Name = "job-title")] string? jobTitle,
+          [FromQuery(Name = "location-id")] Guid? locationId,
+          [FromQuery] int page = 1,
+          [FromQuery] int pageSize = 3
+      )
         {
-            var vacancies = await _vacancyService.GetDetailsBySearch(jobTitle, locationId);
+            var vacancies = await _vacancyService.GetDetailsBySearch(jobTitle, locationId, page, pageSize);
             return Ok(vacancies);
         }
-        [HttpGet("[action]")]
+
+        [HttpGet("[action]")]   
         [AllowAnonymous]
         public async Task<IActionResult> GetVacanciesById(Guid id)
         {
             var response = await _vacancyService.GetVacancyByRecruiterId(id);
             return Ok(response);    
+        }
+        [HttpDelete("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> DeleteVacancy(Guid id)
+        {
+           await _vacancyService.DeleteVacancyById(id);
+           return NoContent();
         }
     }
 }

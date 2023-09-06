@@ -13,6 +13,12 @@ namespace CareerCompassAPI.Persistence.Implementations.Repositories.Subscription
             _context = context;
         }
 
+        public async Task<List<Subscriptions>> GetAllAsync()
+        {
+            var subscriptions = await _context.Subscriptions.ToListAsync();
+            return subscriptions;
+        }
+
         async Task<Subscriptions?> ISubscriptionReadRepository.GetByIdAsync(Guid subscriptionId)
         {
             var subscription = await _context.Subscriptions.Where(s => s.Id == subscriptionId).FirstOrDefaultAsync();

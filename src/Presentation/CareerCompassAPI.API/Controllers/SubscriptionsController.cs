@@ -8,7 +8,6 @@ namespace CareerCompassAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Master")]
     public class SubscriptionsController : ControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
@@ -22,6 +21,12 @@ namespace CareerCompassAPI.API.Controllers
         {
             await _subscriptionService.CreateAsync(subscriptionCreateDto);
             return StatusCode((int)HttpStatusCode.Created);
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAll()
+        {
+            var response = await _subscriptionService.GetAllAsync();
+            return Ok(response);
         }
     }
 }

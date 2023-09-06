@@ -9,6 +9,7 @@ namespace CareerCompassAPI.Persistence.MapperProfiles
         public SubscriptionProfile()
         {
             CreateMap<Subscriptions,SubscriptionCreateDto>().ReverseMap();
+            CreateMap<Subscriptions,SubscriptionGetDto>().ReverseMap();
         }
     }
 }

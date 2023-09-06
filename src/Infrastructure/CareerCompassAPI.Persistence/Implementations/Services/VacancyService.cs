@@ -1,4 +1,4 @@
-﻿    using AutoMapper;
+﻿using AutoMapper;
 using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
@@ -84,6 +84,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _recruiterWriteRepository.SaveChangesAsync();
         }
 
+        public async Task DeleteVacancyById(Guid id)
+        {
+            var vacancy = await _vacancyReadRepository.GetByIdAsync(id);
+            if (vacancy == null)
+            {
+                throw new InvalidOperationException("Vacancy does not exist");
+            }
+            vacancy.IsDeleted = true;
+            _context.Vacancy.Update(vacancy);
+            await _context.SaveChangesAsync();
+        }
+
+
         public async Task<List<VacancyGetDto>> GetBySearch(string jobTitle)
         {
             var vacancies = await _context.Vacancy
@@ -92,14 +105,15 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return _mapper.Map<List<VacancyGetDto>>(vacancies);
         }
 
-        public async Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle, Guid? locationId)
+        public async Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle, Guid? locationId, int page, int pageSize)
         {
             IQueryable<Vacancy> query = _context.Vacancy
                 .Include(v => v.Company)
                     .ThenInclude(c => c.Details)
                 .Include(v => v.JobLocation)
                 .Include(v => v.JobType)
-                .Include(v => v.ShiftAndSchedules);
+                .Include(v => v.ShiftAndSchedules)
+                .Where(v => v.IsDeleted == false);
 
             if (!string.IsNullOrEmpty(jobTitle))
             {
@@ -110,6 +124,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 query = query.Where(v => v.JobLocationId == locationId.Value);
             }
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
 
             var vacancies = await query.ToListAsync();
 
@@ -128,23 +143,22 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 v.CurrentApplicationCount
             )).ToList();
         }
+
         public async Task<List<VacancyGetByIdDto>> GetVacancyByRecruiterId(Guid id)
         {
             var list = await _context.Vacancy
                             .Include(v => v.Company)
                             .Include(v => v.JobLocation)
-                            .Where(v => v.Recruiter.Id == id)
+                            .Where(v => v.Recruiter.Id == id && v.IsDeleted == false)
                             .ToListAsync();
 
             var mappedList = list.Select(vacancy => new VacancyGetByIdDto(
+                vacancy.Id,
                 vacancy.JobTitle,
                 vacancy.Company.Name, 
                 vacancy.JobLocation.Location 
             )).ToList();
-
             return mappedList;
         }
-
-
     }
 }

@@ -31,5 +31,12 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _subscriptionWriteRepository.AddAsync(newSubscription);
             await _subscriptionWriteRepository.SaveChangesAsync();
         }
+
+        public async Task<List<SubscriptionGetDto>> GetAllAsync()
+        {
+            var subscriptionList = await _subscriptionReadRepository.GetAllAsync();
+            List<SubscriptionGetDto> list = _mapper.Map<List<SubscriptionGetDto>>(subscriptionList);
+            return list;
+        }
     }
 }
