@@ -138,5 +138,11 @@ namespace CareerCompassAPI.API.Controllers
             string sessionId = await _stripeService.CreateCheckoutSessionForResumeAsync(jobSeekerResume, ct);
             return Ok(new { sessionId = sessionId });
         }
+        [HttpGet("GetPayments/{userId}")]
+        public async Task<IActionResult> GetPayments([FromRoute]string userId)
+        {
+            var response = await _paymentsService.GetPaymentsByAppUserId(userId);
+            return Ok(response);
+        }
     }
 }
