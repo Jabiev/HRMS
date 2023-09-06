@@ -2,5 +2,5 @@
 
 namespace CareerCompassAPI.Application.DTOs.Payment_DTOs
 {
-    public record PaymentsGetDto(decimal amount, PaymentTypes paymentType, DateTime date);
+    public record PaymentsGetDto(decimal amount, string paymentType, DateTime date);
 }

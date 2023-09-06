@@ -7,6 +7,7 @@ using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -53,7 +54,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
             AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == appUserId);
             var paymentsQuery = _paymentReadRepository.GetAllByExpression(
-                                    p => p.AppUser == user,  
+                                    p => p.AppUser == user,
                                     take: 50,
                                     skip: 0
                                  );
@@ -62,7 +63,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             List<PaymentsGetDto> dtoList = payments.Select(payment =>
                     new PaymentsGetDto(
                         payment.Amount,
-                        (PaymentTypes)payment.Type,
+                        Enum.GetName(typeof(PaymentTypes), payment.Type),
                         payment.DateCreated
                     )).ToList();
             return dtoList;
