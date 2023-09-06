@@ -7,7 +7,7 @@ namespace CareerCompassAPI.Domain.Entities
     public class Payments:BaseEntity
     {
         public AppUser AppUser { get; set; } = null!;
-        public long Amount { get; set; }
+        public decimal Amount { get; set; }
         public PaymentTypes Type { get; set; }
     }
 }

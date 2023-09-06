@@ -37,7 +37,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             Payments newPayment = new()
             {
                 AppUser = user,
-                Amount = paymentCreateDto.amount,
+                Amount = paymentCreateDto.amount/100,
                 Type = paymentCreateDto.type
             };
             await _paymentWriteRepository.AddAsync(newPayment);

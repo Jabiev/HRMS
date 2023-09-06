@@ -2,5 +2,5 @@
 
 namespace CareerCompassAPI.Application.DTOs.Payment_DTOs
 {
-    public record PaymentCreateDto(string appUserId, long amount, PaymentTypes type);
+    public record PaymentCreateDto(string appUserId, decimal amount, PaymentTypes type);
 }
