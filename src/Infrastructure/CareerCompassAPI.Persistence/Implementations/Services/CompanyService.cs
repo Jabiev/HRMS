@@ -5,6 +5,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositori
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Company_DTOs;
 using CareerCompassAPI.Domain.Entities;
+using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,6 +65,37 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             recruiter.CompanyId = newCompany.Id;
             await _recruiterWriteRepository.SaveChangesAsync();
         }
+
+        public async Task<List<CompanyDetailsGetDto>> GetCompanyBySearchAsync(string companyName)
+        {
+            IQueryable<Company> query = _context.Companies
+                .Include(c => c.Details)
+                    .ThenInclude(d => d.Location)
+                .Include(c => c.Details)
+                    .ThenInclude(d => d.Industry)
+                .Include(c => c.Reviews)
+                .Where(c => c.IsDeleted == false);
+
+
+            if (!string.IsNullOrEmpty(companyName))
+            {
+                query = query.Where(c => c.Name.ToLower().Contains(companyName.ToLower()));
+            }
+
+            var companies = await query.ToListAsync();
+
+            return companies.Select(c => new CompanyDetailsGetDto(
+                 c.Name,
+                 c.Details.Description,
+                 c.Details.Ceo,
+                 c.Details.DateFounded,
+                 Enum.GetName(typeof(CompanySizeEnum), c.Details.CompanySize),
+                 c.Details.Industry.Name,
+                 c.Details.Link,
+                 c.Details.Location.Location
+                 )).ToList();
+        }
+
 
         public async Task<CompanyGetDto> GetCompanyDetailsById(Guid companyId)
         {

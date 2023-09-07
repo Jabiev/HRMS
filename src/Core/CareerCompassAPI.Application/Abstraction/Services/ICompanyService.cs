@@ -7,5 +7,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task CreateAsync(CompanyCreateDto companyCreateDto, string userId);
         Task Remove(Guid companyId);
         Task<CompanyGetDto> GetCompanyDetailsById(Guid companyId);
+        Task<List<CompanyDetailsGetDto>> GetCompanyBySearchAsync(string companyName);
     }
 }

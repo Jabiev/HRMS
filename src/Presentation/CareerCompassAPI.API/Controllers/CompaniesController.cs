@@ -36,5 +36,12 @@ namespace CareerCompassAPI.API.Controllers
             CompanyGetDto response = await _companyService.GetCompanyDetailsById(companyId);
             return Ok(response);
         }
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCompanyDetails([FromQuery] string companyName)
+        {
+            var response = await _companyService.GetCompanyBySearchAsync(companyName);
+            return Ok(response);    
+        }
     }
 }
