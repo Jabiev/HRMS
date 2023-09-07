@@ -1,6 +1,8 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Storage;
 using CareerCompassAPI.Application.DTOs.File_DTOs;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CareerCompassAPI.Infrastructure.Services
 {
@@ -17,12 +19,12 @@ namespace CareerCompassAPI.Infrastructure.Services
             => await _storage.DeleteAsync(pathOrContainerName, fileName);
 
         public List<string> GetFiles(string pathOrContainerName)
-            => _storage.GetFiles(pathOrContainerName);  
+            => _storage.GetFiles(pathOrContainerName);
 
         public bool HasFile(string pathOrContainerName, string fileName)
             => _storage.HasFile(pathOrContainerName, fileName);
 
-        public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(FileUploadDto fileUploadDto)
-            =>await _storage.UploadAsync(fileUploadDto);
+        public async Task<List<FileUploadResponseDto>> UploadAsync(FileUploadDto fileUploadDto)
+            => await _storage.UploadAsync(fileUploadDto);
     }
 }

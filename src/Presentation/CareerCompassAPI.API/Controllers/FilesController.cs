@@ -2,6 +2,7 @@
 using CareerCompassAPI.Application.DTOs.File_DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace CareerCompassAPI.API.Controllers
@@ -11,10 +12,11 @@ namespace CareerCompassAPI.API.Controllers
     public class FilesController : ControllerBase
     {
         private readonly IAzureStorage _azureStorage;
-
-        public FilesController(IAzureStorage azureStorage)
+        private readonly ILogger<FilesController> _logger;
+        public FilesController(IAzureStorage azureStorage, ILogger<FilesController> logger)
         {
             _azureStorage = azureStorage;
+            _logger = logger;
         }
 
         [HttpPost("[action]")]

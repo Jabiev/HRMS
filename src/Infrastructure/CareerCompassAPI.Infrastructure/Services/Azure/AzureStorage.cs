@@ -35,13 +35,13 @@ namespace CareerCompassAPI.Infrastructure.Services.Azure
             _blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             return _blobContainerClient.GetBlobs().Any(b => b.Name == fileName);
         }
-        public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(FileUploadDto fileUploadDto)
+        public async Task<List<FileUploadResponseDto>> UploadAsync(FileUploadDto fileUploadDto)
         {
             _blobContainerClient = _blobServiceClient.GetBlobContainerClient(fileUploadDto.containerName);
             await _blobContainerClient.CreateIfNotExistsAsync();
             await _blobContainerClient.SetAccessPolicyAsync(PublicAccessType.BlobContainer);
 
-            List<(string fileName, string pathOrContainerName)> datas = new();
+            List<FileUploadResponseDto> datas = new List<FileUploadResponseDto>();
 
             foreach (IFormFile file in fileUploadDto.files)
             {
@@ -49,7 +49,13 @@ namespace CareerCompassAPI.Infrastructure.Services.Azure
                 BlobClient blobClient = _blobContainerClient.GetBlobClient(fileName);
 
                 await blobClient.UploadAsync(file.OpenReadStream(), overwrite: true);
-                datas.Add((fileName, fileUploadDto.containerName));
+                FileUploadResponseDto responseDto = new FileUploadResponseDto(
+                    fileName,
+                    fileUploadDto.containerName,
+                    blobClient.Uri.AbsoluteUri
+                );
+
+                datas.Add(responseDto);
 
                 FileCreateDto fileCreateDto = new(
                     fileName,
@@ -64,5 +70,6 @@ namespace CareerCompassAPI.Infrastructure.Services.Azure
             }
             return datas;
         }
+
     }
 }
