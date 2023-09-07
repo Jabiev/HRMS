@@ -110,7 +110,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var details = company.Details;
             var industryName = details.Industry.Name;
             CompanyGetDto companyGetDto = new(
-                company.Name, details.Ceo, details.DateFounded, details.CompanySize, industryName, details.Link, details.Description, details.Address
+                company.Id,
+                company.Name, details.Ceo, details.DateFounded, details.CompanySize, industryName, details.Link, details.Description, details.Address,company.LogoUrl
                 );
             return companyGetDto;
         }
@@ -123,6 +124,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 throw new ArgumentNullException();
             }
             _companyWriteRepository.Remove(company);
+            await _companyWriteRepository.SaveChangesAsync();
+        }
+
+        public async Task UploadLogoAsync(Guid companyId, CompanyLogoUploadDto logoUploadDto)
+        {
+            if (logoUploadDto is null)
+            {
+                throw new ArgumentNullException();
+            }
+            Company company = await _companyReadRepository.GetByIdAsync(companyId);
+            // company not found Exception
+            company.LogoUrl = logoUploadDto.url;
+            _companyWriteRepository.Update(company);
             await _companyWriteRepository.SaveChangesAsync();
         }
     }

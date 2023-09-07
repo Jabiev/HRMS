@@ -43,5 +43,11 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _companyService.GetCompanyBySearchAsync(companyName);
             return Ok(response);    
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UploadLogo([FromQuery] Guid companyId, CompanyLogoUploadDto companyLogoUploadDto)
+        {
+            await _companyService.UploadLogoAsync(companyId, companyLogoUploadDto);
+            return Ok();
+        }
     }
 }
