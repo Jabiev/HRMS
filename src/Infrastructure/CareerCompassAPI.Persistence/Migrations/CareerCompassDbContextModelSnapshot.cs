@@ -534,9 +534,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1044,15 +1041,13 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .WithMany("Reviews")
                         .HasForeignKey("CompanyId");
 
-                    b.HasOne("CareerCompassAPI.Domain.Entities.Industry", "Industry")
+                    b.HasOne("CareerCompassAPI.Domain.Entities.Industry", null)
                         .WithMany("Reviews")
                         .HasForeignKey("IndustryId");
 
                     b.Navigation("AppUser");
 
                     b.Navigation("Company");
-
-                    b.Navigation("Industry");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Vacancy", b =>

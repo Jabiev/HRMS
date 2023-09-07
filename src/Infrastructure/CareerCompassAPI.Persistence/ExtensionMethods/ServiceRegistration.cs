@@ -34,6 +34,8 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IJobApplicationRepos
 using CareerCompassAPI.Persistence.Implementations.Repositories.JobApplicationRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IMessageRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.MessageRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IReviewRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.ReviewRepositories;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -65,6 +67,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IReviewService, Implementations.Services.ReviewService>();
             services.AddTransient<Stripe.Checkout.SessionService>();
             StripeConfiguration.ApiKey = configuration.GetValue<string>("StripeSettings:SecretKey");
             services.AddScoped<CustomerService>()
@@ -97,6 +100,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IFileReadRepository, FileReadRepository>();
             services.AddScoped<IJobApplicationReadRepository, JobApplicationReadRepository>();
             services.AddScoped<IMessageReadRepository, MessageReadRepository>();
+            services.AddScoped<IReviewReadRepository, ReviewReadRepository>();
         }
 
         private static void AddWriteRepositories(IServiceCollection services)
@@ -114,6 +118,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IFileWriteRepository, FileWriteRepository>();
             services.AddScoped<IJobApplicationWriteRepository, JobApplicationWriteRepository>();
             services.AddScoped<IMessageWriteRepository, MessageWriteRepository>();
+            services.AddScoped<IReviewWriteRepository, ReviewWriteRepository>();
         }
     }
 }
