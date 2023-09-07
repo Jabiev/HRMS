@@ -3,7 +3,6 @@ using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionReposit
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
-using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,7 +23,7 @@ namespace CareerCompassAPI.Persistence.Contexts
                                                  RoleManager<IdentityRole> roleManager,
                                                  IConfiguration configuration,
                                                  ISubscriptionReadRepository subscriptionReadRepository,
-                                                 ISubscriptionWriteRepository subscriptionWriteRepository)
+                                                 ISubscriptionWriteRepository   subscriptionWriteRepository)
         {
             _context = context;
             _userManager = userManager;
@@ -47,7 +46,6 @@ namespace CareerCompassAPI.Persistence.Contexts
                 }
             }
         }
-
         public async Task SubscriptionsSeedAsync()
         {
             var subscriptions = new List<Subscriptions>
@@ -135,7 +133,6 @@ namespace CareerCompassAPI.Persistence.Contexts
                 await _context.SaveChangesAsync();
             }
         }
-
         public async Task JobTypeSeed()
         {
             var jobTypes = new List<JobType>()

@@ -85,6 +85,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var companies = await query.ToListAsync();
 
             return companies.Select(c => new CompanyDetailsGetDto(
+                 c.Id,
                  c.Name,
                  c.Details.Description,
                  c.Details.Ceo,
@@ -92,7 +93,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                  Enum.GetName(typeof(CompanySizeEnum), c.Details.CompanySize),
                  c.Details.Industry.Name,
                  c.Details.Link,
-                 c.Details.Location.Location
+                 c.Details.Location.Location,
+                 c.LogoUrl
                  )).ToList();
         }
 
@@ -111,7 +113,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var industryName = details.Industry.Name;
             CompanyGetDto companyGetDto = new(
                 company.Id,
-                company.Name, details.Ceo, details.DateFounded, details.CompanySize, industryName, details.Link, details.Description, details.Address,company.LogoUrl
+                company.Name, details.Ceo, details.DateFounded, details.CompanySize, industryName, details.Link, details.Description, details.Address, company.LogoUrl
                 );
             return companyGetDto;
         }
