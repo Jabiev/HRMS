@@ -123,7 +123,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
                 var userId = Guid.Parse(appUser.Id);
                 var title = "Welcome to Career Compass";
-                var message = "Please register your company's name before proceeding to post any job vacancies.";
+                var message = "We're excited to have you onboard! Start by building  your resume to attract the best job opportunities.";
                 BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(userId, title, message), TimeSpan.FromSeconds(10));
             }
             if (userRegisterDto.role == Roles.Recruiter)
