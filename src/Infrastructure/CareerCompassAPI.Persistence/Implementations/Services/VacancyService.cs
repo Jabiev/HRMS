@@ -141,7 +141,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return _mapper.Map<List<VacancyGetDto>>(vacancies);
         }
 
-        public async Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle, Guid? locationId, string sortOrder)
+        public async Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle, Guid? locationId, string sortOrder, string? jobType, decimal? minSalary,
+    decimal? maxSalary)
         {
             IQueryable<Vacancy> query = _context.Vacancy
                 .Include(v => v.Company)
@@ -160,6 +161,11 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 query = query.Where(v => v.JobLocationId == locationId.Value);
             }
+            if (!string.IsNullOrEmpty(jobType))
+            {
+                query = query.Where(v => v.JobType.Any(jt => jt.TypeName.ToLower() == jobType.ToLower()));
+            }
+
             if (sortOrder == "asc")
             {
                 query = query.OrderBy(v => v.DateCreated);

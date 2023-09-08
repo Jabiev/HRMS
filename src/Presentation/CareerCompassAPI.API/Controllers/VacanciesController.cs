@@ -33,9 +33,10 @@ namespace CareerCompassAPI.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<List<VacancyGetDetailsDto>>> GetFilteredSearch(
           [FromQuery(Name = "job-title")] string? jobTitle,
-          [FromQuery(Name = "location-id")] Guid? locationId, [FromQuery] string sortOrder)
+          [FromQuery(Name = "location-id")] Guid? locationId, [FromQuery] string sortOrder, [FromQuery] string? jobType, [FromQuery] decimal? minSalary,
+    [FromQuery]decimal? maxSalary)
         {
-            var vacancies = await _vacancyService.GetDetailsBySearch(jobTitle, locationId,sortOrder);
+            var vacancies = await _vacancyService.GetDetailsBySearch(jobTitle, locationId,sortOrder, jobType,minSalary,maxSalary);
             return Ok(vacancies);
         }
 
