@@ -7,5 +7,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task CreateAsync(FollowerCreateDto followerCreateDto);
         Task Remove(FollowerRemoveDto followerRemoveDto);
         Task<List<FollowerGetFollowedCompaniesDto>> GetFollowedCompanies(string userId);
+        Task<List<GetAllFollowersDto>> GetAllFollowersByCompanyId(Guid companyId);
     }
 }

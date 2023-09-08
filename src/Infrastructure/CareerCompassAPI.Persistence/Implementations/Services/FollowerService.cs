@@ -5,6 +5,7 @@ using CareerCompassAPI.Application.DTOs.Follower_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
@@ -15,16 +16,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly ICompanyReadRepository _companyReadRepository;
         private readonly IFollowerReadRepository _followerReadRepository;
         private readonly IFollowerWriteRepository _followerWriteRepository;
+        private readonly INotificationService _notificationService;
 
         public FollowerService(CareerCompassDbContext context,
                                ICompanyReadRepository companyReadRepository,
                                IFollowerWriteRepository followerWriteRepository,
-                               IFollowerReadRepository followerReadRepository)
+                               IFollowerReadRepository followerReadRepository,
+                               INotificationService notificationService)
         {
             _context = context;
             _companyReadRepository = companyReadRepository;
             _followerWriteRepository = followerWriteRepository;
             _followerReadRepository = followerReadRepository;
+            _notificationService = notificationService;
         }
 
         public async Task CreateAsync(FollowerCreateDto followerCreateDto)
@@ -47,11 +51,32 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             Follower newFollower = new()
             {
                 User = user,
+                UserEmail = user.Email,
                 Company = company,
             };
             await _followerWriteRepository.AddAsync(newFollower);
             await _followerWriteRepository.SaveChangesAsync();
+
+            var userId = Guid.Parse(followerCreateDto.appUserId);  
+            var title = $"Successfully followed {company.Name}";
+            var message = "You will now receive updates from this company.";
+            BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(userId, title, message), TimeSpan.FromSeconds(5));
         }
+
+        public async Task<List<GetAllFollowersDto>> GetAllFollowersByCompanyId(Guid companyId)
+        {
+            var followersForCompany = _followerReadRepository.GetAll()
+                .Where(f => f.Company.Id == companyId)
+                .Select(f => new GetAllFollowersDto(f.UserEmail))
+                .ToList();
+
+            if (!followersForCompany.Any())
+            {
+                return new List<GetAllFollowersDto>();
+            }
+            return followersForCompany;
+        }
+
 
         public async Task<List<FollowerGetFollowedCompaniesDto>> GetFollowedCompanies(string userId)
         {
@@ -89,6 +114,11 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
             _followerWriteRepository.Remove(existingFollower);
             await _followerWriteRepository.SaveChangesAsync();
+
+            var userId = Guid.Parse(followerRemoveDto.appUserId);
+            var title = $"Successfully unfollowed {company.Name}";
+            var message = "You will no longer receive updates from this company.";
+            BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(userId, title, message), TimeSpan.FromSeconds(5));
         }
     }
 }

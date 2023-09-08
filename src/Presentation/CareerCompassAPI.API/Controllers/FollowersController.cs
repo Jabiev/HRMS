@@ -33,5 +33,11 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _followerService.GetFollowedCompanies(appUserId);
             return Ok(response);
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllFollowersByCompanyId(Guid companyId)
+        {
+            var response = await _followerService.GetAllFollowersByCompanyId(companyId);
+            return Ok(response);    
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IFollowerRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
@@ -7,6 +8,7 @@ using CareerCompassAPI.Application.DTOs.Vacancy_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -18,6 +20,9 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IVacancyWriteRepository _vacancyWriteRepository;
         private readonly IVacancyReadRepository _vacancyReadRepository;
         private readonly IRecruiterWriteRepository _recruiterWriteRepository;
+        private readonly IFollowerReadRepository _followerReadRepository;
+        private readonly IFollowerService _followerService;
+        private readonly IMailService _mailService;
         private readonly IMapper _mapper;
 
         public VacancyService(CareerCompassDbContext context,
@@ -26,7 +31,9 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                               IVacancyWriteRepository vacancyWriteRepository,
                               IMapper mapper,
                               IVacancyReadRepository vacancyReadRepository,
-                              IRecruiterWriteRepository recruiterWriteRepository)
+                              IRecruiterWriteRepository recruiterWriteRepository,
+                              IFollowerService followerService,
+                              IMailService mailService)
         {
             _context = context;
             _recruiterReadRepository = recruiterReadRepository;
@@ -35,6 +42,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _mapper = mapper;
             _vacancyReadRepository = vacancyReadRepository;
             _recruiterWriteRepository = recruiterWriteRepository;
+            _followerService = followerService;
+            _mailService = mailService;
         }
 
         public async Task Create(VacancyCreateDto vacancyCreateDto, string userId, Guid companyId)
@@ -55,9 +64,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var experience = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.Id == vacancyCreateDto.experienceLevelId);
             var jobLocation = await _context.JobLocations.FirstOrDefaultAsync(l => l.Id == vacancyCreateDto.locationId);
 
-            //var recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.AppUserId == userId);
-            //var company = await _companyReadRepository.GetByIdAsync(companyId);
-            // Handle not found
 
             List<JobType> jobTypes = await _context.JobTypes.Where(j => vacancyCreateDto.jobTypeIds.Contains(j.Id)).ToListAsync();
             List<ShiftAndSchedule> shifts = await _context.ShiftAndSchedules.Where(s => vacancyCreateDto.shiftIds.Contains(s.Id)).ToListAsync();
@@ -82,6 +88,36 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             recruiter.CurrentPostCount++;
             _recruiterWriteRepository.Update(recruiter);
             await _recruiterWriteRepository.SaveChangesAsync();
+
+            var followers = await _followerService.GetAllFollowersByCompanyId(companyId);
+            int batchSize = 50; 
+            int totalFollowers = followers.Count;
+
+            for (int i = 0; i < totalFollowers; i += batchSize)
+            {
+                var currentBatch = followers.Skip(i).Take(batchSize).ToList();
+                var tasks = new List<Task>();
+
+                foreach (var follower in currentBatch)
+                {
+                    var subject = $"New job vacancy posted by {company.Name}"; 
+                    var content = $"Check out the new job vacancy for the role of {vacancyCreateDto.jobTitle}.";
+
+                    Message message = new Message(new List<string> { follower.email }, subject, content);
+
+
+                    tasks.Add(_mailService.SendEmailAsync(message));
+                }
+                try
+                {
+                    await Task.WhenAll(tasks); 
+                }
+                catch (Exception ex)
+                {
+                   // Exception handling
+                }
+            }
+
         }
 
         public async Task DeleteVacancyById(Guid id)
@@ -155,8 +191,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var mappedList = list.Select(vacancy => new VacancyGetByIdDto(
                 vacancy.Id,
                 vacancy.JobTitle,
-                vacancy.Company.Name, 
-                vacancy.JobLocation.Location 
+                vacancy.Company.Name,
+                vacancy.JobLocation.Location
             )).ToList();
             return mappedList;
         }

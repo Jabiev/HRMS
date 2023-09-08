@@ -57,18 +57,6 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _authService.ValidateRefreshToken(token);
             return Ok(response);
         }
-        [HttpGet("[action]")]
-        public async Task<IActionResult> MailTest()
-        {
-            var emailAddresses = new List<string> { "rhabibli@outlook.com" };
-            var emailSubject = "Test Email";
-            var emailContent = "Hello, this is a test email.";
-
-            var emailMessage = new Message(emailAddresses, emailSubject, emailContent);
-
-            await _mailService.SendEmailAsync(emailMessage);  
-            return Ok();
-        }
         [HttpPost("[action]")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
         {
@@ -82,11 +70,5 @@ namespace CareerCompassAPI.API.Controllers
             await _authService.ResetPassword(resetPasswordDto, userId, correctedToken);
             return Ok("Password reset successfully");
         }
-
-        //[HttpPost("[action]")]
-        //public async Task<IActionResult> Upload()
-        //{
-        //     await _storageService.UploadAsync("resourse/files", Request.Form.Files);
-        //}
     }
 }
