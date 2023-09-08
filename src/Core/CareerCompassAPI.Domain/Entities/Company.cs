@@ -9,5 +9,7 @@ namespace CareerCompassAPI.Domain.Entities
         public ICollection<Vacancy>? Vacancies { get; set; } = new List<Vacancy>();
         public CompanyDetails? Details { get; set; }
         public ICollection<Review>? Reviews { get; set; } = new List<Review>();
+        public ICollection<Follower> Followers { get; set; } = new List<Follower>();
+
     }
 }

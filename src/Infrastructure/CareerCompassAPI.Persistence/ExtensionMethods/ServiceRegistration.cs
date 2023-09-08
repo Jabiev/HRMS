@@ -36,6 +36,8 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IMessageRepositories
 using CareerCompassAPI.Persistence.Implementations.Repositories.MessageRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IReviewRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.ReviewRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IFollowerRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.FollowerRepositories;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -67,6 +69,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IFollowerService, FollowerService>();
             services.AddScoped<IReviewService, Implementations.Services.ReviewService>();
             services.AddTransient<Stripe.Checkout.SessionService>();
             StripeConfiguration.ApiKey = configuration.GetValue<string>("StripeSettings:SecretKey");
@@ -101,6 +104,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IJobApplicationReadRepository, JobApplicationReadRepository>();
             services.AddScoped<IMessageReadRepository, MessageReadRepository>();
             services.AddScoped<IReviewReadRepository, ReviewReadRepository>();
+            services.AddScoped<IFollowerReadRepository, FollowerReadRepository>();
         }
 
         private static void AddWriteRepositories(IServiceCollection services)
@@ -119,6 +123,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IJobApplicationWriteRepository, JobApplicationWriteRepository>();
             services.AddScoped<IMessageWriteRepository, MessageWriteRepository>();
             services.AddScoped<IReviewWriteRepository, ReviewWriteRepository>();
+            services.AddScoped<IFollowerWriteRepository, FollowerWriteRepository>();
         }
     }
 }

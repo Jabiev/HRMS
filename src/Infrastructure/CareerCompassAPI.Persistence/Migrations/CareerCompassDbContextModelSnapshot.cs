@@ -181,6 +181,36 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.ToTable("Files");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Follower", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Followers");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Industry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -924,6 +954,23 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Follower", b =>
+                {
+                    b.HasOne("CareerCompassAPI.Domain.Entities.Company", "Company")
+                        .WithMany("Followers")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "User")
+                        .WithMany("Followers")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.JobApplications", b =>
                 {
                     b.HasOne("CareerCompassAPI.Domain.Entities.JobSeeker", "JobSeeker")
@@ -1168,6 +1215,8 @@ namespace CareerCompassAPI.Persistence.Migrations
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Company", b =>
                 {
+                    b.Navigation("Followers");
+
                     b.Navigation("Reviews");
 
                     b.Navigation("Vacancies");
@@ -1213,6 +1262,8 @@ namespace CareerCompassAPI.Persistence.Migrations
             modelBuilder.Entity("CareerCompassAPI.Domain.Identity.AppUser", b =>
                 {
                     b.Navigation("Files");
+
+                    b.Navigation("Followers");
 
                     b.Navigation("JobSeekers")
                         .IsRequired();

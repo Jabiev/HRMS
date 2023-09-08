@@ -20,5 +20,6 @@ namespace CareerCompassAPI.Domain.Identity
         public ICollection<Notification> Notifications { get; set; }
         public ICollection<Payments> Payments { get; set; }
         public ICollection<File> Files { get; set; }
+        public ICollection<Follower> Followers { get; set; } = new List<Follower>();
     }
 }
