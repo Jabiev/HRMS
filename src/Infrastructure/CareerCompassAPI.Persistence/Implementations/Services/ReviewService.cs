@@ -64,23 +64,29 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _reviewWriteRepository.SaveChangesAsync();
         }
 
-        public async Task<List<ReviewGetDto>> GetAllByCompanyId(Guid companyId)
+        public async Task<CompanyReviewSummaryDto> GetAllByCompanyId(Guid companyId)
         {
             var reviews = await _reviewReadRepository
-  .GetAllByExpression(
-           r => r.Company.Id == companyId && r.Status == ReviewStatus.Approved,
-           int.MaxValue,
-           0)
+                .GetAllByExpression(
+                    r => r.Company.Id == companyId && r.Status == ReviewStatus.Approved,
+                    int.MaxValue,
+                    0)
+                .Include(r => r.JobSeeker)
+                .ToListAsync();
 
-    .Select(r => new ReviewGetDto(
-        r.JobSeeker.FirstName,
-        r.JobSeeker.LastName,
-        r.Title,
-        r.Description,
-        r.Rating))
-    .ToListAsync();
+            var reviewDtos = reviews.Select(r => new ReviewGetDto(
+                r.JobSeeker.FirstName,
+                r.JobSeeker.LastName,
+                r.Title,
+                r.Description,
+                r.Rating)).ToList();
 
-            return reviews;
+            double averageRating = 0;
+            if (reviewDtos.Count > 0)
+            {
+                averageRating = (double)reviewDtos.Average(r => r.rating);
+            }
+            return new CompanyReviewSummaryDto(reviewDtos, averageRating);
         }
     }
 }
