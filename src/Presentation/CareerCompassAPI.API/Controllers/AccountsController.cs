@@ -70,5 +70,20 @@ namespace CareerCompassAPI.API.Controllers
             await _authService.ResetPassword(resetPasswordDto, userId, correctedToken);
             return Ok("Password reset successfully");
         }
+        [HttpPost("PasswordChange/{userId}")]
+        public async Task<IActionResult> PasswordChange(string userId, [FromBody] PasswordChangeDto passwordChangeDto)
+        {
+            var result = await _authService.PasswordChange(userId, passwordChangeDto);
+
+            if (result)
+            {
+                return Ok("Password changed successfully");
+            }
+            else
+            {
+                return BadRequest("Something went wrong");
+            }
+        }
+
     }
 }

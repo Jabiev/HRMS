@@ -80,6 +80,26 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _userManager.UpdateAsync(user);
             return tokenResponse;
         }
+
+        public async Task<bool> PasswordChange(string userId, PasswordChangeDto passwordChangeDto)
+        {
+            if (passwordChangeDto.newPassword != passwordChangeDto.confirmNewPassword)
+            {
+                return false;
+            }
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            if (user is not AppUser)
+            {
+                return false;
+            }
+            bool isOldPasswordValid = await _userManager.CheckPasswordAsync(user, passwordChangeDto.oldPassword);
+            if (!isOldPasswordValid) { return false; }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, passwordChangeDto.newPassword);
+
+            return result.Succeeded;
+        }
+
         public async Task Register(UserRegisterDto userRegisterDto)
         {
             var freeSubscription = await _subscriptionReadRepository.GetByExpressionAsync(s => s.Price == 0);
