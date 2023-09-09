@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\CareerCompassAPI.Application\CareerCompassAPI.Application.csproj" />
+  </ItemGroup>
+
 </Project>

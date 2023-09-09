@@ -114,7 +114,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 }
                 catch (Exception ex)
                 {
-                   // Exception handling
+                   //TODO: Exception Handling
                 }
             }
 

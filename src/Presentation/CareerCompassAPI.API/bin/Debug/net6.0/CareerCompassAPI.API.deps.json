@@ -1197,6 +1197,7 @@
       },
       "CareerCompassAPI.SignalR/1.0.0": {
         "dependencies": {
+          "CareerCompassAPI.Application": "1.0.0",
           "Microsoft.AspNetCore.Http.Connections": "1.1.0",
           "Microsoft.AspNetCore.SignalR.Core": "1.1.0"
         },

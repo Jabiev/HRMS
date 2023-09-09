@@ -20,5 +20,11 @@ namespace CareerCompassAPI.API.Controllers
             await _reviewService.CreateAsync(reviewCreateDto);
             return Ok();
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllByCompanyId([FromQuery] Guid companyId)
+        {
+            var response = await _reviewService.GetAllByCompanyId(companyId);
+            return Ok(response);
+        }
     }
 }

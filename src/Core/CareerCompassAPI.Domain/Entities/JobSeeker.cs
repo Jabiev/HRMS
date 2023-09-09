@@ -14,5 +14,6 @@ namespace CareerCompassAPI.Domain.Entities
         public string? Location { get; set; }
         public override bool IsDeleted { get; set; }
         public ICollection<JobApplications> JobApplications { get; set; }
+        public ICollection<Review> Reviews { get; set; }
     }
 }

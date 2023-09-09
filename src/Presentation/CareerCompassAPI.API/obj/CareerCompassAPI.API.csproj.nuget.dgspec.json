@@ -354,7 +354,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\Rhabi\\OneDrive\\Documents\\CareerCompass\\CareerCompassAPI\\src\\Core\\CareerCompassAPI.Application\\CareerCompassAPI.Application.csproj": {
+                "projectPath": "C:\\Users\\Rhabi\\OneDrive\\Documents\\CareerCompass\\CareerCompassAPI\\src\\Core\\CareerCompassAPI.Application\\CareerCompassAPI.Application.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

@@ -10,3 +10,8 @@ C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastruct
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\refint\CareerCompassAPI.SignalR.dll
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\CareerCompassAPI.SignalR.pdb
 C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\ref\CareerCompassAPI.SignalR.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\bin\Debug\net6.0\CareerCompassAPI.Application.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\bin\Debug\net6.0\CareerCompassAPI.Domain.dll
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\bin\Debug\net6.0\CareerCompassAPI.Application.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\bin\Debug\net6.0\CareerCompassAPI.Domain.pdb
+C:\Users\Rhabi\OneDrive\Documents\CareerCompass\CareerCompassAPI\src\Infrastructure\CareerCompassAPI.SignalR\obj\Debug\net6.0\CareerCompassAPI.SignalR.csproj.CopyComplete
