@@ -1,3 +1,4 @@
+using CareerCompassAPI.API.Middlewares;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Identity;
@@ -106,6 +107,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
+app.UseCustomExceptionHandler();
 app.MapControllers();
 app.UseEndpoints(endpoints =>
 {

@@ -3,6 +3,7 @@ using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.File_DTOs;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
+using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
@@ -22,6 +23,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             if (fileCreateDto == null) throw new ArgumentNullException();
 
             AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == fileCreateDto.appUserId);
+            if (user is not AppUser)
+            {
+                throw new NotFoundException("User does not exist");
+            }
             Domain.Entities.File newFile = new()
             {
                 Name = fileCreateDto.name,

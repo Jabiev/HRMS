@@ -9,6 +9,7 @@ using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
+using CareerCompassAPI.Persistence.Exceptions;
 using CareerCompassAPI.Persistence.Exceptions.AuthExceptions;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
@@ -27,7 +28,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IJwtService _jwtService;
         private readonly IMailService _mailService;
         private readonly CareerCompassDbContext _context;
-        private readonly INotificationService _notificationService;
         public AuthService(UserManager<AppUser> userManager,
                            IJobSeekerWriteRepository jobSeekerWriteRepository,
                            ISubscriptionReadRepository subscriptionReadRepository,
@@ -35,7 +35,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                            SignInManager<AppUser> signInManager,
                            IJwtService jwtService,
                            CareerCompassDbContext context,
-                           INotificationService notificationService,
                            IMailService mailService)
         {
             _userManager = userManager;
@@ -45,18 +44,16 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _signInManager = signInManager;
             _jwtService = jwtService;
             _context = context;
-            _notificationService = notificationService;
             _mailService = mailService;
         }
 
         public async Task ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
             var user = await _userManager.FindByEmailAsync(forgotPasswordDto.email);
-            if (user == null) { return; }
+            if (user == null) { throw new NotFoundException("User with given email does not exist"); }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var callbackUrl = GenerateResetPasswordUrl(user.Id, token);
-
             var message = new Message(new string[] { forgotPasswordDto.email },
                                       "Reset Password",
                                       $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
@@ -90,7 +87,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             AppUser user = await _userManager.FindByIdAsync(userId);
             if (user is not AppUser)
             {
-                return false;
+                throw new NotFoundException("User with given ID does not exist");
             }
             bool isOldPasswordValid = await _userManager.CheckPasswordAsync(user, passwordChangeDto.oldPassword);
             if (!isOldPasswordValid) { return false; }
@@ -168,12 +165,12 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             if (resetPasswordDto.password != resetPasswordDto.confirmPassword)
             {
-                throw new ArgumentException("Passwords do not match.");
+                throw new ValuesMismatchException("Passwords do not match.");
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                throw new InvalidOperationException("User not found.");
+                throw new NotFoundException("User not found.");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, token, resetPasswordDto.password);
@@ -195,16 +192,16 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             if (refreshToken is null)
             {
-                throw new ArgumentNullException("Refresh token does not exist");
+                throw new NotFoundException("Refresh token does not exist");
             }
             AppUser? user = await _context.Users.Where(u => u.RefreshToken == refreshToken).FirstOrDefaultAsync();
             if (user is not AppUser)
             {
-                throw new ArgumentNullException("User does not exist");
+                throw new NotFoundException("User does not exist");
             }
             if (user.RefreshTokenExpiration < DateTime.UtcNow)
             {
-                throw new ArgumentNullException("Refresh token does not exist");
+                throw new NotFoundException("Refresh token does not exist");
             }
             TokenResponseDto tokenResponse = await _jwtService.CreateJwtToken(user);
             user.RefreshToken = tokenResponse.refreshToken;

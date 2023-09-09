@@ -2,7 +2,9 @@
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Application.DTOs.Industry_DTOs;
+using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Persistence.Contexts;
+using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
@@ -20,6 +22,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         public async Task<List<ExperienceLevelGetDto>> GetAllAsync()
         {
             var experienceLevels = await _context.ExperienceLevels.ToListAsync();
+            if (experienceLevels is null)
+            {
+                throw new NotFoundException("Experience levels do not exist");
+            }
             List<ExperienceLevelGetDto> experienceList = _mapper.Map<List<ExperienceLevelGetDto>>(experienceLevels);
             return experienceList;
         }

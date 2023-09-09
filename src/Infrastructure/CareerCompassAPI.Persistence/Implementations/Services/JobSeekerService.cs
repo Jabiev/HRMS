@@ -30,20 +30,14 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         public async Task CreateAsync(JobSeekerCreateDto dto, string jobseekerAppUserId)
         {
             var jobSeeker = await _context.JobSeekers.FirstOrDefaultAsync(j => j.AppUserId == jobseekerAppUserId);
-            if (jobSeeker == null)
+            if (jobSeeker is not JobSeeker)
             {
-                // Log the error
-                _logger.LogError($"JobSeeker with ID {jobseekerAppUserId} not found.");
-                // Throw a custom exception or return an appropriate response
                 throw new NotFoundException($"JobSeeker with ID {jobseekerAppUserId} not found.");
             }
 
             EducationLevel educationLevel = await _context.EducationLevels.FirstOrDefaultAsync(el => el.Id == dto.educationLevelId);
-            if (educationLevel == null)
+            if (educationLevel is not EducationLevel)
             {
-                // Log the error
-                _logger.LogError($"EducationLevel with ID {dto.educationLevelId} not found.");
-                // Throw a custom exception or return an appropriate response
                 throw new NotFoundException($"EducationLevel with ID {dto.educationLevelId} not found.");
             }
 
@@ -67,9 +61,9 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 .ThenInclude(r => r.Company)    
                 .FirstOrDefaultAsync(js => js.AppUserId == appUserId);
 
-            if (jobSeeker == null)
+            if (jobSeeker is not JobSeeker)
             {
-                throw new InvalidOperationException("JobSeeker not found");
+                throw new NotFoundException("JobSeeker not found");
             }
 
             var approvedPositions = jobSeeker.JobApplications

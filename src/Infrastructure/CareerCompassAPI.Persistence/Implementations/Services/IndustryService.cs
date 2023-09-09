@@ -26,7 +26,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             if (industryCreateDto is null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Empty value may not be passed as an argument");
             }
             Industry newIndustry = new()
             {

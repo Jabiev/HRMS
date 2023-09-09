@@ -6,6 +6,7 @@ using CareerCompassAPI.Application.DTOs.Application_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Persistence.Contexts;
+using CareerCompassAPI.Persistence.Exceptions;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -50,18 +51,18 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             Vacancy vacancy = await _vacancyReadRepository.GetByIdAsync(applicationCreateDto.vacancyId);
             if (vacancy == null)
             {
-                throw new InvalidOperationException("The specified vacancy does not exist.");
+                throw new NotFoundException("The specified vacancy does not exist.");
             }
 
             if (vacancy.CurrentApplicationCount >= vacancy.ApplicationLimit)
             {
-                throw new InvalidOperationException("Application limit for this vacancy has been reached.");
+                throw new LimitExceededException("Application limit for this vacancy has been reached.");
             }
 
             JobSeeker jobSeeker = await _jobSeekerReadRepository.GetByIdAsync(applicationCreateDto.jobSeekerId);
             if (jobSeeker == null)
             {
-                throw new InvalidOperationException("The specified job seeker does not exist.");
+                throw new NotFoundException("The specified job seeker does not exist.");
             }
 
             JobApplications newJobApplication = new()

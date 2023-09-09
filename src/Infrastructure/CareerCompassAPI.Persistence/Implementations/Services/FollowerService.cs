@@ -5,6 +5,7 @@ using CareerCompassAPI.Application.DTOs.Follower_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
+using CareerCompassAPI.Persistence.Exceptions;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,12 +36,12 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             if (followerCreateDto is null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Empty value can not be passed as an argument");
             }
             AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == followerCreateDto.appUserId);
-            if (user == null) { throw new ArgumentNullException(); }
+            if (user is not AppUser) { throw new NotFoundException("User does not exist"); }
             Company company = await _companyReadRepository.GetByIdAsync(followerCreateDto.companyId);
-            if (company == null) { throw new ArgumentNullException(); }
+            if (company is not Company) { throw new NotFoundException("Company does not exist"); }
             var existingFollower = await _context.Followers
             .FirstOrDefaultAsync(f => f.User == user && f.Company == company);
 
@@ -100,16 +101,24 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             if (followerRemoveDto is null)
             {
-                throw new ArgumentNullException(nameof(followerRemoveDto));
+                throw new ArgumentNullException("Empty value may not be passed as an argument");
             }
             AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == followerRemoveDto.appUserId);
+            if (user is not AppUser)
+            {
+                throw new NotFoundException("User does not exist");
+            }
             Company company = await _companyReadRepository.GetByIdAsync(followerRemoveDto.companyId);
+            if (company is not Company)
+            {
+                throw new NotFoundException("Company does not exist");
+            }
             var existingFollower = await _context.Followers
                 .FirstOrDefaultAsync(f => f.User == user && f.Company == company);
 
             if (existingFollower == null)
             {
-                throw new ArgumentException("Follower relationship not found.");
+                throw new NotFoundException("Follower relationship not found.");
             }
 
             _followerWriteRepository.Remove(existingFollower);

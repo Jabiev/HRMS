@@ -7,6 +7,7 @@ using CareerCompassAPI.Application.DTOs.Company_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Persistence.Contexts;
+using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
@@ -37,11 +38,20 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             if (companyCreateDto is null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Empty value passed as an argument");
             }
             var industry = await _industryReadRepository.GetByExpressionAsync(i => i.Id == companyCreateDto.industryId);
+            if (industry is not Industry)
+            {
+                throw new NotFoundException("Matching industry is not found");
+            }
             var jobLocation = await _context.JobLocations.FirstOrDefaultAsync(j => j.Id == companyCreateDto.locationId);
+            if (jobLocation is not JobLocation)
+            {
+                throw new NotFoundException("Matching job location is not found");
+            }
             var recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.AppUserId == userId);
+            if (recruiter is not Recruiter) { throw new NotFoundException("Recruiter is not found"); }
 
             CompanyDetails newCompanyDetails = new()
             {
@@ -123,7 +133,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var company = await _companyReadRepository.GetByIdAsync(companyId);
             if (company is not Company)
             {
-                throw new ArgumentNullException();
+                throw new NotFoundException("Company not found");
             }
             _companyWriteRepository.Remove(company);
             await _companyWriteRepository.SaveChangesAsync();
@@ -133,10 +143,13 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             if (logoUploadDto is null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Empty value passed as an argument");
             }
             Company company = await _companyReadRepository.GetByIdAsync(companyId);
-            // company not found Exception
+            if (company is not Company)
+            {
+                throw new NotFoundException("Company not found");
+            }
             company.LogoUrl = logoUploadDto.url;
             _companyWriteRepository.Update(company);
             await _companyWriteRepository.SaveChangesAsync();
