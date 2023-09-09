@@ -113,6 +113,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<ApplicationHub>("/application");
     endpoints.MapHub<ChatHub>("/chat");
     endpoints.MapHub<VideoHub>("/video").RequireAuthorization();
+    endpoints.MapHub<VideoHub>("/review");
 });
 app.MapHangfireDashboard("/hangfire", new DashboardOptions());
 RecurringJob.AddOrUpdate("check-subscription", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().CheckSubscriptions(), Cron.Hourly);
