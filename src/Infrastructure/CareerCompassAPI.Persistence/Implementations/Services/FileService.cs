@@ -10,10 +10,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 {
     public class FileService : IFileService
     {
-        private readonly CareerCompassDbContext _context;
+        private readonly ICareerCompassDbContext _context;
         private readonly IFileWriteRepository _fileWriteRepository;
 
-        public FileService(CareerCompassDbContext context, IFileWriteRepository fileWriteRepository)
+        public FileService(ICareerCompassDbContext context, IFileWriteRepository fileWriteRepository)
         {
             _context = context;
             _fileWriteRepository = fileWriteRepository;

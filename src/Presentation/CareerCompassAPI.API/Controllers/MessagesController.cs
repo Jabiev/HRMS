@@ -25,5 +25,11 @@ namespace CareerCompassAPI.API.Controllers
             //await _hubContext.Clients.All.SendAsync("ReceiveMessage");
             return Ok(new { Message = "Message successfully sent." });
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetMessages(string senderId, string receiverId)
+        {
+            var response = await _messageService.GetUnreadMessagesAsync(senderId, receiverId);
+            return Ok(response);
+        }
     }
 }

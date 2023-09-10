@@ -10,10 +10,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 {
     public class EducationLevelService : IEducationLevelService
     {
-        private readonly CareerCompassDbContext _context;
+        private readonly ICareerCompassDbContext _context;
         private readonly IMapper _mapper;
 
-        public EducationLevelService(CareerCompassDbContext context, IMapper mapper)
+        public EducationLevelService(ICareerCompassDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

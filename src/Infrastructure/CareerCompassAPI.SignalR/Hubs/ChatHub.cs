@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Security.Claims;
+﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.RTC_DTOs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Collections.Concurrent;
 
 namespace CareerCompassAPI.SignalR.Hubs
 {
@@ -13,10 +12,12 @@ namespace CareerCompassAPI.SignalR.Hubs
     {
         private readonly ILogger<ChatHub> _logger;
         private static readonly ConcurrentDictionary<string, string> UserConnectionMap = new ConcurrentDictionary<string, string>();
+        private readonly IMessageService _messageService;
 
-        public ChatHub(ILogger<ChatHub> logger)
+        public ChatHub(ILogger<ChatHub> logger, IMessageService messageService)
         {
             _logger = logger;
+            _messageService = messageService;
         }
 
         public override async Task OnConnectedAsync()
@@ -57,7 +58,10 @@ namespace CareerCompassAPI.SignalR.Hubs
         {
             var groupId = GenerateGroupId(userId1, userId2);
             await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
-            _logger.LogInformation($"User {Context.ConnectionId} has joined the group {groupId}");
+
+            var unreadMessages = await _messageService.GetUnreadMessagesAsync(userId1, userId2);
+
+            await Clients.Caller.SendAsync("ReceiveUnreadMessages", unreadMessages);
         }
 
         public async Task LeaveGroup(string userId1, string userId2)
@@ -96,10 +100,7 @@ namespace CareerCompassAPI.SignalR.Hubs
         {
             try
             {
-                // Map the userId to the ConnectionId
                 UserConnectionMap.TryAdd(Context.ConnectionId, userId);
-
-                // ... the rest of your logic here
                 RTCSessionDescriptionDTO offer = JsonConvert.DeserializeObject<RTCSessionDescriptionDTO>(offerJson);
 
                 if (string.IsNullOrEmpty(offer.Type) || string.IsNullOrEmpty(offer.Sdp))
@@ -107,8 +108,6 @@ namespace CareerCompassAPI.SignalR.Hubs
                     _logger.LogWarning("Invalid offer received for starting a direct call.");
                     return;
                 }
-
-                // Forwarding offer to the recipient
                 await Clients.User(recipientId).SendAsync("ReceiveDirectCall", userId, recipientId, offerJson);
 
                 _logger.LogInformation($"User {userId} started a direct call with {recipientId}. Offer forwarded.");

@@ -7,8 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CareerCompassAPI.Persistence.Contexts
 {
-    public class CareerCompassDbContext:IdentityDbContext<AppUser>
+    public class CareerCompassDbContext:IdentityDbContext<AppUser>, ICareerCompassDbContext
     {
+        public CareerCompassDbContext() : base()
+        {
+        }
         public CareerCompassDbContext(DbContextOptions<CareerCompassDbContext> options):base(options) { }
         public DbSet<Subscriptions> Subscriptions { get; set; }
         public DbSet<JobSeeker> JobSeekers { get; set; }

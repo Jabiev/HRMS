@@ -15,7 +15,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 {
     public class ApplicationService : IApplicationService
     {
-        private readonly CareerCompassDbContext _context;
+        private readonly ICareerCompassDbContext _context;
         private readonly IJobSeekerReadRepository _jobSeekerReadRepository;
         private readonly IVacancyReadRepository _vacancyReadRepository;
         private readonly IVacancyWriteRepository _vacancyWriteRepository;
@@ -24,7 +24,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly ILogger<ApplicationService> _logger;
 
 
-        public ApplicationService(CareerCompassDbContext context,
+        public ApplicationService(ICareerCompassDbContext context,
                                   IJobSeekerReadRepository jobSeekerReadRepository,
                                   IVacancyReadRepository vacancyReadRepository,
                                   IJobApplicationWriteRepository jobApplicationWriteRepository,

@@ -9,13 +9,16 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
     public class MessageService : IMessageService
     {
         private readonly IMessageWriteRepository _messageWriteRepository;
+        private readonly IMessageReadRepository _messageReadRepository;
         private readonly CareerCompassDbContext _context;
 
         public MessageService(IMessageWriteRepository messageWriteRepository,
-                              CareerCompassDbContext context)
+                              CareerCompassDbContext context,
+                              IMessageReadRepository messageReadRepository)
         {
             _messageWriteRepository = messageWriteRepository;
             _context = context;
+            _messageReadRepository = messageReadRepository;
         }
         public async Task CreateAsync(MessageCreateDto messageCreateDto)
         {
@@ -38,5 +41,20 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _messageWriteRepository.AddAsync(newMessage);
             await _messageWriteRepository.SaveChangesAsync();
         }
+
+        public async Task<List<GetUnreadMessagesDto>> GetUnreadMessagesAsync(string senderId, string receiverId)
+        {
+            var unreadMessages = await _messageReadRepository.GetAllByExpression(
+    m => ((m.Sender.Id == senderId && m.Receiver.Id == receiverId) ||
+          (m.Sender.Id == receiverId && m.Receiver.Id == senderId)) &&
+         !m.IsRead,
+    int.MaxValue,
+    0)
+    .Select(m => new GetUnreadMessagesDto(m.Sender.Id, m.Receiver.Id, m.Content, m.MessageType))
+    .ToListAsync();
+
+            return unreadMessages;
+        }
+
     }
 }

@@ -10,9 +10,7 @@ using CareerCompassAPI.SignalR.Hubs;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
-using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

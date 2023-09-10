@@ -12,8 +12,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
     public class ExperienceLevelService : IExperienceLevelService
     {
         private readonly IMapper _mapper;
-        private readonly CareerCompassDbContext _context;
-        public ExperienceLevelService(IMapper mapper, CareerCompassDbContext context)
+        private readonly ICareerCompassDbContext _context;
+        public ExperienceLevelService(IMapper mapper, ICareerCompassDbContext context)
         {
             _mapper = mapper;
             _context = context;
@@ -22,10 +22,11 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         public async Task<List<ExperienceLevelGetDto>> GetAllAsync()
         {
             var experienceLevels = await _context.ExperienceLevels.ToListAsync();
-            if (experienceLevels is null)
+            if (!experienceLevels.Any())
             {
                 throw new NotFoundException("Experience levels do not exist");
             }
+
             List<ExperienceLevelGetDto> experienceList = _mapper.Map<List<ExperienceLevelGetDto>>(experienceLevels);
             return experienceList;
         }

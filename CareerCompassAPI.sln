@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareerCompassAPI.Persistenc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareerCompassAPI.API", "src\Presentation\CareerCompassAPI.API\CareerCompassAPI.API.csproj", "{127811B7-F424-4DFB-9F8B-27564E980870}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CareerCompassAPI.SignalR", "src\Infrastructure\CareerCompassAPI.SignalR\CareerCompassAPI.SignalR.csproj", "{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareerCompassAPI.SignalR", "src\Infrastructure\CareerCompassAPI.SignalR\CareerCompassAPI.SignalR.csproj", "{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CareerCompass.UnitTests", "tests\CareerCompass.UnitTests\CareerCompass.UnitTests.csproj", "{AE6EE52E-7DA3-457D-9B52-5B47616A4E0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE6EE52E-7DA3-457D-9B52-5B47616A4E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE6EE52E-7DA3-457D-9B52-5B47616A4E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE6EE52E-7DA3-457D-9B52-5B47616A4E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE6EE52E-7DA3-457D-9B52-5B47616A4E0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{F19ABA3E-DCF0-420A-BC62-974528F8ED3E} = {3A8FE57A-CC26-4BF7-9B49-75A997CABC88}
 		{127811B7-F424-4DFB-9F8B-27564E980870} = {8B37B06C-5E25-4302-9BB3-7A6468AF741B}
 		{2E1BB909-1D85-4DB0-937B-B71CBE2B44BD} = {3A8FE57A-CC26-4BF7-9B49-75A997CABC88}
+		{AE6EE52E-7DA3-457D-9B52-5B47616A4E0B} = {8FE67DD8-FB84-4AD2-97EA-10F3B4A66D52}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E157B089-6192-42DF-9B25-B917DC6C9C50}

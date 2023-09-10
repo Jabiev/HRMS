@@ -71,6 +71,7 @@ namespace CareerCompassAPI.API.Controllers
             return Ok("Password reset successfully");
         }
         [HttpPost("PasswordChange/{userId}")]
+        [Authorize]
         public async Task<IActionResult> PasswordChange(string userId, [FromBody] PasswordChangeDto passwordChangeDto)
         {
             var result = await _authService.PasswordChange(userId, passwordChangeDto);
@@ -84,6 +85,5 @@ namespace CareerCompassAPI.API.Controllers
                 return BadRequest("Something went wrong");
             }
         }
-
     }
 }

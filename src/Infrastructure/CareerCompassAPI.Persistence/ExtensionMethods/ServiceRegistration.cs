@@ -68,6 +68,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IPaymentsService, PaymentService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IApplicationService, ApplicationService>();
+            services.AddScoped<ICareerCompassDbContext, CareerCompassDbContext>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IFollowerService, FollowerService>();
             services.AddScoped<IReviewService, Implementations.Services.ReviewService>();
