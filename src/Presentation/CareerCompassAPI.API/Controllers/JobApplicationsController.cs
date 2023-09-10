@@ -32,7 +32,7 @@ namespace CareerCompassAPI.API.Controllers
             return Ok();
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetApplicants([FromQuery]string appUserId)
+        public async Task<IActionResult> GetApplicants([FromQuery] string appUserId)
         {
             var response = await _applicationService.GetApplicationsByAppUserId(appUserId);
             return Ok(response);
@@ -44,7 +44,7 @@ namespace CareerCompassAPI.API.Controllers
             return Ok(response);
         }
         [HttpPut("[action]")]
-        public async Task<IActionResult> UpdateStatus([FromBody] ApplicationStatusUpdateDto applicationStatusUpdateDto )
+        public async Task<IActionResult> UpdateStatus([FromBody] ApplicationStatusUpdateDto applicationStatusUpdateDto)
         {
             await _applicationService.UpdateAsync(applicationStatusUpdateDto);
             return Ok();
@@ -54,6 +54,12 @@ namespace CareerCompassAPI.API.Controllers
         {
             var response = await _jobSeekerService.GetApprovedPositionsByAppUserId(appUserId);
             return Ok(response);
+        }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveApplication(Guid applicationId)
+        {
+            await _applicationService.Remove(applicationId);
+            return Ok();
         }
     }
 }

@@ -126,7 +126,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
 
             var approvedApplications = await _context.Applications
-                .Where(ja => ja.Vacancy.Recruiter.Id == recruiter.Id && ja.Status == ApplicationStatus.Approved)
+                .Where(ja => ja.Vacancy.Recruiter.Id == recruiter.Id && ja.Status == ApplicationStatus.Approved && ja.IsDeleted == false)
                 .Include(ja => ja.JobSeeker)
                 .Include(ja => ja.Vacancy)
                 .ToListAsync();
@@ -144,6 +144,18 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             return approvedApplicantDtos;
         }
+
+        public async Task Remove(Guid applicationId)
+        {
+            var application = await _jobApplicationReadRepository.GetByIdAsync(applicationId);
+            if (application is null)
+            {
+                throw new NotFoundException("Application does not exist");
+            }
+            application.IsDeleted = true;
+            await _jobApplicationWriteRepository.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(ApplicationStatusUpdateDto applicationStatusUpdateDto)
         {
             JobApplications application = await _jobApplicationReadRepository.GetByIdAsync(applicationStatusUpdateDto.applicationId);

@@ -8,5 +8,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<List<ApplicantsGetDto>> GetApplicationsByAppUserId(string appUserId);
         Task UpdateAsync(ApplicationStatusUpdateDto applicationStatusUpdateDto);
         Task<List<ApprovedApplicantGetDto>> GetApprovedApplicantsByAppUserId(string appUserId);
+        Task Remove(Guid applicationId);
     }
 }
