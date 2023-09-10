@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.Connections.Features;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Cms;
 
 namespace CareerCompassAPI.SignalR.Hubs
 {
@@ -46,13 +47,23 @@ namespace CareerCompassAPI.SignalR.Hubs
         public async Task AnswerDirectCallAsync(string callerId, string answerJson)
         {
             var groupId = GenerateGroupId(Context.UserIdentifier, callerId);
-            _logger.LogInformation($"Answer received. CallerId: {callerId}, AnswerJson: {answerJson}");
-
-            _logger.LogInformation($"Current GroupID: {groupId}");
-            _logger.LogInformation($"Current UserIdentifier: {Context.UserIdentifier}");
-            _logger.LogInformation($"Current ConnectionId: {Context.ConnectionId}");
-
             await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveDirectCallAnswer", callerId, answerJson);
+        }
+        public async Task NotifyCallDeclined(string userId, string recipientId)
+        {
+            try
+            {
+                var groupId = GenerateGroupId(userId, recipientId);
+                await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveCallDeclined", Context.UserIdentifier, recipientId);
+
+                _logger.LogInformation($"Received userId: {userId}, recipientId: {recipientId}");
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while declining the call.");
+            }
         }
         public async Task SendIceCandidate(string recipientId, string iceCandidateJson)
         {
@@ -60,10 +71,6 @@ namespace CareerCompassAPI.SignalR.Hubs
             await Clients.GroupExcept(groupId, new List<string> { Context.ConnectionId }).SendAsync("ReceiveIceCandidate", iceCandidateJson);
         }
 
-        public async Task NotifyCallDeclined(string callerId)
-        {
-            await Clients.User(callerId).SendAsync("ReceiveCallDeclined", Context.UserIdentifier);
-        }
         public override async Task OnConnectedAsync()
         {
             var httpContext = Context.Features.Get<IHttpContextFeature>()?.HttpContext;

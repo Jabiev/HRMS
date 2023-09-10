@@ -67,7 +67,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
 
             var approvedPositions = jobSeeker.JobApplications
-                .Where(ja => ja.Status == ApplicationStatus.Approved)
+                .Where(ja => ja.Status == ApplicationStatus.Approved && ja.IsDeleted == false)
                 .Select(ja => new JobseekerApprovedGetDto(
                     ja.Id,
                     ja.Vacancy.Recruiter.FirstName,
