@@ -29,11 +29,17 @@ namespace CareerCompassAPI.API.Controllers
             return Ok();
         }
         [HttpPut("[action]")]
-        [AllowAnonymous]
         public async Task<IActionResult> ChangeUserRole(ChangeUserRoleDto changeUserRoleDto)
         {
             await _dashboardService.ChangeUserRole(changeUserRoleDto);
             return Ok(new { Message = "User role updated successfully" });
+        }
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllCompanies()
+        {
+            var response = await _dashboardService.GetAllCompaniesAsync();
+            return Ok(response);
         }
     }
 }

@@ -61,6 +61,25 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return appUsers;
         }
 
+        public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync()
+        {
+            var companiesWithCounts = await _context.Companies
+                .Include(c => c.Followers)
+                .Include(c => c.Reviews)
+                .Include(c => c.Details)
+                    .ThenInclude(cd => cd.Location) 
+                .Select(c => new CompaniesListGetDto(
+                    c.Id,
+                    c.Name,
+                    c.Followers.Count,
+                    c.Reviews.Count,
+                    c.Details.Location.Location
+                ))
+                .ToListAsync();
+
+            return companiesWithCounts;
+        }
+
         public async Task RemoveUser(string appUserId)
         {
             if (string.IsNullOrEmpty(appUserId))
@@ -73,8 +92,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new NotFoundException("User with given parameters does not exist");
             }
-
-            // Manually delete the messages
             var messagesToDelete = await _context.Messages
                                         .Where(m => m.Sender.Id == appUserId || m.Receiver.Id == appUserId)
                                         .ToListAsync();
@@ -82,7 +99,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _context.Messages.RemoveRange(messagesToDelete);
             await _context.SaveChangesAsync();
 
-            // Proceed with deleting the user
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
             {
