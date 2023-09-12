@@ -1,4 +1,6 @@
-﻿using CareerCompassAPI.Application.Abstraction.Services;
+﻿using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
+using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Domain.Entities;
@@ -14,11 +16,24 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly CareerCompassDbContext _context;
+        private readonly ICompanyReadRepository _companyReadRepository;
+        private readonly ICompanyWriteRepository _companyWriteRepository;
+        private readonly IRecruiterReadRepository _recruiterReadRepository;
+        private readonly IRecruiterWriteRepository _recruiterWriteRepository;
 
-        public DashboardService(UserManager<AppUser> userManager, CareerCompassDbContext context)
+        public DashboardService(UserManager<AppUser> userManager,
+                                CareerCompassDbContext context,
+                                ICompanyReadRepository companyReadRepository,
+                                ICompanyWriteRepository companyWriteRepository,
+                                IRecruiterReadRepository recruiterReadRepository,
+                                IRecruiterWriteRepository recruiterWriteRepository)
         {
             _userManager = userManager;
             _context = context;
+            _companyReadRepository = companyReadRepository;
+            _companyWriteRepository = companyWriteRepository;
+            _recruiterReadRepository = recruiterReadRepository;
+            _recruiterWriteRepository = recruiterWriteRepository;
         }
 
         public async Task ChangeUserRole(ChangeUserRoleDto changeUserRoleDto)
@@ -40,7 +55,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
             await _userManager.AddToRoleAsync(user, changeUserRoleDto.newRole); 
         }
-
         public async Task<List<AppUserGetDto>> GetAllAsync()
         {
             var appUsers = new List<AppUserGetDto>();
@@ -61,7 +75,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             return appUsers;
         }
-
         public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders, string? searchQuery)
         {
          
@@ -122,13 +135,26 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                         break;
                 }
             }
-
             return sortedCompanies;
         }
 
-
-
-
+        public async Task RemoveCompany(Guid companyId)
+        {
+            if (companyId == Guid.Empty)
+            {
+                throw new ArgumentException("Empty value may not be passed as an argument", nameof(companyId));
+            }
+            var company = await _companyReadRepository.GetByIdAsync(companyId);
+            if (company == null)
+            {
+                throw new NotFoundException("Company does not exist");
+            }
+            _companyWriteRepository.Remove(company);
+            var recuiter = await _recruiterReadRepository.GetByExpressionAsync(r => r.Company.Id == companyId);
+            recuiter.Company = null;
+            await _recruiterWriteRepository.SaveChangesAsync();
+            await _companyWriteRepository.SaveChangesAsync();
+        }
 
         public async Task RemoveUser(string appUserId)
         {

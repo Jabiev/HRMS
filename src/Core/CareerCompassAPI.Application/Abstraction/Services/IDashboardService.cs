@@ -9,5 +9,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task RemoveUser(string appUserId);
         Task ChangeUserRole(ChangeUserRoleDto changeUserRoleDto);
         Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrder, string? searchQuery);
+        Task RemoveCompany(Guid companyId);
     }
 }

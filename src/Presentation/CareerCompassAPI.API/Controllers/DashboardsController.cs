@@ -35,11 +35,17 @@ namespace CareerCompassAPI.API.Controllers
             return Ok(new { Message = "User role updated successfully" });
         }
         [HttpGet("[action]")]
-        [AllowAnonymous]
+     
         public async Task<IActionResult> GetAllCompanies([FromQuery] string? sortOrder, [FromQuery] string? searchQuery)
         {
             var response = await _dashboardService.GetAllCompaniesAsync(sortOrder, searchQuery);
             return Ok(response);
+        }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveCompany([FromQuery] Guid companyId)
+        {
+            await _dashboardService.RemoveCompany(companyId);
+            return Ok();
         }
     }
 }
