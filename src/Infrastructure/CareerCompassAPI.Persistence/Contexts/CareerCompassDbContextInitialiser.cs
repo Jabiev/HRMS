@@ -105,34 +105,34 @@ namespace CareerCompassAPI.Persistence.Contexts
             await _userManager.CreateAsync(appUser, _configuration["Master:password"]);
             await _userManager.AddToRoleAsync(appUser, Roles.Master.ToString());
         }
-        public async Task RecruiterUserSeedAsync(int count = 20)
-        {
-            var existingRecruiters = await _userManager.GetUsersInRoleAsync(Roles.Recruiter.ToString());
+        //public async Task RecruiterUserSeedAsync(int count = 20)
+        //{
+        //    var existingRecruiters = await _userManager.GetUsersInRoleAsync(Roles.Recruiter.ToString());
 
-            if (existingRecruiters.Any())
-            {
-                return;
-            }
+        //    if (existingRecruiters.Any())
+        //    {
+        //        return;
+        //    }
 
-            var faker = new Faker();
-            var recruiters = new List<AppUser>();
+        //    var faker = new Faker();
+        //    var recruiters = new List<AppUser>();
 
-            for (int i = 0; i < count; i++)
-            {
-                var recruiterUser = new AppUser
-                {
-                    UserName = faker.Internet.UserName(),
-                    Email = faker.Internet.Email(),
-                    PhoneNumber = faker.Phone.PhoneNumber(),
-                };
-                var password = "Rahil123!";
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        var recruiterUser = new AppUser
+        //        {
+        //            UserName = faker.Internet.UserName(),
+        //            Email = faker.Internet.Email(),
+        //            PhoneNumber = faker.Phone.PhoneNumber(),
+        //        };
+        //        var password = "Rahil123!";
 
-                recruiters.Add(recruiterUser);
-                await _userManager.CreateAsync(recruiterUser, password);
-                await _userManager.AddToRoleAsync(recruiterUser, Roles.Recruiter.ToString());
-                await _context.SaveChangesAsync();
-            }
-        }
+        //        recruiters.Add(recruiterUser);
+        //        await _userManager.CreateAsync(recruiterUser, password);
+        //        await _userManager.AddToRoleAsync(recruiterUser, Roles.Recruiter.ToString());
+        //        await _context.SaveChangesAsync();
+        //    }
+        //}
         public async Task JobTypeSeed()
         {
             var jobTypes = new List<JobType>()

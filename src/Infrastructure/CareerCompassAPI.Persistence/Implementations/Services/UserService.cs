@@ -1,6 +1,7 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Auth_DTOs;
 using CareerCompassAPI.Persistence.Contexts;
+using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
@@ -19,7 +20,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                                             .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
-                throw new InvalidOperationException("User not found.");
+                throw new NotFoundException("User not found.");
             }
             var firstName = user.JobSeekers?.FirstName ?? user.Recruiters?.FirstName;
             var lastName = user.JobSeekers?.LastName ?? user.Recruiters?.LastName;

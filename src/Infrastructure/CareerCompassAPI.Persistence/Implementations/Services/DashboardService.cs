@@ -74,6 +74,15 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 throw new NotFoundException("User with given parameters does not exist");
             }
 
+            // Manually delete the messages
+            var messagesToDelete = await _context.Messages
+                                        .Where(m => m.Sender.Id == appUserId || m.Receiver.Id == appUserId)
+                                        .ToListAsync();
+
+            _context.Messages.RemoveRange(messagesToDelete);
+            await _context.SaveChangesAsync();
+
+            // Proceed with deleting the user
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
             {
