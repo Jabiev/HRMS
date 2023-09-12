@@ -36,9 +36,9 @@ namespace CareerCompassAPI.API.Controllers
         }
         [HttpGet("[action]")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllCompanies([FromQuery] string? sortOrder)
+        public async Task<IActionResult> GetAllCompanies([FromQuery] string? sortOrder, [FromQuery] string? searchQuery)
         {
-            var response = await _dashboardService.GetAllCompaniesAsync(sortOrder);
+            var response = await _dashboardService.GetAllCompaniesAsync(sortOrder, searchQuery);
             return Ok(response);
         }
     }

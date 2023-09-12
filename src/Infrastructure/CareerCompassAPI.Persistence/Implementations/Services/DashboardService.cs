@@ -62,7 +62,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return appUsers;
         }
 
-        public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders)
+        public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders, string? searchQuery)
         {
          
             var companiesQuery = await _context.Companies
@@ -71,6 +71,14 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 .Include(c => c.Details)
                     .ThenInclude(cd => cd.Location)
                 .ToListAsync();
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                companiesQuery = companiesQuery.Where(c =>
+                    c.Name.ToLower().Contains(searchQuery.ToLower()) ||
+                    c.Details.Location.Location.ToLower().Contains(searchQuery.ToLower())
+                ).ToList();
+            }
 
             List<CompaniesListGetDto> sortedCompanies = companiesQuery
                 .Select(c => new CompaniesListGetDto(
