@@ -1,14 +1,16 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IReviewRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
-using CareerCompassAPI.Domain.Entities;
+using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -20,13 +22,15 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly ICompanyWriteRepository _companyWriteRepository;
         private readonly IRecruiterReadRepository _recruiterReadRepository;
         private readonly IRecruiterWriteRepository _recruiterWriteRepository;
+        private readonly IReviewReadRepository _reviewReadRepository;
 
         public DashboardService(UserManager<AppUser> userManager,
                                 CareerCompassDbContext context,
                                 ICompanyReadRepository companyReadRepository,
                                 ICompanyWriteRepository companyWriteRepository,
                                 IRecruiterReadRepository recruiterReadRepository,
-                                IRecruiterWriteRepository recruiterWriteRepository)
+                                IRecruiterWriteRepository recruiterWriteRepository,
+                                IReviewReadRepository reviewReadRepository)
         {
             _userManager = userManager;
             _context = context;
@@ -34,6 +38,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _companyWriteRepository = companyWriteRepository;
             _recruiterReadRepository = recruiterReadRepository;
             _recruiterWriteRepository = recruiterWriteRepository;
+            _reviewReadRepository = reviewReadRepository;
         }
 
         public async Task ChangeUserRole(ChangeUserRoleDto changeUserRoleDto)
@@ -147,6 +152,23 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 }
             }
             return sortedCompanies;
+        }
+
+        public async Task<List<PendingReviewsDto>> GetAllPendingReviews()
+        {
+            var pendingReviews = _reviewReadRepository.GetAllByExpression(
+                r => r.Status == ReviewStatus.Pending,
+                int.MaxValue, 
+                0,
+                true,
+                "JobSeeker.AppUser"
+            );
+
+            var pendingReviewList = await pendingReviews.ToListAsync();
+
+            return pendingReviewList.Select(r =>
+                new PendingReviewsDto(r.Id,r.JobSeeker.AppUser.Email, r.Title, r.Description, r.Rating)
+            ).ToList();
         }
 
         public async Task RemoveCompany(Guid companyId)

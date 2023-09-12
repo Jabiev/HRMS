@@ -47,5 +47,12 @@ namespace CareerCompassAPI.API.Controllers
             await _dashboardService.RemoveCompany(companyId);
             return Ok();
         }
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPendingReviews()
+        {
+            var response = await _dashboardService.GetAllPendingReviews();
+            return Ok(response);
+        }
     }
 }

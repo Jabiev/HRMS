@@ -1,6 +1,5 @@
 ﻿using CareerCompassAPI.Domain.Entities.Common;
 using CareerCompassAPI.Domain.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CareerCompassAPI.Domain.Entities
 {
