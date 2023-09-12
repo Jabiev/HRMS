@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http.Connections.Features;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Cms;
 
 namespace CareerCompassAPI.SignalR.Hubs
 {
