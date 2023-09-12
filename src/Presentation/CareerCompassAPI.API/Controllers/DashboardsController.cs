@@ -1,4 +1,5 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
+using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,13 @@ namespace CareerCompassAPI.API.Controllers
         {
             await _dashboardService.RemoveUser(appUserId);
             return Ok();
+        }
+        [HttpPut("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ChangeUserRole(ChangeUserRoleDto changeUserRoleDto)
+        {
+            await _dashboardService.ChangeUserRole(changeUserRoleDto);
+            return Ok(new { Message = "User role updated successfully" });
         }
     }
 }

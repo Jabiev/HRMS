@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
+using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions;
@@ -17,6 +18,26 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             _userManager = userManager;
             _context = context;
+        }
+
+        public async Task ChangeUserRole(ChangeUserRoleDto changeUserRoleDto)
+        {
+            var user = await _userManager.FindByIdAsync(changeUserRoleDto.appUserId);
+
+            if (user == null)
+            {
+                throw new NotFoundException("User not found.");
+            }
+
+            if (changeUserRoleDto.newRole != "Admin" && changeUserRoleDto.newRole != "Master")
+            {
+                throw new Exception("Invalid role.");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles); 
+
+            await _userManager.AddToRoleAsync(user, changeUserRoleDto.newRole); 
         }
 
         public async Task<List<AppUserGetDto>> GetAllAsync()
