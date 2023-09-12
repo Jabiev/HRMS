@@ -10,7 +10,6 @@ using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -23,6 +22,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IRecruiterReadRepository _recruiterReadRepository;
         private readonly IRecruiterWriteRepository _recruiterWriteRepository;
         private readonly IReviewReadRepository _reviewReadRepository;
+        private readonly IReviewWriteRepository _reviewWriteRepository;
 
         public DashboardService(UserManager<AppUser> userManager,
                                 CareerCompassDbContext context,
@@ -30,7 +30,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                                 ICompanyWriteRepository companyWriteRepository,
                                 IRecruiterReadRepository recruiterReadRepository,
                                 IRecruiterWriteRepository recruiterWriteRepository,
-                                IReviewReadRepository reviewReadRepository)
+                                IReviewReadRepository reviewReadRepository,
+                                IReviewWriteRepository reviewWriteRepository)
         {
             _userManager = userManager;
             _context = context;
@@ -39,6 +40,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _recruiterReadRepository = recruiterReadRepository;
             _recruiterWriteRepository = recruiterWriteRepository;
             _reviewReadRepository = reviewReadRepository;
+            _reviewWriteRepository = reviewWriteRepository;
         }
 
         public async Task ChangeUserRole(ChangeUserRoleDto changeUserRoleDto)
@@ -215,5 +217,16 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
         }
 
+        public async Task UpdateReviewStatus(Guid reviewId, ReviewStatus newStatus)
+        {
+            var review = await _reviewReadRepository.GetByIdAsync(reviewId);
+            if (review is null)
+            {
+                throw new NotFoundException("Review not found"); 
+            }
+            review.Status= newStatus;
+            _reviewWriteRepository.Update(review);
+            await _reviewWriteRepository.SaveChangesAsync();
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
+using CareerCompassAPI.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,11 +49,21 @@ namespace CareerCompassAPI.API.Controllers
             return Ok();
         }
         [HttpGet("[action]")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetPendingReviews()
         {
             var response = await _dashboardService.GetAllPendingReviews();
             return Ok(response);
+        }
+        [HttpPatch("[action]")]
+      
+        public async Task<IActionResult> UpdateReviewStatus([FromQuery] Guid reviewId, [FromBody] int newStatus)
+        {
+            if (Enum.IsDefined(typeof(ReviewStatus), newStatus))
+            {
+                await _dashboardService.UpdateReviewStatus(reviewId, (ReviewStatus)newStatus);
+                return Ok();
+            }
+            return BadRequest("Invalid Status");
         }
     }
 }

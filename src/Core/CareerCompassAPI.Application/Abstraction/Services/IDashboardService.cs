@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
+using CareerCompassAPI.Domain.Enums;
 
 namespace CareerCompassAPI.Application.Abstraction.Services
 {
@@ -11,5 +12,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrder, string? searchQuery);
         Task RemoveCompany(Guid companyId);
         Task<List<PendingReviewsDto>> GetAllPendingReviews();
+        Task UpdateReviewStatus(Guid reviewId, ReviewStatus newStatus);
     }
 }
