@@ -1,6 +1,7 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
+using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions;
@@ -61,13 +62,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return appUsers;
         }
 
-        public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync()
+        public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders)
         {
-            var companiesWithCounts = await _context.Companies
+         
+            var companiesQuery = await _context.Companies
                 .Include(c => c.Followers)
                 .Include(c => c.Reviews)
                 .Include(c => c.Details)
-                    .ThenInclude(cd => cd.Location) 
+                    .ThenInclude(cd => cd.Location)
+                .ToListAsync();
+
+            List<CompaniesListGetDto> sortedCompanies = companiesQuery
                 .Select(c => new CompaniesListGetDto(
                     c.Id,
                     c.Name,
@@ -75,10 +80,47 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                     c.Reviews.Count,
                     c.Details.Location.Location
                 ))
-                .ToListAsync();
+                .ToList();
 
-            return companiesWithCounts;
+            if (string.IsNullOrEmpty(sortOrders))
+            {
+                return sortedCompanies;
+            }
+            var sorts = sortOrders.Split('|');
+            foreach (var sort in sorts)
+            {
+                var parts = sort.Split('_');
+                if (parts.Length != 2)
+                {
+                    continue; 
+                }
+
+                var field = parts[0].ToLower();
+                var direction = parts[1].ToLower();
+
+                switch (field)
+                {
+                    case "followers":
+                        sortedCompanies = direction == "asc" ?
+                            sortedCompanies.OrderBy(c => c.followersCount).ToList() :
+                            sortedCompanies.OrderByDescending(c => c.followersCount).ToList();
+                        break;
+                    case "reviews":
+                        sortedCompanies = direction == "asc" ?
+                            sortedCompanies.OrderBy(c => c.reviewsCount).ToList() :
+                            sortedCompanies.OrderByDescending(c => c.reviewsCount).ToList();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return sortedCompanies;
         }
+
+
+
+
 
         public async Task RemoveUser(string appUserId)
         {
