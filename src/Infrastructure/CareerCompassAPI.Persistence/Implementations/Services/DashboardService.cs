@@ -55,16 +55,25 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
             await _userManager.AddToRoleAsync(user, changeUserRoleDto.newRole); 
         }
-        public async Task<List<AppUserGetDto>> GetAllAsync()
+        public async Task<List<AppUserGetDto>> GetAllAsync(string searchQuery = "")
         {
             var appUsers = new List<AppUserGetDto>();
+            IQueryable<AppUser> queryableUsers = _userManager.Users;
 
-            var users = _userManager.Users.ToList();
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                queryableUsers = queryableUsers.Where(
+                    u => u.UserName.ToLower().Contains(searchQuery.ToLower()) ||
+                         u.Email.ToLower().Contains(searchQuery.ToLower()) ||
+                         u.PhoneNumber.ToLower().Contains(searchQuery.ToLower())
+                );
+            }
+
+            var users = await queryableUsers.ToListAsync();  
 
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
-
                 appUsers.Add(new AppUserGetDto(
                     user.Id,
                     user.UserName,
@@ -75,6 +84,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             return appUsers;
         }
+
+
         public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders, string? searchQuery)
         {
          

@@ -17,9 +17,9 @@ namespace CareerCompassAPI.API.Controllers
             _dashboardService = dashboardService;
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([FromQuery] string? searchQuery)
         {
-            var response = await _dashboardService.GetAllAsync();
+            var response = await _dashboardService.GetAllAsync(searchQuery);
             return Ok(response);
         }
         [HttpDelete("[action]")]
