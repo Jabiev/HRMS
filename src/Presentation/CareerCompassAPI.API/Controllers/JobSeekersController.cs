@@ -28,5 +28,11 @@ namespace CareerCompassAPI.API.Controllers
             await _jobSeekerService.CreateAsync(createDto, userId);
             return Ok();
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UploadAvatar([FromQuery] string jobseekerId, JobseekerAvatarUploadDto uploadAvatar)
+        {
+            await _jobSeekerService.UploadLogoAsync(jobseekerId,uploadAvatar);
+            return Ok();
+        }
     }
 }

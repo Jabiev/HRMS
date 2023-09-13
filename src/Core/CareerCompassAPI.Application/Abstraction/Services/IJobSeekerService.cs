@@ -1,4 +1,5 @@
-﻿using CareerCompassAPI.Application.DTOs.JobSeeker_DTOs;
+﻿using CareerCompassAPI.Application.DTOs.Company_DTOs;
+using CareerCompassAPI.Application.DTOs.JobSeeker_DTOs;
 
 namespace CareerCompassAPI.Application.Abstraction.Services
 {
@@ -7,5 +8,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<JobSeekerGetDto> GetByUserId(Guid userId);
         Task CreateAsync(JobSeekerCreateDto dto, string jobseekerAppUserId);
         Task<List<JobseekerApprovedGetDto>> GetApprovedPositionsByAppUserId(string appUserId);
+        Task UploadLogoAsync(string appUserId, JobseekerAvatarUploadDto avatarUploadDto);
     }
 }

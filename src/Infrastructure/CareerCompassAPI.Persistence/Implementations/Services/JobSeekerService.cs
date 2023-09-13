@@ -91,5 +91,21 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 phoneNumber: userResponse.PhoneNumber);
             return jobSeeker;
         }
+
+        public async Task UploadLogoAsync(string appUserId, JobseekerAvatarUploadDto avatarUploadDto)
+        {
+            if (avatarUploadDto is null)
+            {
+                throw new ArgumentNullException("Empty value passed as an argument");
+            }
+            JobSeeker jobseeker = await _jobSeekerReadRepository.GetByUserIdAsync(Guid.Parse(appUserId));
+            if (jobseeker is not JobSeeker)
+            {
+                throw new NotFoundException("Jobseeker not found");
+            }
+            jobseeker.LogoUrl = avatarUploadDto.url;
+            _jobSeekerWriteRepository.Update(jobseeker);
+            await _jobSeekerWriteRepository.SaveChangesAsync();
+        }
     }
 }
