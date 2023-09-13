@@ -65,5 +65,36 @@ namespace CareerCompassAPI.API.Controllers
             }
             return BadRequest("Invalid Status");
         }
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserStats(DateTime? startDate, DateTime? endDate)
+        {
+            var stats = await _dashboardService.GetUserRegistrationStatsAsync(startDate, endDate);
+            return Ok(stats);
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetEducationLevels()
+        {
+            var response = await _dashboardService.GetAllEducationLevelsAsync();
+            return Ok(response);
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateEducationLevel(CreateEducationLevelDto createEducationLevelDto)
+        {
+            await _dashboardService.CreateEducationLevel(createEducationLevelDto);
+            return Ok();
+        }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveEducationLevel([FromQuery] Guid levelId)
+        {
+            await _dashboardService.RemoveEducationLevel(levelId);
+            return Ok();
+        }
+        [HttpPatch("[action]")]
+        public async Task<IActionResult> UpdateEducationLevel(EducationLevelUpdateDto educationLevelUpdateDto)
+        {
+            await _dashboardService.UpdateEducationLevel(educationLevelUpdateDto);
+            return Ok();
+        }
     }
 }

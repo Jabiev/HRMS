@@ -17,6 +17,7 @@ namespace CareerCompassAPI.Domain.Identity
         public DateTime RefreshTokenExpiration { get; set; }
         public JobSeeker JobSeekers { get; set; }
         public Recruiter Recruiters { get; set; }
+        public DateTime DateRegistered { get; set; }
         public ICollection<Notification> Notifications { get; set; }
         public ICollection<Payments> Payments { get; set; }
         public ICollection<File> Files { get; set; }

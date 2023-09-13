@@ -10,10 +10,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 {
     public class FileService : IFileService
     {
-        private readonly ICareerCompassDbContext _context;
+        private readonly CareerCompassDbContext _context;
         private readonly IFileWriteRepository _fileWriteRepository;
 
-        public FileService(ICareerCompassDbContext context, IFileWriteRepository fileWriteRepository)
+        public FileService(CareerCompassDbContext context, IFileWriteRepository fileWriteRepository)
         {
             _context = context;
             _fileWriteRepository = fileWriteRepository;
@@ -27,6 +27,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new NotFoundException("User does not exist");
             }
+
+     
+            _context.Users.Attach(user);
+
             Domain.Entities.File newFile = new()
             {
                 Name = fileCreateDto.name,
@@ -39,5 +43,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _fileWriteRepository.AddAsync(newFile);
             await _fileWriteRepository.SaveChangesAsync();
         }
+
     }
 }

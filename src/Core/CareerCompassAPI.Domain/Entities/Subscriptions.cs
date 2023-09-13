@@ -1,5 +1,4 @@
 ﻿using CareerCompassAPI.Domain.Entities.Common;
-using CareerCompassAPI.Domain.Identity;
 
 namespace CareerCompassAPI.Domain.Entities
 {

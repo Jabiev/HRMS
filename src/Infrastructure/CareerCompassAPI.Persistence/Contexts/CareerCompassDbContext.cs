@@ -65,7 +65,7 @@ namespace CareerCompassAPI.Persistence.Contexts
 
             modelBuilder.Entity<File>()
                 .HasOne(f => f.User)
-                .WithMany(u => u.Files)
+                .WithMany(u => u.Files)   
             .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Payments>()

@@ -4,6 +4,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IReviewRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
+using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Contexts;
@@ -23,6 +24,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IRecruiterWriteRepository _recruiterWriteRepository;
         private readonly IReviewReadRepository _reviewReadRepository;
         private readonly IReviewWriteRepository _reviewWriteRepository;
+        
 
         public DashboardService(UserManager<AppUser> userManager,
                                 CareerCompassDbContext context,
@@ -62,6 +64,21 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
             await _userManager.AddToRoleAsync(user, changeUserRoleDto.newRole); 
         }
+
+        public async Task CreateEducationLevel(CreateEducationLevelDto createEducationLevelDto)
+        {
+            if (createEducationLevelDto is null)
+            {
+                throw new ArgumentNullException("Arguments passed in may not contain null values");
+            }
+            EducationLevel newLevel = new()
+            {
+                Name = createEducationLevelDto.name
+            };
+            await _context.EducationLevels.AddAsync(newLevel);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<AppUserGetDto>> GetAllAsync(string searchQuery = "")
         {
             var appUsers = new List<AppUserGetDto>();
@@ -101,6 +118,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 .Include(c => c.Reviews)
                 .Include(c => c.Details)
                     .ThenInclude(cd => cd.Location)
+                 .Where(c => c.IsDeleted == false)
                 .ToListAsync();
 
             if (!string.IsNullOrEmpty(searchQuery))
@@ -156,6 +174,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return sortedCompanies;
         }
 
+        public async Task<List<EducationLevelsGetDto>> GetAllEducationLevelsAsync()
+        {
+            var levels = await _context.EducationLevels.ToListAsync();
+            if (levels.Count == 0)
+            {
+                throw new NotFoundException("Education levels do not exist");
+            }
+
+            List<EducationLevelsGetDto> newLevels = levels.Select(level =>
+                new EducationLevelsGetDto(level.Id, level.Name)
+            ).ToList();
+            return newLevels;
+        }
         public async Task<List<PendingReviewsDto>> GetAllPendingReviews()
         {
             var pendingReviews = _reviewReadRepository.GetAllByExpression(
@@ -173,6 +204,36 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             ).ToList();
         }
 
+        public async Task<List<UserRegistrationStatDto>> GetUserRegistrationStatsAsync(DateTime? startDate, DateTime? endDate)
+        {
+            var query = _context.Users.Include(u => u.JobSeekers)
+                    .Include(u => u.Recruiters)
+                    .AsQueryable(); 
+
+            if (startDate.HasValue)
+            {
+                query = query.Where(u => u.DateRegistered >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                query = query.Where(u => u.DateRegistered <= endDate.Value);
+            }
+
+            var users = await query.ToListAsync();
+            return users
+                .GroupBy(u => u.DateRegistered.Date)
+                .Select(g => new UserRegistrationStatDto(
+                Date: g.Key,
+                TotalUsers: g.Count(),
+                JobSeekers: g.Count(u => u.JobSeekers != null),
+                Recruiters: g.Count(u => u.Recruiters != null)
+                ))
+                .OrderBy(x => x.Date)
+                .ToList();
+
+        }
+
         public async Task RemoveCompany(Guid companyId)
         {
             if (companyId == Guid.Empty)
@@ -184,11 +245,23 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new NotFoundException("Company does not exist");
             }
-            _companyWriteRepository.Remove(company);
+            company.IsDeleted = true;
+            _companyWriteRepository.Update(company);
             var recuiter = await _recruiterReadRepository.GetByExpressionAsync(r => r.Company.Id == companyId);
             recuiter.Company = null;
             await _recruiterWriteRepository.SaveChangesAsync();
             await _companyWriteRepository.SaveChangesAsync();
+        }
+
+        public async Task RemoveEducationLevel(Guid levelId)
+        {
+            if (levelId == Guid.Empty)
+            {
+                throw new NotFoundException("Parameter passed may not contain null value");
+            }
+            EducationLevel level = await _context.EducationLevels.FirstOrDefaultAsync(el => el.Id == levelId);
+            _context.Remove(level);
+            _context.SaveChangesAsync();
         }
 
         public async Task RemoveUser(string appUserId)
@@ -215,6 +288,22 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new Exception("Failed to delete the user");  // Custom Exception
             }
+        }
+
+        public async Task UpdateEducationLevel(EducationLevelUpdateDto updateEducationLevelDto)
+        {
+            if (updateEducationLevelDto is null)
+            {
+                throw new NotFoundException("Argument passed in may not contain null values");
+            }
+            EducationLevel level = _context.EducationLevels.FirstOrDefault(el => el.Id == updateEducationLevelDto.levelId);
+            if (level is null)
+            {
+                throw new NotFoundException("Level with given ID does not exist");
+            }
+            level.Name = updateEducationLevelDto.newName;
+            _context.EducationLevels.Update(level);
+           await _context.SaveChangesAsync();
         }
 
         public async Task UpdateReviewStatus(Guid reviewId, ReviewStatus newStatus)

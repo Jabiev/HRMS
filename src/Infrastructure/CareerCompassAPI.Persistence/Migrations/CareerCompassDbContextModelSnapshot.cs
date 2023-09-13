@@ -172,7 +172,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -187,9 +186,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
@@ -208,12 +204,9 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("CompanyId");
 
@@ -415,11 +408,9 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ReceiverId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SenderId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -479,7 +470,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("AppUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateCreated")
@@ -712,6 +702,9 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateRegistered")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -969,19 +962,13 @@ namespace CareerCompassAPI.Persistence.Migrations
                 {
                     b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "User")
                         .WithMany("Files")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Follower", b =>
                 {
-                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", null)
-                        .WithMany("Followers")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("CareerCompassAPI.Domain.Entities.Company", "Company")
                         .WithMany("Followers")
                         .HasForeignKey("CompanyId")
@@ -989,10 +976,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Followers")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Company");
 
@@ -1052,15 +1037,11 @@ namespace CareerCompassAPI.Persistence.Migrations
                 {
                     b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "Receiver")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("ReceiverId");
 
                     b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("SenderId");
 
                     b.Navigation("Receiver");
 
@@ -1080,9 +1061,7 @@ namespace CareerCompassAPI.Persistence.Migrations
                 {
                     b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "AppUser")
                         .WithMany("Payments")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppUserId");
 
                     b.Navigation("AppUser");
                 });
