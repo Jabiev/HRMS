@@ -81,8 +81,8 @@ namespace CareerCompassAPI.API.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateEducationLevel(CreateEducationLevelDto createEducationLevelDto)
         {
-            await _dashboardService.CreateEducationLevel(createEducationLevelDto);
-            return Ok();
+            var newLevelId = await _dashboardService.CreateEducationLevel(createEducationLevelDto);
+            return Ok(newLevelId);
         }
         [HttpDelete("[action]")]
         public async Task<IActionResult> RemoveEducationLevel([FromQuery] Guid levelId)

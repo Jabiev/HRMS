@@ -66,7 +66,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _userManager.AddToRoleAsync(user, changeUserRoleDto.newRole); 
         }
 
-        public async Task CreateEducationLevel(CreateEducationLevelDto createEducationLevelDto)
+        public async Task<Guid> CreateEducationLevel(CreateEducationLevelDto createEducationLevelDto)
         {
             if (createEducationLevelDto is null)
             {
@@ -78,6 +78,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             };
             await _context.EducationLevels.AddAsync(newLevel);
             await _context.SaveChangesAsync();
+            return newLevel.Id;
         }
 
         public async Task<Guid> CreateExperienceLevel(ExperienceLevelCreateDto experienceLevelCreateDto)

@@ -16,7 +16,7 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task UpdateReviewStatus(Guid reviewId, ReviewStatus newStatus);
         Task<List<UserRegistrationStatDto>> GetUserRegistrationStatsAsync(DateTime? startDate, DateTime? endDate);
         Task<List<EducationLevelsGetDto>> GetAllEducationLevelsAsync();
-        Task CreateEducationLevel(CreateEducationLevelDto createEducationLevelDto);
+        Task<Guid> CreateEducationLevel(CreateEducationLevelDto createEducationLevelDto);
         Task RemoveEducationLevel(Guid levelId);
         Task UpdateEducationLevel(EducationLevelUpdateDto updateEducationLevelDto);
         Task<List<ExperienceLevelGetDto>> GetAllExperienceLevelsAsync();
