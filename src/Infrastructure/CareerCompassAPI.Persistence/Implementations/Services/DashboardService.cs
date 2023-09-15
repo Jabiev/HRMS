@@ -379,6 +379,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _context.SaveChangesAsync();
         }
 
+        public async Task RemoveJobType(Guid jobTypeId)
+        {
+            if (jobTypeId == Guid.Empty)
+            {
+                throw new NotFoundException("Job type with given ID does not exist");
+            }
+            JobType jobType = await _context.JobTypes.FirstOrDefaultAsync(jt=>jt.Id==jobTypeId);
+            _context.Remove(jobType);
+            _context.SaveChangesAsync();
+        }
+
         public async Task RemoveUser(string appUserId)
         {
             if (string.IsNullOrEmpty(appUserId))

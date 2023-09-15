@@ -29,5 +29,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task RemoveJobLocation(Guid jobLocationId);
         Task<List<JobTypeGetDto>> GetAllTypesAsync();
         Task<Guid> CreateJobType(JobTypeCreateDto jobTypeCreateDto);
+        Task RemoveJobType(Guid jobTypeId);
     }
 }
