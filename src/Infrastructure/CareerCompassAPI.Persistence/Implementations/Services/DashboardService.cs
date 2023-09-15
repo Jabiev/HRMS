@@ -5,6 +5,7 @@ using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
+using CareerCompassAPI.Application.DTOs.Location_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
@@ -94,6 +95,21 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _context.AddAsync(newLevel);
             await _context.SaveChangesAsync();
             return newLevel.Id;
+        }
+
+        public async Task<Guid> CreateJobLocation(JobLocationCreateDto jobLocationCreateDto)
+        {
+            if (jobLocationCreateDto is null)
+            {
+                throw new ArgumentNullException("Parameter passed in may not contain null values");
+            }
+            JobLocation newLocation = new()
+            {
+                Location = jobLocationCreateDto.locationName
+            };
+            await _context.AddAsync(newLocation);
+            await _context.SaveChangesAsync();
+            return newLocation.Id;
         }
 
         public async Task<List<AppUserGetDto>> GetAllAsync(string searchQuery = "")
@@ -217,6 +233,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return expLevels;
         }
 
+        public async Task<List<LocationGetDto>> GetAllLocationsAsync()
+        {
+            var jobLocations = await _context.JobLocations.ToListAsync();
+            if (jobLocations.Count == 0)
+            {
+                throw new NotFoundException("Job locations do not exist");
+            }
+            List<LocationGetDto> locations = jobLocations.Select(location => new LocationGetDto(location.Id, location.Location)).ToList();
+            return locations;
+        }
+
         public async Task<List<PendingReviewsDto>> GetAllPendingReviews()
         {
             var pendingReviews = _reviewReadRepository.GetAllByExpression(
@@ -302,6 +329,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             ExperienceLevel level = await _context.ExperienceLevels.FirstOrDefaultAsync(el => el.Id == levelId);
             _context.Remove(level);
+            _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveJobLocation(Guid jobLocationId)
+        {
+            if (jobLocationId == Guid.Empty)
+            {
+                throw new NotFoundException("Location does not exist with given parameter");
+            }
+            JobLocation location = await _context.JobLocations.FirstOrDefaultAsync(jl => jl.Id == jobLocationId);
+            _context.Remove(location);
             _context.SaveChangesAsync();
         }
 

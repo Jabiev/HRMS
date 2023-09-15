@@ -116,5 +116,23 @@ namespace CareerCompassAPI.API.Controllers
             var newLevelId = await _dashboardService.CreateExperienceLevel(experienceLevelCreateDto);
             return Ok(newLevelId);
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllJobLocations()
+        {
+            var response = await _dashboardService.GetAllLocationsAsync();
+            return Ok(response);
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateJobLocation(JobLocationCreateDto jobLocationCreateDto)
+        {
+            var locationId = await _dashboardService.CreateJobLocation(jobLocationCreateDto);
+            return Ok(locationId);
+        }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveJobLocation([FromQuery] Guid joblocationId)
+        {
+            await _dashboardService.RemoveJobLocation(joblocationId);
+            return Ok();
+        }
     }
 }
