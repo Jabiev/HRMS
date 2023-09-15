@@ -1,6 +1,7 @@
 ﻿using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
+using CareerCompassAPI.Application.DTOs.JobType_DTOs;
 using CareerCompassAPI.Application.DTOs.Location_DTOs;
 using CareerCompassAPI.Domain.Enums;
 
@@ -26,5 +27,7 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<List<LocationGetDto>> GetAllLocationsAsync(string? searchQuery);
         Task<Guid> CreateJobLocation(JobLocationCreateDto jobLocationCreateDto);
         Task RemoveJobLocation(Guid jobLocationId);
+        Task<List<JobTypeGetDto>> GetAllTypesAsync();
+        Task<Guid> CreateJobType(JobTypeCreateDto jobTypeCreateDto);
     }
 }

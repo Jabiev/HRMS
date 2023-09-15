@@ -5,6 +5,7 @@ using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
+using CareerCompassAPI.Application.DTOs.JobType_DTOs;
 using CareerCompassAPI.Application.DTOs.Location_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
@@ -110,6 +111,21 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _context.AddAsync(newLocation);
             await _context.SaveChangesAsync();
             return newLocation.Id;
+        }
+
+        public async Task<Guid> CreateJobType(JobTypeCreateDto jobTypeCreateDto)
+        {
+            if (jobTypeCreateDto is null)
+            {
+                throw new ArgumentNullException("Passed in parameter may not contain null values");
+            }
+            JobType newJobType = new()
+            {
+                TypeName = jobTypeCreateDto.typeName
+            };
+            await _context.AddAsync(newJobType);
+            await _context.SaveChangesAsync();
+            return newJobType.Id;
         }
 
         public async Task<List<AppUserGetDto>> GetAllAsync(string searchQuery = "")
@@ -232,7 +248,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             new ExperienceLevelGetDto(level.Id, level.LevelName)).ToList();
             return expLevels;
         }
-        public async Task<List<LocationGetDto>> GetAllLocationsAsync(string searchQuery = " ")
+        public async Task<List<LocationGetDto>> GetAllLocationsAsync(string? searchQuery)
         {
             IQueryable<JobLocation> query = _context.JobLocations;
 
@@ -268,6 +284,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return pendingReviewList.Select(r =>
                 new PendingReviewsDto(r.Id,r.JobSeeker.AppUser.Email, r.Title, r.Description, r.Rating)
             ).ToList();
+        }
+
+        public async Task<List<JobTypeGetDto>> GetAllTypesAsync()
+        {
+            var jobTypes = await _context.JobTypes.ToListAsync();
+            if (jobTypes.Count == 0)
+            {
+                throw new NotFoundException("Job types do not exist");
+            }
+            List<JobTypeGetDto> types = jobTypes.Select(type => new JobTypeGetDto(type.Id, type.TypeName)).ToList();    
+            return types;
         }
 
         public async Task<List<UserRegistrationStatDto>> GetUserRegistrationStatsAsync(DateTime? startDate, DateTime? endDate)
