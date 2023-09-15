@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
+using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Domain.Enums;
 
 namespace CareerCompassAPI.Application.Abstraction.Services
@@ -18,5 +19,8 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task CreateEducationLevel(CreateEducationLevelDto createEducationLevelDto);
         Task RemoveEducationLevel(Guid levelId);
         Task UpdateEducationLevel(EducationLevelUpdateDto updateEducationLevelDto);
+        Task<List<ExperienceLevelGetDto>> GetAllExperienceLevelsAsync();
+        Task RemoveExperienceLevel(Guid levelId);
+        Task<Guid> CreateExperienceLevel(ExperienceLevelCreateDto experienceLevelCreateDto);
     }
 }

@@ -4,6 +4,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IReviewRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
+using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
@@ -77,6 +78,21 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             };
             await _context.EducationLevels.AddAsync(newLevel);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Guid> CreateExperienceLevel(ExperienceLevelCreateDto experienceLevelCreateDto)
+        {
+            if (experienceLevelCreateDto is null)
+            {
+                throw new ArgumentNullException("Null values may not be passed as an argument");
+            }
+            ExperienceLevel newLevel = new()
+            {
+                LevelName = experienceLevelCreateDto.name
+            };
+            await _context.AddAsync(newLevel);
+            await _context.SaveChangesAsync();
+            return newLevel.Id;
         }
 
         public async Task<List<AppUserGetDto>> GetAllAsync(string searchQuery = "")
@@ -187,6 +203,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             ).ToList();
             return newLevels;
         }
+
+        public async Task<List<ExperienceLevelGetDto>> GetAllExperienceLevelsAsync()
+        {
+            var experienceLevels = await _context.ExperienceLevels.ToListAsync();
+            if (experienceLevels.Count == 0)
+            {
+                throw new NotFoundException("Experience levels do not exist");
+            }
+            List<ExperienceLevelGetDto> expLevels = experienceLevels.Select(level =>
+            new ExperienceLevelGetDto(level.Id, level.LevelName)).ToList();
+            return expLevels;
+        }
+
         public async Task<List<PendingReviewsDto>> GetAllPendingReviews()
         {
             var pendingReviews = _reviewReadRepository.GetAllByExpression(
@@ -260,6 +289,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 throw new NotFoundException("Parameter passed may not contain null value");
             }
             EducationLevel level = await _context.EducationLevels.FirstOrDefaultAsync(el => el.Id == levelId);
+            _context.Remove(level);
+            _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveExperienceLevel(Guid levelId)
+        {
+            if (levelId == Guid.Empty)
+            {
+                throw new NotFoundException("Parameter passed may not contain null value");
+            }
+            ExperienceLevel level = await _context.ExperienceLevels.FirstOrDefaultAsync(el => el.Id == levelId);
             _context.Remove(level);
             _context.SaveChangesAsync();
         }

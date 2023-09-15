@@ -96,5 +96,25 @@ namespace CareerCompassAPI.API.Controllers
             await _dashboardService.UpdateEducationLevel(educationLevelUpdateDto);
             return Ok();
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetExperienceLevels()
+        {
+            var response = await _dashboardService.GetAllExperienceLevelsAsync();
+            return Ok(response);
+        }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveExperienceLevel([FromQuery] Guid levelId)
+        {
+            await _dashboardService.RemoveExperienceLevel(levelId);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateExperienceLevel(ExperienceLevelCreateDto experienceLevelCreateDto)
+        {
+            var newLevelId = await _dashboardService.CreateExperienceLevel(experienceLevelCreateDto);
+            return Ok(newLevelId);
+        }
     }
 }
