@@ -23,7 +23,7 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<List<ExperienceLevelGetDto>> GetAllExperienceLevelsAsync();
         Task RemoveExperienceLevel(Guid levelId);
         Task<Guid> CreateExperienceLevel(ExperienceLevelCreateDto experienceLevelCreateDto);
-        Task<List<LocationGetDto>> GetAllLocationsAsync();
+        Task<List<LocationGetDto>> GetAllLocationsAsync(string? searchQuery);
         Task<Guid> CreateJobLocation(JobLocationCreateDto jobLocationCreateDto);
         Task RemoveJobLocation(Guid jobLocationId);
     }

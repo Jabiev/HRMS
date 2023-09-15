@@ -117,9 +117,9 @@ namespace CareerCompassAPI.API.Controllers
             return Ok(newLevelId);
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllJobLocations()
+        public async Task<IActionResult> GetAllJobLocations([FromQuery] string? searchQuery)
         {
-            var response = await _dashboardService.GetAllLocationsAsync();
+            var response = await _dashboardService.GetAllLocationsAsync(searchQuery);
             return Ok(response);
         }
         [HttpPost("[action]")]

@@ -232,15 +232,24 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             new ExperienceLevelGetDto(level.Id, level.LevelName)).ToList();
             return expLevels;
         }
-
-        public async Task<List<LocationGetDto>> GetAllLocationsAsync()
+        public async Task<List<LocationGetDto>> GetAllLocationsAsync(string searchQuery = " ")
         {
-            var jobLocations = await _context.JobLocations.ToListAsync();
+            IQueryable<JobLocation> query = _context.JobLocations;
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                query = query.Where(location => location.Location.Contains(searchQuery));
+            }
+
+            var jobLocations = await query.ToListAsync();
+
             if (jobLocations.Count == 0)
             {
                 throw new NotFoundException("Job locations do not exist");
             }
+
             List<LocationGetDto> locations = jobLocations.Select(location => new LocationGetDto(location.Id, location.Location)).ToList();
+
             return locations;
         }
 
