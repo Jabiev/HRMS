@@ -3,6 +3,7 @@ using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Application.DTOs.JobType_DTOs;
 using CareerCompassAPI.Application.DTOs.Location_DTOs;
+using CareerCompassAPI.Application.DTOs.Subscription_DTOs;
 using CareerCompassAPI.Domain.Enums;
 
 namespace CareerCompassAPI.Application.Abstraction.Services
@@ -30,5 +31,7 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<List<JobTypeGetDto>> GetAllTypesAsync();
         Task<Guid> CreateJobType(JobTypeCreateDto jobTypeCreateDto);
         Task RemoveJobType(Guid jobTypeId);
+        Task<List<DTOs.Dashboard_DTOs.SubscriptionGetDto>> GetAllSubscriptionsAsync();
+        Task<Guid> CreateSubscription(SubscriptionCreateDto subscriptionCreateDto);
     }
 }

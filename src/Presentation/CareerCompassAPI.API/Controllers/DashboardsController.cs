@@ -152,5 +152,12 @@ namespace CareerCompassAPI.API.Controllers
             await _dashboardService.RemoveJobType(jobTypeId);
             return Ok();
         }
+        [HttpGet("[action]")]
+
+        public async Task<IActionResult> GetAllSubscriptions()
+        {
+            var response = await _dashboardService.GetAllSubscriptionsAsync();
+            return Ok(response);
+        }
     }
 }

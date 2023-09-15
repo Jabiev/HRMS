@@ -286,6 +286,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             ).ToList();
         }
 
+        public async Task<List<SubscriptionGetDto>> GetAllSubscriptionsAsync()
+        {
+            var subscriptions = await _context.Subscriptions.ToListAsync();
+            if (subscriptions.Count == 0)
+            {
+                throw new NotFoundException("Subscriptions not found");
+            }
+            List<SubscriptionGetDto> subs = subscriptions.Select(sub => new SubscriptionGetDto(sub.Id, sub.Name, sub.Price, sub.PostLimit)).ToList();
+            return subs;
+        }
+
         public async Task<List<JobTypeGetDto>> GetAllTypesAsync()
         {
             var jobTypes = await _context.JobTypes.ToListAsync();
