@@ -128,6 +128,23 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return newJobType.Id;
         }
 
+        public async Task<Guid> CreateSubscription(Application.DTOs.Subscription_DTOs.SubscriptionCreateDto subscriptionCreateDto)
+        {
+            if (subscriptionCreateDto is null)
+            {
+                throw new ArgumentNullException("Parameters passed in may not include null values");
+            }
+            Subscriptions newSubscription = new()
+            {
+                Name = subscriptionCreateDto.Name,
+                Price = subscriptionCreateDto.Price,
+                PostLimit = subscriptionCreateDto.PostLimit
+            };
+            await _context.Subscriptions.AddAsync(newSubscription);
+            await _context.SaveChangesAsync();
+            return newSubscription.Id;  
+        }
+
         public async Task<List<AppUserGetDto>> GetAllAsync(string searchQuery = "")
         {
             var appUsers = new List<AppUserGetDto>();

@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
+using CareerCompassAPI.Application.DTOs.Subscription_DTOs;
 using CareerCompassAPI.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -153,10 +154,15 @@ namespace CareerCompassAPI.API.Controllers
             return Ok();
         }
         [HttpGet("[action]")]
-
         public async Task<IActionResult> GetAllSubscriptions()
         {
             var response = await _dashboardService.GetAllSubscriptionsAsync();
+            return Ok(response);
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateSubscription(SubscriptionCreateDto subscriptionCreateDto)
+        {
+            var response = await _dashboardService.CreateSubscription(subscriptionCreateDto);
             return Ok(response);
         }
     }
