@@ -11,6 +11,7 @@ namespace CareerCompassAPI.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Master,Admin")]
+
     public class DashboardsController : ControllerBase
     {
         private readonly IDashboardService _dashboardService;
