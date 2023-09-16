@@ -8,6 +8,7 @@ using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Application.DTOs.JobType_DTOs;
 using CareerCompassAPI.Application.DTOs.Location_DTOs;
 using CareerCompassAPI.Application.DTOs.Schedule_DTOs;
+using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
@@ -304,22 +305,31 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return locations;
         }
 
-        public async Task<List<PaymentsListGetDto>> GetAllPaymentsAsync()
+        public async Task<PaginatedResponse<PaymentsListGetDto>> GetAllPaymentsAsync(int page, int pageSize)
         {
-            var paymentsList = await _context.Payments.Include(p => p.AppUser).ToListAsync();
+            var totalItems = await _context.Payments.CountAsync();
+            var paymentsList = await _context.Payments
+                                             .Include(p => p.AppUser)
+                                             .Skip((page - 1) * pageSize)
+                                             .Take(pageSize)
+                                             .ToListAsync();
+
             if (paymentsList.Count == 0)
             {
                 throw new NotFoundException("No Payments found");
             }
+
             List<PaymentsListGetDto> payments = paymentsList.Select(payment => new PaymentsListGetDto(
                 payment.Id,
                 payment.AppUser.Id,
                 payment.Amount,
                 Enum.GetName(typeof(PaymentTypes), payment.Type),
-                 payment.DateCreated.ToString("yyyy-MM-ddTHH:mm:ss")
-                    )).ToList();
-            return payments;
+                payment.DateCreated.ToString("yyyy-MM-ddTHH:mm:ss")
+            )).ToList();
+
+            return new PaginatedResponse<PaymentsListGetDto>(payments, totalItems);
         }
+
 
         public async Task<List<PendingReviewsDto>> GetAllPendingReviews()
         {

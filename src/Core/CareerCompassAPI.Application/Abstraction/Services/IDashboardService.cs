@@ -5,6 +5,7 @@ using CareerCompassAPI.Application.DTOs.JobType_DTOs;
 using CareerCompassAPI.Application.DTOs.Location_DTOs;
 using CareerCompassAPI.Application.DTOs.Schedule_DTOs;
 using CareerCompassAPI.Application.DTOs.Subscription_DTOs;
+using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Enums;
 
 namespace CareerCompassAPI.Application.Abstraction.Services
@@ -39,6 +40,7 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<List<ShiftAndScheduleGetDto>> GetAllShiftsAsync();
         Task RemoveShift(Guid shiftId);
         Task<Guid> CreateShift(ShiftAndScheduleCreateDto shiftAndScheduleDto);
-        Task<List<PaymentsListGetDto>> GetAllPaymentsAsync();
+        Task<PaginatedResponse<PaymentsListGetDto>> GetAllPaymentsAsync(int page, int pageSize);
+
     }
 }

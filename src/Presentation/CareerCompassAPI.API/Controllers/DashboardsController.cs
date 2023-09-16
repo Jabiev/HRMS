@@ -2,6 +2,7 @@
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.Subscription_DTOs;
 using CareerCompassAPI.Domain.Enums;
+using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -196,10 +197,18 @@ namespace CareerCompassAPI.API.Controllers
             return Ok(response);
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllPayments()
+        public async Task<IActionResult> GetAllPayments(int page = 1, int pageSize = 10)
         {
-            var response = await _dashboardService.GetAllPaymentsAsync();
-            return Ok(response);
+            try
+            {
+                var response = await _dashboardService.GetAllPaymentsAsync(page, pageSize);
+                return Ok(response);
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("No Payments found");
+            }
         }
+
     }
 }
