@@ -39,5 +39,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<List<ShiftAndScheduleGetDto>> GetAllShiftsAsync();
         Task RemoveShift(Guid shiftId);
         Task<Guid> CreateShift(ShiftAndScheduleCreateDto shiftAndScheduleDto);
+        Task<List<PaymentsListGetDto>> GetAllPaymentsAsync();
     }
 }

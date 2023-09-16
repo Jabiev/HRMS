@@ -15,6 +15,7 @@ using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -28,7 +29,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IRecruiterWriteRepository _recruiterWriteRepository;
         private readonly IReviewReadRepository _reviewReadRepository;
         private readonly IReviewWriteRepository _reviewWriteRepository;
-        
+
 
         public DashboardService(UserManager<AppUser> userManager,
                                 CareerCompassDbContext context,
@@ -64,9 +65,9 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-            await _userManager.RemoveFromRolesAsync(user, roles); 
+            await _userManager.RemoveFromRolesAsync(user, roles);
 
-            await _userManager.AddToRoleAsync(user, changeUserRoleDto.newRole); 
+            await _userManager.AddToRoleAsync(user, changeUserRoleDto.newRole);
         }
 
         public async Task<Guid> CreateEducationLevel(CreateEducationLevelDto createEducationLevelDto)
@@ -158,7 +159,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             };
             await _context.Subscriptions.AddAsync(newSubscription);
             await _context.SaveChangesAsync();
-            return newSubscription.Id;  
+            return newSubscription.Id;
         }
 
         public async Task<List<AppUserGetDto>> GetAllAsync(string searchQuery = "")
@@ -169,13 +170,14 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 queryableUsers = queryableUsers.Where(
-                    u => u.UserName.ToLower().Contains(searchQuery.ToLower()) ||
+                    u => u.Id.Contains(searchQuery) ||
+                    u.UserName.ToLower().Contains(searchQuery.ToLower()) ||
                          u.Email.ToLower().Contains(searchQuery.ToLower()) ||
                          u.PhoneNumber.ToLower().Contains(searchQuery.ToLower())
                 );
             }
 
-            var users = await queryableUsers.ToListAsync();  
+            var users = await queryableUsers.ToListAsync();
 
             foreach (var user in users)
             {
@@ -194,7 +196,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
         public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders, string? searchQuery)
         {
-         
+
             var companiesQuery = await _context.Companies
                 .Include(c => c.Followers)
                 .Include(c => c.Reviews)
@@ -231,7 +233,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 var parts = sort.Split('_');
                 if (parts.Length != 2)
                 {
-                    continue; 
+                    continue;
                 }
 
                 var field = parts[0].ToLower();
@@ -302,11 +304,28 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return locations;
         }
 
+        public async Task<List<PaymentsListGetDto>> GetAllPaymentsAsync()
+        {
+            var paymentsList = await _context.Payments.Include(p => p.AppUser).ToListAsync();
+            if (paymentsList.Count == 0)
+            {
+                throw new NotFoundException("No Payments found");
+            }
+            List<PaymentsListGetDto> payments = paymentsList.Select(payment => new PaymentsListGetDto(
+                payment.Id,
+                payment.AppUser.Id,
+                payment.Amount,
+                Enum.GetName(typeof(PaymentTypes), payment.Type),
+                 payment.DateCreated.ToString("yyyy-MM-ddTHH:mm:ss")
+                    )).ToList();
+            return payments;
+        }
+
         public async Task<List<PendingReviewsDto>> GetAllPendingReviews()
         {
             var pendingReviews = _reviewReadRepository.GetAllByExpression(
                 r => r.Status == ReviewStatus.Pending,
-                int.MaxValue, 
+                int.MaxValue,
                 0,
                 true,
                 "JobSeeker.AppUser"
@@ -315,7 +334,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var pendingReviewList = await pendingReviews.ToListAsync();
 
             return pendingReviewList.Select(r =>
-                new PendingReviewsDto(r.Id,r.JobSeeker.AppUser.Email, r.Title, r.Description, r.Rating)
+                new PendingReviewsDto(r.Id, r.JobSeeker.AppUser.Email, r.Title, r.Description, r.Rating)
             ).ToList();
         }
 
@@ -348,7 +367,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new NotFoundException("Job types do not exist");
             }
-            List<JobTypeGetDto> types = jobTypes.Select(type => new JobTypeGetDto(type.Id, type.TypeName)).ToList();    
+            List<JobTypeGetDto> types = jobTypes.Select(type => new JobTypeGetDto(type.Id, type.TypeName)).ToList();
             return types;
         }
 
@@ -356,7 +375,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             var query = _context.Users.Include(u => u.JobSeekers)
                     .Include(u => u.Recruiters)
-                    .AsQueryable(); 
+                    .AsQueryable();
 
             if (startDate.HasValue)
             {
@@ -440,7 +459,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new NotFoundException("Job type with given ID does not exist");
             }
-            JobType jobType = await _context.JobTypes.FirstOrDefaultAsync(jt=>jt.Id==jobTypeId);
+            JobType jobType = await _context.JobTypes.FirstOrDefaultAsync(jt => jt.Id == jobTypeId);
             _context.Remove(jobType);
             _context.SaveChangesAsync();
         }
@@ -463,7 +482,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 throw new NotFoundException("Subscription with given ID does not exist");
             }
             Subscriptions subscriptions = await _context.Subscriptions.FirstOrDefaultAsync(s => s.Id == subscriptionId);
-            _context.Remove(subscriptions); 
+            _context.Remove(subscriptions);
             _context.SaveChangesAsync();
         }
 
@@ -506,7 +525,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             level.Name = updateEducationLevelDto.newName;
             _context.EducationLevels.Update(level);
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateReviewStatus(Guid reviewId, ReviewStatus newStatus)
@@ -514,9 +533,9 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var review = await _reviewReadRepository.GetByIdAsync(reviewId);
             if (review is null)
             {
-                throw new NotFoundException("Review not found"); 
+                throw new NotFoundException("Review not found");
             }
-            review.Status= newStatus;
+            review.Status = newStatus;
             _reviewWriteRepository.Update(review);
             await _reviewWriteRepository.SaveChangesAsync();
         }
@@ -530,7 +549,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             subscription.Name = updateSubscriptionDto.name;
             subscription.Price = updateSubscriptionDto.price;
-            subscription.PostLimit=updateSubscriptionDto.postLimit;
+            subscription.PostLimit = updateSubscriptionDto.postLimit;
             _context.Subscriptions.Update(subscription);
             await _context.SaveChangesAsync();
         }

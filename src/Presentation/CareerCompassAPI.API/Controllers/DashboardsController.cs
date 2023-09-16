@@ -195,5 +195,11 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _dashboardService.CreateShift(shiftAndScheduleDto);
             return Ok(response);
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllPayments()
+        {
+            var response = await _dashboardService.GetAllPaymentsAsync();
+            return Ok(response);
+        }
     }
 }
