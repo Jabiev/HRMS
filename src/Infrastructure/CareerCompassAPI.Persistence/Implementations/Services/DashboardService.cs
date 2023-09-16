@@ -7,6 +7,7 @@ using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Application.DTOs.JobType_DTOs;
 using CareerCompassAPI.Application.DTOs.Location_DTOs;
+using CareerCompassAPI.Application.DTOs.Schedule_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
@@ -126,6 +127,21 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _context.AddAsync(newJobType);
             await _context.SaveChangesAsync();
             return newJobType.Id;
+        }
+
+        public async Task<Guid> CreateShift(ShiftAndScheduleCreateDto shiftAndScheduleDto)
+        {
+            if (shiftAndScheduleDto is null)
+            {
+                throw new ArgumentNullException("Passed in argument may not contain null values");
+            }
+            ShiftAndSchedule newShiftAndSchedule = new()
+            {
+                ShiftName = shiftAndScheduleDto.shiftName
+            };
+            await _context.AddAsync(newShiftAndSchedule);
+            await _context.SaveChangesAsync();
+            return newShiftAndSchedule.Id;
         }
 
         public async Task<Guid> CreateSubscription(Application.DTOs.Subscription_DTOs.SubscriptionCreateDto subscriptionCreateDto)
@@ -303,6 +319,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             ).ToList();
         }
 
+        public async Task<List<ShiftAndScheduleGetDto>> GetAllShiftsAsync()
+        {
+            var shifts = await _context.ShiftAndSchedules.ToListAsync();
+            if (shifts.Count == 0)
+            {
+                throw new NotFoundException("Shifts not found");
+            }
+            List<ShiftAndScheduleGetDto> shiftAndSchedules = shifts.Select(shift => new ShiftAndScheduleGetDto(shift.Id, shift.ShiftName)).ToList();
+            return shiftAndSchedules;
+        }
+
         public async Task<List<SubscriptionGetDto>> GetAllSubscriptionsAsync()
         {
             var subscriptions = await _context.Subscriptions.ToListAsync();
@@ -418,6 +445,28 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _context.SaveChangesAsync();
         }
 
+        public async Task RemoveShift(Guid shiftId)
+        {
+            if (shiftId == Guid.Empty)
+            {
+                throw new ArgumentNullException("Empty value may not be passed as an argument");
+            }
+            ShiftAndSchedule shift = await _context.ShiftAndSchedules.FirstOrDefaultAsync(sh => sh.Id == shiftId);
+            _context.Remove(shift);
+            _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveSubscription(Guid subscriptionId)
+        {
+            if (subscriptionId == Guid.Empty)
+            {
+                throw new NotFoundException("Subscription with given ID does not exist");
+            }
+            Subscriptions subscriptions = await _context.Subscriptions.FirstOrDefaultAsync(s => s.Id == subscriptionId);
+            _context.Remove(subscriptions); 
+            _context.SaveChangesAsync();
+        }
+
         public async Task RemoveUser(string appUserId)
         {
             if (string.IsNullOrEmpty(appUserId))
@@ -470,6 +519,20 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             review.Status= newStatus;
             _reviewWriteRepository.Update(review);
             await _reviewWriteRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateSubscription(SubscriptionUpdateDto updateSubscriptionDto)
+        {
+            var subscription = await _context.Subscriptions.FindAsync(updateSubscriptionDto.id);
+            if (subscription == null)
+            {
+                throw new NotFoundException("Subscription with given ID is not found");
+            }
+            subscription.Name = updateSubscriptionDto.name;
+            subscription.Price = updateSubscriptionDto.price;
+            subscription.PostLimit=updateSubscriptionDto.postLimit;
+            _context.Subscriptions.Update(subscription);
+            await _context.SaveChangesAsync();
         }
     }
 }

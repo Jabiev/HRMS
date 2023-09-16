@@ -3,6 +3,7 @@ using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Application.DTOs.JobType_DTOs;
 using CareerCompassAPI.Application.DTOs.Location_DTOs;
+using CareerCompassAPI.Application.DTOs.Schedule_DTOs;
 using CareerCompassAPI.Application.DTOs.Subscription_DTOs;
 using CareerCompassAPI.Domain.Enums;
 
@@ -33,5 +34,10 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task RemoveJobType(Guid jobTypeId);
         Task<List<DTOs.Dashboard_DTOs.SubscriptionGetDto>> GetAllSubscriptionsAsync();
         Task<Guid> CreateSubscription(SubscriptionCreateDto subscriptionCreateDto);
+        Task RemoveSubscription(Guid subscriptionId);
+        Task UpdateSubscription(SubscriptionUpdateDto updateSubscriptionDto);
+        Task<List<ShiftAndScheduleGetDto>> GetAllShiftsAsync();
+        Task RemoveShift(Guid shiftId);
+        Task<Guid> CreateShift(ShiftAndScheduleCreateDto shiftAndScheduleDto);
     }
 }

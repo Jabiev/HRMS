@@ -165,5 +165,35 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _dashboardService.CreateSubscription(subscriptionCreateDto);
             return Ok(response);
         }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveSubscription([FromQuery] Guid subscriptionId)
+        {
+            await _dashboardService.RemoveSubscription(subscriptionId);
+            return Ok();
+        }
+        [HttpPut("[action]")]
+        public async Task<IActionResult> UpdateSubscription(SubscriptionUpdateDto subscriptionUpdateDto)
+        {
+            await _dashboardService.UpdateSubscription(subscriptionUpdateDto);
+            return Ok();
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllShifts()
+        {
+            var response = await _dashboardService.GetAllShiftsAsync();
+            return Ok(response);
+        }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveShift([FromQuery] Guid shiftId)
+        {
+            await _dashboardService.RemoveShift(shiftId);
+            return Ok();
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateShift(ShiftAndScheduleCreateDto shiftAndScheduleDto)
+        {
+            var response = await _dashboardService.CreateShift(shiftAndScheduleDto);
+            return Ok(response);
+        }
     }
 }
