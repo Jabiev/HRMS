@@ -49,5 +49,12 @@ namespace CareerCompassAPI.API.Controllers
             await _companyService.UploadLogoAsync(companyId, companyLogoUploadDto);
             return Ok();
         }
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetHighestRated()
+        {
+            var response = await _companyService.GetHighestRated();
+            return Ok(response);
+        }
     }
 }

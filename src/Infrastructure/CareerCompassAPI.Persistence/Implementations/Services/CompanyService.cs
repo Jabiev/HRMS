@@ -8,7 +8,9 @@ using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions;
+using CareerCompassAPI.Persistence.Implementations.Repositories.CompanyRepositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -127,6 +129,36 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 );
             return companyGetDto;
         }
+
+        public async Task<List<HighestRatedCompanyGetDto>> GetHighestRated()
+        {
+            var companiesWithReviews = await _companyReadRepository.GetAll(isTracking: false, includes: new[] { "Reviews" })
+                                    .Select(c => new
+                                     {
+                                        c.Id,
+                                        c.Name,
+                                        c.LogoUrl,
+                                        Reviews = c.Reviews.Select(r => r.Rating)
+                                                       })
+                                                       .ToListAsync();
+            var highestRatedCompanies = companiesWithReviews.Select(c => new HighestRatedCompanyGetDto(
+                                       c.Id,  
+                                       c.Name,
+                                       c.LogoUrl,
+                                       c.Reviews.Count(),
+                                       c.Reviews.Any() ? c.Reviews.Average() : 0
+                                                            ))
+                                                        .OrderByDescending(dto => dto.reviewsCount)
+                                      .ThenByDescending(dto => dto.rating)
+                                      .Take(9)
+                                      .ToList();
+
+                return highestRatedCompanies;
+        }
+
+
+
+
 
         public async Task Remove(Guid companyId)
         {
