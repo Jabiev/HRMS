@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using File = CareerCompassAPI.Domain.Entities.File;
 using Payments = CareerCompassAPI.Domain.Entities.Payments;
+using TestimonialFeedback = CareerCompassAPI.Domain.Entities.TestimonialFeedback;
 
 namespace CareerCompassAPI.Persistence.Contexts
 {
@@ -34,6 +35,7 @@ namespace CareerCompassAPI.Persistence.Contexts
         public DbSet<Payments> Payments { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Follower> Followers { get; set; }
+        public DbSet<TestimonialFeedback> TestimonialFeedbacks { get; set; }
         public DbSet<Domain.Entities.Message> Messages { get; set; }
         public DbSet<Domain.Entities.File> Files { get; set; }
 

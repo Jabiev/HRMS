@@ -38,6 +38,8 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IReviewRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.ReviewRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IFollowerRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.FollowerRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.IFeedbackRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.FeedbackRepositories;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -72,6 +74,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IFollowerService, FollowerService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IReviewService, Implementations.Services.ReviewService>();
             services.AddTransient<Stripe.Checkout.SessionService>();
             StripeConfiguration.ApiKey = configuration.GetValue<string>("StripeSettings:SecretKey");
@@ -102,6 +105,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IRecruiterReadRepository, RecruiterReadRepository>();
             services.AddScoped<IVacancyReadRepository, VacancyReadRepository>();
             services.AddScoped<IPaymentReadRepository, PaymentReadRepository>();
+            services.AddScoped<IFeedbackReadRepository, FeedbackReadRepository>();
             services.AddScoped<IFileReadRepository, FileReadRepository>();
             services.AddScoped<IJobApplicationReadRepository, JobApplicationReadRepository>();
             services.AddScoped<IMessageReadRepository, MessageReadRepository>();
@@ -121,6 +125,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IRecruiterWriteRepository, RecruiterWriteRepository>();
             services.AddScoped<IVacancyWriteRepository, VacancyWriteRepository>();
             services.AddScoped<IPaymentWriteRepository, PaymentWriteRepository>();
+            services.AddScoped<IFeedbackWriteRepository, FeedbackWriteRepository>();
             services.AddScoped<IFileWriteRepository, FileWriteRepository>();
             services.AddScoped<IJobApplicationWriteRepository, JobApplicationWriteRepository>();
             services.AddScoped<IMessageWriteRepository, MessageWriteRepository>();
