@@ -5,5 +5,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
     public interface ITeamMemberService
     {
         Task CreateMember(TeamMemberCreateDto teamMemberCreateDto);
+        Task<List<TeamMembersGetDto>> GetMembers();
     }
 }

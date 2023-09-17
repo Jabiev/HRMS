@@ -42,6 +42,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IFeedbackRepositorie
 using CareerCompassAPI.Persistence.Implementations.Repositories.FeedbackRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.ITeamRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.TeamRepositories;
+using CareerCompassAPI.Services;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {

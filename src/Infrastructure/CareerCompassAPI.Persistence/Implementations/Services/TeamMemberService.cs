@@ -1,35 +1,45 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Repositories.ITeamRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.TeamMember_DTOs;
-using CareerCompassAPI.Domain.Entities;
 
-namespace CareerCompassAPI.Persistence.Implementations.Services
+namespace CareerCompassAPI.Services
 {
-    public class TeamMemberService : ITeamMemberService
+    public class TeamMemberService:ITeamMemberService
     {
-        private readonly ITeamWriteRepository _teamWriteRepository;
+        private readonly ITeamReadRepository _teamReadRepository; 
 
-        public TeamMemberService(ITeamWriteRepository teamWriteRepository)
+        public TeamMemberService(ITeamReadRepository teamReadRepository)
         {
-            _teamWriteRepository = teamWriteRepository;
+            _teamReadRepository = teamReadRepository;
         }
 
-        public async Task CreateMember(TeamMemberCreateDto teamMemberCreateDto)
+        public Task CreateMember(TeamMemberCreateDto teamMemberCreateDto)
         {
-            if (teamMemberCreateDto is null)
+            throw new NotImplementedException();
+        }
+
+        public Task<List<TeamMembersGetDto>> GetMembers()
+        {
+            var membersFromRepo = _teamReadRepository.GetAll();
+
+            List<TeamMembersGetDto> teamMembers = new List<TeamMembersGetDto>();
+
+            foreach (var member in membersFromRepo)
             {
-                throw new ArgumentNullException("Parameter passed in may not include null values");
+                var dto = new TeamMembersGetDto(
+                    member.Id,
+                    member.FirstName,
+                    member.LastName,
+                    member.Position,
+                    member.Description,
+                    member.ImageUrl
+                );
+
+                teamMembers.Add(dto);
             }
-            TeamMember newMember = new()
-            {
-                FirstName = teamMemberCreateDto.firstName,
-                LastName = teamMemberCreateDto.lastName,
-                Description = teamMemberCreateDto.description,
-                Position = teamMemberCreateDto.position,
-                ImageUrl = teamMemberCreateDto.imageUrl,
-            };
-            await _teamWriteRepository.AddAsync(newMember);
-            await _teamWriteRepository.SaveChangesAsync();
+
+            return Task.FromResult(teamMembers);
         }
+
     }
 }

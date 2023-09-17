@@ -142,7 +142,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         }
 
         public async Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle, Guid? locationId, string sortOrder, string? jobType, decimal? minSalary,
-    decimal? maxSalary)
+          decimal? maxSalary)
         {
             IQueryable<Vacancy> query = _context.Vacancy
                 .Include(v => v.Company)
