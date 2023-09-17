@@ -21,5 +21,11 @@ namespace CareerCompassAPI.API.Controllers
             await _feedbackService.CreateFeedbackAsync(feedbackCreateDto);
             return Ok();
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetTestimonials()
+        {
+            var response = await _feedbackService.GetFeedbacksAsync();
+            return Ok(response);
+        }
     }
 }
