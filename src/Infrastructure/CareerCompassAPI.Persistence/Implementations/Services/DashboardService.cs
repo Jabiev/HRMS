@@ -1,6 +1,7 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Repositories.ICompanyRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.IReviewRepositories;
+using CareerCompassAPI.Application.Abstraction.Repositories.ITeamRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
@@ -8,6 +9,7 @@ using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Application.DTOs.JobType_DTOs;
 using CareerCompassAPI.Application.DTOs.Location_DTOs;
 using CareerCompassAPI.Application.DTOs.Schedule_DTOs;
+using CareerCompassAPI.Application.DTOs.TeamMember_DTOs;
 using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
@@ -29,6 +31,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         private readonly IRecruiterWriteRepository _recruiterWriteRepository;
         private readonly IReviewReadRepository _reviewReadRepository;
         private readonly IReviewWriteRepository _reviewWriteRepository;
+        private readonly ITeamWriteRepository _teamWriteRepository;
 
 
         public DashboardService(UserManager<AppUser> userManager,
@@ -38,7 +41,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                                 IRecruiterReadRepository recruiterReadRepository,
                                 IRecruiterWriteRepository recruiterWriteRepository,
                                 IReviewReadRepository reviewReadRepository,
-                                IReviewWriteRepository reviewWriteRepository)
+                                IReviewWriteRepository reviewWriteRepository,
+                                ITeamWriteRepository teamWriteRepository)
         {
             _userManager = userManager;
             _context = context;
@@ -48,6 +52,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _recruiterWriteRepository = recruiterWriteRepository;
             _reviewReadRepository = reviewReadRepository;
             _reviewWriteRepository = reviewWriteRepository;
+            _teamWriteRepository = teamWriteRepository;
         }
 
         public async Task ChangeUserRole(ChangeUserRoleDto changeUserRoleDto)
@@ -162,6 +167,24 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return newSubscription.Id;
         }
 
+        public async Task<Guid> CreateMember(TeamMemberCreateDto teamMemberCreateDto)
+        {
+            if (teamMemberCreateDto is null)
+            {
+                throw new ArgumentNullException("Parameter passed in may not include null values");
+            }
+            TeamMember newMember = new()
+            {
+                FirstName = teamMemberCreateDto.firstName,
+                LastName = teamMemberCreateDto.lastName,
+                Description = teamMemberCreateDto.description,
+                Position = teamMemberCreateDto.position,
+                ImageUrl = teamMemberCreateDto.imageUrl,
+            };
+            await _teamWriteRepository.AddAsync(newMember);
+            await _teamWriteRepository.SaveChangesAsync();
+            return newMember.Id;
+        }
         public async Task<List<AppUserGetDto>> GetAllAsync(string searchQuery = "")
         {
             var appUsers = new List<AppUserGetDto>();
@@ -192,8 +215,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             return appUsers;
         }
-
-
         public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders, string? searchQuery)
         {
 
@@ -311,8 +332,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return new PaginatedResponse<UserFeedbacksGetDto>(feedbacks, totalItems);
         }
 
-
-
         public async Task<List<LocationGetDto>> GetAllLocationsAsync(string? searchQuery)
         {
             IQueryable<JobLocation> query = _context.JobLocations;
@@ -358,8 +377,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
             return new PaginatedResponse<PaymentsListGetDto>(payments, totalItems);
         }
-
-
         public async Task<List<PendingReviewsDto>> GetAllPendingReviews()
         {
             var pendingReviews = _reviewReadRepository.GetAllByExpression(
@@ -440,6 +457,16 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
         }
 
+        public async Task<List<TeamMembersGetDto>> GetAllTeamMembers()
+        {
+            var teamMembers = await _context.Members.Where(m => m.IsDeleted == false).ToListAsync();
+            if (teamMembers.Count == 0)
+            {
+                throw new NotFoundException("Team Members do not exist");
+            }
+            List<TeamMembersGetDto> members = teamMembers.Select(member => new TeamMembersGetDto(member.Id, member.FirstName, member.LastName,member.Position, member.Description, member.ImageUrl)).ToList();
+            return members;
+        }
         public async Task RemoveCompany(Guid companyId)
         {
             if (companyId == Guid.Empty)
@@ -614,5 +641,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _context.Subscriptions.Update(subscription);
             await _context.SaveChangesAsync();
         }
+
     }
 }

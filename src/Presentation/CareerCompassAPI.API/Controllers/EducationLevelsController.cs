@@ -1,5 +1,4 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareerCompassAPI.API.Controllers

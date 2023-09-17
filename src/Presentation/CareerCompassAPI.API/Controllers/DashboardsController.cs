@@ -1,6 +1,7 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.Subscription_DTOs;
+using CareerCompassAPI.Application.DTOs.TeamMember_DTOs;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.AspNetCore.Authorization;
@@ -228,6 +229,19 @@ namespace CareerCompassAPI.API.Controllers
         {
             await _dashboardService.SetIsActive(feedbackId);
             return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateTeamMember(TeamMemberCreateDto teamMemberCreateDto)
+        {
+            var responseId = await _dashboardService.CreateMember(teamMemberCreateDto);
+            return Ok(responseId);
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetMembers()
+        {
+            var response = await _dashboardService.GetAllTeamMembers();
+            return Ok(response);
         }
     }
 }
