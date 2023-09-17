@@ -16,7 +16,6 @@ using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -284,6 +283,36 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             new ExperienceLevelGetDto(level.Id, level.LevelName)).ToList();
             return expLevels;
         }
+
+        public async Task<PaginatedResponse<UserFeedbacksGetDto>> GetAllFeedbacksAsync(int page, int pageSize)
+        {
+            var totalItems = await _context.TestimonialFeedbacks.CountAsync();
+
+            var feedbackList = await _context.TestimonialFeedbacks
+                                              .Skip((page - 1) * pageSize)
+                                              .Take(pageSize)
+                                              .ToListAsync();
+
+            if (feedbackList.Count == 0)
+            {
+                throw new NotFoundException("No Feedbacks found");
+            }
+
+            List<UserFeedbacksGetDto> feedbacks = feedbackList.Select(feedback => new UserFeedbacksGetDto(
+                feedback.Id,
+                feedback.FirstName,
+                feedback.LastName,
+                feedback.Description,
+                feedback.ImageUrl,
+                feedback.JobTitle,
+                feedback.isActive
+            )).ToList();
+
+            return new PaginatedResponse<UserFeedbacksGetDto>(feedbacks, totalItems);
+        }
+
+
+
         public async Task<List<LocationGetDto>> GetAllLocationsAsync(string? searchQuery)
         {
             IQueryable<JobLocation> query = _context.JobLocations;
@@ -452,6 +481,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _context.SaveChangesAsync();
         }
 
+        public async Task RemoveFeedback(Guid feedbackId)
+        {
+            if (feedbackId == Guid.Empty)
+            {
+                throw new NotFoundException("Feedback does not exist");
+            }
+            TestimonialFeedback feedback = await _context.TestimonialFeedbacks.FirstOrDefaultAsync(tf => tf.Id ==  feedbackId);
+            _context.Remove(feedback);
+            _context.SaveChangesAsync();
+        }
+
         public async Task RemoveJobLocation(Guid jobLocationId)
         {
             if (jobLocationId == Guid.Empty)
@@ -520,6 +560,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new Exception("Failed to delete the user");  // Custom Exception
             }
+        }
+
+        public async Task SetIsActive(Guid feedbackId)
+        {
+            if (feedbackId == Guid.Empty)
+            {
+                throw new NotFoundException("Feedback does not exist");
+            }
+            TestimonialFeedback feedback = await _context.TestimonialFeedbacks.FirstOrDefaultAsync(tf => tf.Id ==  feedbackId);
+            feedback.isActive = true;
+            _context.SaveChangesAsync();
         }
 
         public async Task UpdateEducationLevel(EducationLevelUpdateDto updateEducationLevelDto)

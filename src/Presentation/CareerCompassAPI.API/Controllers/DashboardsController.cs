@@ -211,5 +211,23 @@ namespace CareerCompassAPI.API.Controllers
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllUserFeedbacks(int page = 1, int pageSize = 10)
+        {
+            var response = await _dashboardService.GetAllFeedbacksAsync(page, pageSize);
+            return Ok(response);
+        }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveFeedback([FromQuery] Guid feedbackId)
+        {
+            await _dashboardService.RemoveFeedback(feedbackId);
+            return Ok();
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SetIsActive([FromQuery] Guid feedbackId)
+        {
+            await _dashboardService.SetIsActive(feedbackId);
+            return Ok();
+        }
     }
 }

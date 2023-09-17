@@ -27,6 +27,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 Description = feedbackCreateDto.description,
                 ImageUrl = feedbackCreateDto.imageUrl,
                 JobTitle = feedbackCreateDto.jobTitle,
+                isActive = false
             };
             await _feedbackWriteRepository.AddAsync(newFeedback);
             await _feedbackWriteRepository.SaveChangesAsync();

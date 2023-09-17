@@ -9,5 +9,6 @@ namespace CareerCompassAPI.Domain.Entities
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public string JobTitle { get; set; }
+        public bool isActive { get; set; }
     }
 }

@@ -41,6 +41,10 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task RemoveShift(Guid shiftId);
         Task<Guid> CreateShift(ShiftAndScheduleCreateDto shiftAndScheduleDto);
         Task<PaginatedResponse<PaymentsListGetDto>> GetAllPaymentsAsync(int page, int pageSize);
+        Task<PaginatedResponse<UserFeedbacksGetDto>> GetAllFeedbacksAsync(int page, int pageSize);  
+
+        Task RemoveFeedback(Guid feedbackId);
+        Task SetIsActive(Guid feedbackId);
 
     }
 }
