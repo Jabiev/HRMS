@@ -1,4 +1,5 @@
-﻿using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
+﻿using CareerCompassAPI.Application.DTOs.AppSetting_DTOs;
+using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Application.DTOs.JobType_DTOs;
@@ -47,6 +48,7 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task SetIsActive(Guid feedbackId);
         Task<Guid> CreateMember(TeamMemberCreateDto teamMemberCreateDto);
         Task<List<TeamMembersGetDto>> GetAllTeamMembers();
+        Task<List<AppSettingGetDto>> GetAppSettingListAsync();
 
     }
 }

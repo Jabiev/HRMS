@@ -83,6 +83,7 @@ using (var scope = app.Services.CreateScope())
 {
     var instance = scope.ServiceProvider.GetRequiredService<CareerCompassDbContextInitialiser>();
     await instance.InitialiseAsync();
+    await instance.SettingsSeed();
     await instance.EducationLevelsSeed();
     await instance.RoleSeedAsync();
     await instance.SubscriptionsSeedAsync();
@@ -93,7 +94,6 @@ using (var scope = app.Services.CreateScope())
     await instance.ShiftAndScheduleSeed();
     //await instance.RecruiterUserSeedAsync();
     await instance.UserSeedAsync();
-    await instance.SettingsSeed();
 }
 if (app.Environment.IsDevelopment())
 {

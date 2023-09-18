@@ -3,6 +3,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositori
 using CareerCompassAPI.Application.Abstraction.Repositories.IReviewRepositories;
 using CareerCompassAPI.Application.Abstraction.Repositories.ITeamRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
+using CareerCompassAPI.Application.DTOs.AppSetting_DTOs;
 using CareerCompassAPI.Application.DTOs.AppUser_DTOs;
 using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
@@ -642,5 +643,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<AppSettingGetDto>> GetAppSettingListAsync()
+        {
+            var settingsList = await _context.Settings.ToListAsync();
+            if (settingsList.Count == 0)
+            {
+                throw new NotFoundException("Settings do not exist");
+            }
+
+            List<AppSettingGetDto> settings = settingsList.Select(
+                setting => new AppSettingGetDto(setting.SettingName, setting.SettingValue)
+            ).ToList();
+
+            return settings;
+        }
     }
 }
