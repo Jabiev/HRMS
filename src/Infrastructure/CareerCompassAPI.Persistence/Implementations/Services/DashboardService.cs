@@ -652,7 +652,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
 
             List<AppSettingGetDto> settings = settingsList.Select(
-                setting => new AppSettingGetDto(setting.SettingName, setting.SettingValue)
+                setting => new AppSettingGetDto(setting.Id,setting.SettingName, setting.SettingValue)
             ).ToList();
 
             return settings;
