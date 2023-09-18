@@ -120,5 +120,9 @@ app.MapHangfireDashboard("/hangfire", new DashboardOptions());
 RecurringJob.AddOrUpdate("check-subscription", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().CheckSubscriptions(), Cron.Hourly);
 RecurringJob.AddOrUpdate("delete-old-messages", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteOldMessages(), "0 0 * * *");
 RecurringJob.AddOrUpdate("delete-old-notifications", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteOldNotifications(), "0 0 * * *");
+RecurringJob.AddOrUpdate("delete-declined-applications", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteDeclinedApplications(), "0 0 * * *");
+RecurringJob.AddOrUpdate("delete-declined-reviews", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteDeclinedReviews(), "0 0 * * *");
+
+
 
 app.Run();

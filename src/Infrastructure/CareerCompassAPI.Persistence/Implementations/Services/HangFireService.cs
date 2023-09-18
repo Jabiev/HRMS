@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
+using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +39,39 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
             await _recruiterWriteRepository.SaveChangesAsync();
         }
+
+        public async Task DeleteDeclinedApplications()
+        {
+            var daysSetting = await _context.Settings
+                .Where(s => s.SettingName == "DaysToDeleteDeclinedApplications")
+                .FirstOrDefaultAsync();
+            if (daysSetting != null && int.TryParse(daysSetting.SettingValue, out int days))
+            {
+                DateTime cutoffDate = DateTime.Now.AddDays(-days);
+                var declinedApplications = await _context.Applications
+                    .Where(ja => ja.Status == ApplicationStatus.Declined && ja.DateCreated < cutoffDate)
+                    .ToListAsync();
+                _context.Applications.RemoveRange(declinedApplications);
+                await _context.SaveChangesAsync();
+            }
+
+        }
+
+        public async Task DeleteDeclinedReviews()
+        {
+            var daysSetting = await _context.Settings
+                .Where(s => s.SettingName == "DaysToDeleteDeclinedReviews")
+                .FirstOrDefaultAsync();
+
+            int daysToKeep = int.Parse(daysSetting?.SettingValue ?? "3"); 
+            DateTime cutoffDate = DateTime.UtcNow.AddDays(-daysToKeep);
+            var reviewsToDelete = await _context.Reviews
+                .Where(r => r.Status == ReviewStatus.Declined && r.DateCreated < cutoffDate)
+                .ToListAsync();
+            _context.Reviews.RemoveRange(reviewsToDelete);
+            await _context.SaveChangesAsync();
+        }
+
 
         public async Task DeleteOldMessages()
         {

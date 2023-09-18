@@ -5,5 +5,7 @@
         Task CheckSubscriptions();
         Task DeleteOldMessages();
         Task DeleteOldNotifications();
+        Task DeleteDeclinedApplications();
+        Task DeleteDeclinedReviews();
     }
 }
