@@ -39,6 +39,37 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _recruiterWriteRepository.SaveChangesAsync();
         }
 
+        public async Task DeleteOldMessages()
+        {
+            var daysSetting = await _context.Settings
+                .Where(s => s.SettingName == "DaysToDeleteOldMessages")
+                .FirstOrDefaultAsync();
+
+            if (daysSetting != null)
+            {
+                int daysToDeleteOldMessages = int.Parse(daysSetting.SettingValue); 
+                var olderThan = DateTime.Now.AddDays(-daysToDeleteOldMessages);
+                var oldMessages = await _context.Messages.Where(m => m.DateCreated <= olderThan).ToListAsync();
+                _context.Messages.RemoveRange(oldMessages);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteOldNotifications()
+        {
+            var daysSetting = await _context.Settings
+                .Where(s => s.SettingName == "DaysToDeleteOldNotifications")
+                .FirstOrDefaultAsync();
+
+            if (daysSetting != null)
+            {
+                int daysToDeleteOldNotifications = int.Parse(daysSetting.SettingValue); 
+                var olderThan = DateTime.Now.AddDays(-daysToDeleteOldNotifications);
+                var oldNotifications = await _context.Notifications.Where(n => n.DateCreated <= olderThan).ToListAsync();
+                _context.Notifications.RemoveRange(oldNotifications);
+                await _context.SaveChangesAsync();
+            }
+        }
 
     }
 }

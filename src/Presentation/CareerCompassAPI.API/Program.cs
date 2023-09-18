@@ -93,6 +93,7 @@ using (var scope = app.Services.CreateScope())
     await instance.ShiftAndScheduleSeed();
     //await instance.RecruiterUserSeedAsync();
     await instance.UserSeedAsync();
+    await instance.SettingsSeed();
 }
 if (app.Environment.IsDevelopment())
 {
@@ -117,4 +118,7 @@ app.UseEndpoints(endpoints =>
 });
 app.MapHangfireDashboard("/hangfire", new DashboardOptions());
 RecurringJob.AddOrUpdate("check-subscription", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().CheckSubscriptions(), Cron.Hourly);
+RecurringJob.AddOrUpdate("delete-old-messages", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteOldMessages(), "0 0 * * *");
+RecurringJob.AddOrUpdate("delete-old-notifications", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteOldNotifications(), "0 0 * * *");
+
 app.Run();

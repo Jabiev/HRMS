@@ -39,6 +39,7 @@ namespace CareerCompassAPI.Persistence.Contexts
         public DbSet<TestimonialFeedback> TestimonialFeedbacks { get; set; }
         public DbSet<Domain.Entities.Message> Messages { get; set; }
         public DbSet<Domain.Entities.File> Files { get; set; }
+        public DbSet<Domain.Entities.AppSetting> Settings { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

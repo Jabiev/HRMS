@@ -3,5 +3,7 @@
     public interface IHangFireService
     {
         Task CheckSubscriptions();
+        Task DeleteOldMessages();
+        Task DeleteOldNotifications();
     }
 }

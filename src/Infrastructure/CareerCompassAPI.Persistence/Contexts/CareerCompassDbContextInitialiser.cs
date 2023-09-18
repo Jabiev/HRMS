@@ -261,6 +261,18 @@ namespace CareerCompassAPI.Persistence.Contexts
 
             await _context.SaveChangesAsync();
         }
-
+        public async Task SettingsSeed()
+        {
+            if (!_context.Settings.Any())
+            {
+                var settings = new List<AppSetting>
+                {
+                    new AppSetting { SettingName = "DaysToDeleteOldMessages", SettingValue = "3"},
+                    new AppSetting {SettingName = "DaysToDeleteOldNotifications", SettingValue ="3"},
+                };  
+                await _context.Settings.AddRangeAsync(settings);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
