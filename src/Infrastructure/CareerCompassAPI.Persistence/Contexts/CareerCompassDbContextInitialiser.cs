@@ -23,7 +23,7 @@ namespace CareerCompassAPI.Persistence.Contexts
                                                  RoleManager<IdentityRole> roleManager,
                                                  IConfiguration configuration,
                                                  ISubscriptionReadRepository subscriptionReadRepository,
-                                                 ISubscriptionWriteRepository   subscriptionWriteRepository)
+                                                 ISubscriptionWriteRepository subscriptionWriteRepository)
         {
             _context = context;
             _userManager = userManager;
@@ -105,34 +105,6 @@ namespace CareerCompassAPI.Persistence.Contexts
             await _userManager.CreateAsync(appUser, _configuration["Master:password"]);
             await _userManager.AddToRoleAsync(appUser, Roles.Master.ToString());
         }
-        //public async Task RecruiterUserSeedAsync(int count = 20)
-        //{
-        //    var existingRecruiters = await _userManager.GetUsersInRoleAsync(Roles.Recruiter.ToString());
-
-        //    if (existingRecruiters.Any())
-        //    {
-        //        return;
-        //    }
-
-        //    var faker = new Faker();
-        //    var recruiters = new List<AppUser>();
-
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        var recruiterUser = new AppUser
-        //        {
-        //            UserName = faker.Internet.UserName(),
-        //            Email = faker.Internet.Email(),
-        //            PhoneNumber = faker.Phone.PhoneNumber(),
-        //        };
-        //        var password = "Rahil123!";
-
-        //        recruiters.Add(recruiterUser);
-        //        await _userManager.CreateAsync(recruiterUser, password);
-        //        await _userManager.AddToRoleAsync(recruiterUser, Roles.Recruiter.ToString());
-        //        await _context.SaveChangesAsync();
-        //    }
-        //}
         public async Task JobTypeSeed()
         {
             var jobTypes = new List<JobType>()
@@ -286,7 +258,7 @@ namespace CareerCompassAPI.Persistence.Contexts
                         AppUser = user,
                         FirstName = $"FirstName{i}",
                         LastName = $"LastName{i}",
-                        Location = "Some Location", 
+                        Location = "Some Location",
                         IsDeleted = false
                     };
 
@@ -297,75 +269,224 @@ namespace CareerCompassAPI.Persistence.Contexts
             await _context.JobSeekers.AddRangeAsync(jobSeekers);
             await _context.SaveChangesAsync();
         }
+        public async Task SeedRecruitersAsync()
+        {
+            Random rand = new Random();
+            List<Recruiter> recruiters = new List<Recruiter>();
 
-        public async Task CompanySeedAsync()
-        {
-            var techIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Information Technology");
-            var bakuLocation = await _context.JobLocations.FirstOrDefaultAsync(j => j.Location == "Baku,Azerbaijan");
-            var londonLocation = await _context.JobLocations.FirstOrDefaultAsync(j => j.Location == "London,UK");
-            var detailsList = new List<CompanyDetails>
-    {
-        new CompanyDetails
-        {
-            Ceo = "Sundar Pichai",
-            DateFounded = 1998,
-            CompanySize = CompanySizeEnum.Size_10000Plus,
-            Industry = techIndustry,
-            Link = "https://www.google.com",
-            Description = "Google is a tech company specializing in Internet-related services and products.",
-            Address = "1600 Amphitheatre Parkway, Mountain View, CA",
-            Location = londonLocation
-        },
-        new CompanyDetails
-        {
-            Ceo = "Satya Nadella",
-            DateFounded = 1975,
-            CompanySize = CompanySizeEnum.Size_10000Plus,
-            Industry = techIndustry,
-            Link = "https://www.microsoft.com",
-            Description = "Microsoft develops, licenses, and supports a wide range of software products, computing devices, and services.",
-            Address = "Redmond, Washington, U.S.",
-            Location = bakuLocation
-        },
-        new CompanyDetails
-        {
-            Ceo = "Tim Cook",
-            DateFounded = 1976,
-            CompanySize = CompanySizeEnum.Size_10000Plus,
-            Industry = techIndustry,
-            Link = "https://www.apple.com",
-            Description = "Apple designs, manufactures, and markets mobile communication and media devices.",
-            Address = "Cupertino, California, U.S.",
-            Location = londonLocation
-        }
-    };
+            var freeSubscription = await _context.Subscriptions.FirstOrDefaultAsync(s => s.Name == "Free");
+            var basicSubscription = await _context.Subscriptions.FirstOrDefaultAsync(s => s.Name == "Basic");
+            var proSubscription = await _context.Subscriptions.FirstOrDefaultAsync(s => s.Name == "Pro");
+            Subscriptions[] possibleSubscriptions = { freeSubscription, basicSubscription, proSubscription };
 
-            await _context.CompanyDetails.AddRangeAsync(detailsList);
-            await _context.SaveChangesAsync();
-            var companies = new List<Company>
-    {
-        new Company { Name = "Google", Details = detailsList[0] },
-        new Company { Name = "Microsoft", Details = detailsList[1] },
-        new Company { Name = "Apple", Details = detailsList[2] }
-    };
+            var companies = await _context.Companies.ToListAsync();
 
-            foreach (var company in companies)
+            for (int i = 0; i < 20; i++)
             {
-                var existingCompany = await _context.Companies.FirstOrDefaultAsync(c => c.Name == company.Name);
-                if (existingCompany == null)
+                string email = $"recruiter{i}@example.com";
+                var user = new AppUser
                 {
-                    await _context.Companies.AddAsync(company);
+                    Email = email,
+                    UserName = email,
+                    DateRegistered = DateTime.Now,
+                    PhoneNumber = $"+994501112{i}2",
+                };
+
+                var result = await _userManager.CreateAsync(user, "Password@123");
+
+                if (result.Succeeded)
+                {
+                    Console.WriteLine($"User created with ID: {user.Id}");
+
+                    var subscription = possibleSubscriptions[rand.Next(0, possibleSubscriptions.Length)];
+                    var company = companies[rand.Next(0, companies.Count)];
+
+                    var recruiter = new Recruiter
+                    {
+                        AppUserId = user.Id,
+                        AppUser = user,
+                        CompanyId = company.Id,
+                        Company = company,
+                        FirstName = $"RecruiterFirstName{i}",
+                        LastName = $"RecruiterLastName{i}",
+                        Subscription = subscription,
+                        CurrentPostCount = 0,
+                        SubscriptionStartDate = DateTime.Now
+                    };
+
+                    recruiters.Add(recruiter);
                 }
             }
 
+            if (recruiters.Any())
+            {
+                await _context.Recruiters.AddRangeAsync(recruiters);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task SeedVacanciesAsync()
+        {
+            Random rand = new Random();
+
+            var recruiters = await _context.Recruiters.ToListAsync();
+            var entryLevel = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.LevelName == "Entry");
+            var midLevel = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.LevelName == "Mid");
+            var seniorLevel = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.LevelName == "Senior");
+            var noExperience = await _context.ExperienceLevels.FirstOrDefaultAsync(e => e.LevelName == "No Experience");
+            var london = await _context.JobLocations.FirstOrDefaultAsync(l => l.Location == "London,UK");
+            var baku = await _context.JobLocations.FirstOrDefaultAsync(l => l.Location == "Baku,Azerbaijan");
+            var istanbul = await _context.JobLocations.FirstOrDefaultAsync(l => l.Location == "Istanbul,Turkey");
+            var google = await _context.Companies.FirstOrDefaultAsync(c => c.Name == "Google");
+            var jpmorgan = await _context.Companies.FirstOrDefaultAsync(c => c.Name == "JP Morgan");
+            List<Vacancy> vacancies = new List<Vacancy>();
+            vacancies.Add(new Vacancy
+            {
+                JobTitle = "Finance Manager",
+                ExperienceLevel = midLevel,
+                Recruiter = recruiters[rand.Next(recruiters.Count)],
+                Salary = 80000.00M,
+                JobLocation = london,
+                Description = "Responsible for managing the financial aspects of our London branch.",
+                Company = jpmorgan,
+                ApplicationLimit = 50,
+                CurrentApplicationCount = 0
+            });
+
+            vacancies.Add(new Vacancy
+            {
+                JobTitle = "Software Engineer",
+                ExperienceLevel = entryLevel,
+                Recruiter = recruiters[rand.Next(recruiters.Count)],
+                Salary = 100000.00M,
+                JobLocation = baku,
+                Description = "Software Engineer position in the Baku office focusing on web technologies.",
+                Company = google,
+                ApplicationLimit = 100,
+                CurrentApplicationCount = 0
+            });
+
+
+            await _context.Vacancy.AddRangeAsync(vacancies);
             await _context.SaveChangesAsync();
         }
+
+        public async Task CompanySeedAsync()
+        {
+            if (!_context.CompanyDetails.Any())
+            {
+                var techIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Information Technology");
+                var agricultureIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Agriculture");
+                var financialIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Financial Services");
+                var healthcareIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Healthcare");
+                var bakuLocation = await _context.JobLocations.FirstOrDefaultAsync(j => j.Location == "Baku,Azerbaijan");
+                var londonLocation = await _context.JobLocations.FirstOrDefaultAsync(j => j.Location == "London,UK");
+                var companies = new List<Company>
+        {
+            new Company
+            {
+                Name = "Google",
+                Details = new CompanyDetails
+                {
+                    Ceo = "Sundar Pichai",
+                    DateFounded = 1998,
+                    CompanySize = CompanySizeEnum.Size_10000Plus,
+                    Industry = techIndustry,
+                    Link = "https://www.google.com",
+                    Description = "Google is a tech company specializing in Internet-related services and products.",
+                    Address = "1600 Amphitheatre Parkway, Mountain View, CA",
+                    Location = londonLocation
+                }
+            },
+            new Company
+            {
+                Name = "Microsoft",
+                Details = new CompanyDetails
+                {
+                    Ceo = "Satya Nadella",
+                    DateFounded = 1975,
+                    CompanySize = CompanySizeEnum.Size_10000Plus,
+                    Industry = techIndustry,
+                    Link = "https://www.microsoft.com",
+                    Description = "Microsoft develops, licenses, and supports a wide range of software products, computing devices, and services.",
+                    Address = "Redmond, Washington, U.S.",
+                    Location = bakuLocation
+                }
+            },
+            new Company
+            {
+                Name = "Apple",
+                Details = new CompanyDetails
+                {
+                    Ceo = "Tim Cook",
+                    DateFounded = 1976,
+                    CompanySize = CompanySizeEnum.Size_10000Plus,
+                    Industry = techIndustry,
+                    Link = "https://www.apple.com",
+                    Description = "Apple designs, manufactures, and markets mobile communication and media devices.",
+                    Address = "Cupertino, California, U.S.",
+                    Location = londonLocation
+                }
+            },
+            new Company
+            {
+                Name = "Cargill",
+                Details = new CompanyDetails
+                {
+                    Ceo = "David MacLennan",
+                    DateFounded = 1865,
+                    CompanySize = CompanySizeEnum.Size_10000Plus,
+                    Industry = agricultureIndustry,
+                    Link = "https://www.cargill.com",
+                    Description = "Cargill provides food, agriculture, financial and industrial products and services.",
+                    Address = "Minneapolis, Minnesota, U.S.",
+                    Location = londonLocation
+                }
+            },
+            new Company
+            {
+                Name = "JPMorgan Chase",
+                Details = new CompanyDetails
+                {
+                    Ceo = "Jamie Dimon",
+                    DateFounded = 2000,
+                    CompanySize = CompanySizeEnum.Size_10000Plus,
+                    Industry = financialIndustry,
+                    Link = "https://www.jpmorganchase.com",
+                    Description = "JPMorgan Chase is a multinational investment bank and financial services holding company.",
+                    Address = "New York City, New York, U.S.",
+                    Location = bakuLocation
+                }
+            },
+            new Company
+            {
+                Name = "Pfizer",
+                Details = new CompanyDetails
+                {
+                    Ceo = "Albert Bourla",
+                    DateFounded = 1849,
+                    CompanySize = CompanySizeEnum.Size_10000Plus,
+                    Industry = healthcareIndustry,
+                    Link = "https://www.pfizer.com",
+                    Description = "Pfizer is an American multinational pharmaceutical corporation.",
+                    Address = "New York City, New York, U.S.",
+                    Location = londonLocation
+                }
+            }
+        };
+
+                // Add the companies along with their details
+                await _context.Companies.AddRangeAsync(companies);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task SeedReviewsAsync()
         {
             List<Review> reviews = new List<Review>();
             Random rand = new Random();
 
-            string[] companies = { "Apple", "Microsoft", "Google" };
+            string[] companies = { "Apple", "Microsoft", "Google", "Bravo", "McDonalds", "Vodafone", "Cargill", "JPMorgan Chase", "Pfizer" };
             var jobSeekerIds = await _context.JobSeekers
                                 .Select(js => js.Id)
                                 .ToListAsync();
@@ -389,7 +510,7 @@ namespace CareerCompassAPI.Persistence.Contexts
                         JobSeeker = jobSeeker,
                         Title = $"Review for {companyName}",
                         Description = $"This is a review for {companyName} by job seeker {jobSeeker.Id}.",
-                        Rating = rand.Next(1, 6), 
+                        Rating = rand.Next(1, 6),
                         Company = company,
                         Status = ReviewStatus.Approved
                     };
@@ -401,10 +522,6 @@ namespace CareerCompassAPI.Persistence.Contexts
             await _context.Reviews.AddRangeAsync(reviews);
             await _context.SaveChangesAsync();
         }
-
-
-
-
         public async Task SettingsSeed()
         {
             var defaultSettings = new List<AppSetting>

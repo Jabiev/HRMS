@@ -93,9 +93,10 @@ using (var scope = app.Services.CreateScope())
     await instance.ExperienceLevelSeed();
     await instance.ShiftAndScheduleSeed();
     await instance.CompanySeedAsync();
-    await instance.SeedReviewsAsync();
     await instance.SeedJobSeekersAsync();
-    //await instance.RecruiterUserSeedAsync();
+    await instance.SeedRecruitersAsync();
+    await instance.SeedReviewsAsync();
+    //await instance.SeedVacanciesAsync();
     await instance.UserSeedAsync();
 }
 if (app.Environment.IsDevelopment())
