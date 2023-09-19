@@ -161,10 +161,11 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 query = query.Where(v => v.JobLocationId == locationId.Value);
             }
-            if (!string.IsNullOrEmpty(jobType))
+            if (!string.IsNullOrEmpty(jobType) && jobType != "All")
             {
                 query = query.Where(v => v.JobType.Any(jt => jt.TypeName.ToLower() == jobType.ToLower()));
             }
+
 
             if (sortOrder == "asc")
             {

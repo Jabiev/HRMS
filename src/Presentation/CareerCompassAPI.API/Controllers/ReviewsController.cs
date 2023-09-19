@@ -21,9 +21,9 @@ namespace CareerCompassAPI.API.Controllers
             return Ok();
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllByCompanyId([FromQuery] Guid companyId)
+        public async Task<IActionResult> GetAllByCompanyId([FromQuery] Guid companyId, [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
         {
-            var response = await _reviewService.GetAllByCompanyId(companyId);
+            var response = await _reviewService.GetAllByCompanyId(companyId, pageIndex, pageSize);
             return Ok(response);
         }
     }

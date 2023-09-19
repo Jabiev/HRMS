@@ -155,11 +155,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
                 return highestRatedCompanies;
         }
-
-
-
-
-
         public async Task Remove(Guid companyId)
         {
             var company = await _companyReadRepository.GetByIdAsync(companyId);

@@ -660,6 +660,15 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool>("isChatAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isPlannerAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isVideoAvailable")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Subscriptions");

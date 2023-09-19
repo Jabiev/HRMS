@@ -64,16 +64,15 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _reviewWriteRepository.SaveChangesAsync();
         }
 
-        public async Task<CompanyReviewSummaryDto> GetAllByCompanyId(Guid companyId)
+        public async Task<CompanyReviewSummaryDto> GetAllByCompanyId(Guid companyId, int pageIndex, int pageSize)
         {
-            var reviews = await _reviewReadRepository
-                .GetAllByExpression(
-                    r => r.Company.Id == companyId && r.Status == ReviewStatus.Approved,
-                    int.MaxValue,
-                    0)
-                .Include(r => r.JobSeeker)
-                .ToListAsync();
-
+            int skip = (pageIndex - 1) * pageSize;
+            var reviews = await _context.Reviews
+                                        .Where(r => r.Company.Id == companyId && r.Status == ReviewStatus.Approved)
+                                        .Include(r => r.JobSeeker)
+                                        .Skip(skip)
+                                        .Take(pageSize)
+                                        .ToListAsync();
             var reviewDtos = reviews.Select(r => new ReviewGetDto(
                 r.JobSeeker.FirstName,
                 r.JobSeeker.LastName,
@@ -81,12 +80,16 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 r.Description,
                 r.Rating)).ToList();
 
-            double averageRating = 0;
+            decimal averageRating = 0;
             if (reviewDtos.Count > 0)
             {
-                averageRating = (double)reviewDtos.Average(r => r.rating);
+                averageRating = reviewDtos.Average(r => r.rating);
             }
-            return new CompanyReviewSummaryDto(reviewDtos, averageRating);
+            int totalReviews = await _context.Reviews
+                                              .Where(r => r.Company.Id == companyId && r.Status == ReviewStatus.Approved)
+                                              .CountAsync();
+
+            return new CompanyReviewSummaryDto(reviewDtos, averageRating, totalReviews);
         }
     }
 }

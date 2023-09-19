@@ -17,15 +17,20 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         {
             var user = await _context.Users.Include(u => u.JobSeekers)
                                             .Include(u => u.Recruiters)
+                                                .ThenInclude(r => r.Subscription)
                                             .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
                 throw new NotFoundException("User not found.");
             }
+
             var firstName = user.JobSeekers?.FirstName ?? user.Recruiters?.FirstName;
             var lastName = user.JobSeekers?.LastName ?? user.Recruiters?.LastName;
             var email = user.Email;
-            return new UserDetailsGetDto(firstName, lastName, email);
+            var subscriptionName = user.Recruiters?.Subscription?.Name;
+
+            return new UserDetailsGetDto(firstName, lastName, email, subscriptionName);
         }
+
     }
 }

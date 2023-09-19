@@ -1,6 +1,8 @@
-﻿namespace CareerCompassAPI.Domain.Entities
+﻿using CareerCompassAPI.Domain.Entities.Common;
+
+namespace CareerCompassAPI.Domain.Entities
 {
-    public class RecruiterEvents
+    public class RecruiterEvents:BaseEntity
     {
     }
 }
