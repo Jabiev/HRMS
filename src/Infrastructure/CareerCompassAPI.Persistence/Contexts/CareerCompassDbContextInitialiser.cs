@@ -324,7 +324,6 @@ namespace CareerCompassAPI.Persistence.Contexts
                 await _context.SaveChangesAsync();
             }
         }
-
         public async Task SeedVacanciesAsync()
         {
             Random rand = new Random();
@@ -376,6 +375,8 @@ namespace CareerCompassAPI.Persistence.Contexts
             if (!_context.CompanyDetails.Any())
             {
                 var techIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Information Technology");
+                var foodIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Restaurants & Food Service");
+                var transportationIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Transportation & Logistics");
                 var agricultureIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Agriculture");
                 var financialIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Financial Services");
                 var healthcareIndustry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Healthcare");
@@ -395,6 +396,264 @@ namespace CareerCompassAPI.Persistence.Contexts
                     Link = "https://www.google.com",
                     Description = "Google is a tech company specializing in Internet-related services and products.",
                     Address = "1600 Amphitheatre Parkway, Mountain View, CA",
+                    Location = londonLocation
+                }
+            },
+            new Company
+            {
+                Name = "FedEx",
+                Details = new CompanyDetails
+                {
+                    Ceo = "Frederick W. Smith",
+                    DateFounded = 1971,
+                    CompanySize = CompanySizeEnum.Size_10000Plus,
+                    Industry = transportationIndustry,
+                    Link = "https://www.fedex.com",
+                    Description = "An American multinational delivery services company.",
+                    Address = "Memphis, Tennessee, U.S.",
+                    Location = bakuLocation
+                }
+            },
+            new Company
+            {
+                Name = "Marriott International",
+                Details = new CompanyDetails
+                {
+                     Ceo = "Anthony Capuano",
+                     DateFounded = 1927,
+                     CompanySize = CompanySizeEnum.Size_10000Plus,
+                     Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Hotels & Travel Accommodation"),
+                      Link = "https://www.marriott.com",
+                      Description = "Marriott International is an American multinational company that operates, franchises, and licenses lodging including hotel, residential, and timeshare properties.",
+                      Address = "Bethesda, Maryland, U.S.",
+                      Location = await _context.JobLocations.FirstOrDefaultAsync(j => j.Location == "London,UK")
+                }
+            },
+            new Company
+{
+    Name = "State Farm",
+    Details = new CompanyDetails
+    {
+        Ceo = "Michael L. Tipsord",
+        DateFounded = 1922,
+        CompanySize = CompanySizeEnum.Size_10000Plus,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Insurance"),
+        Link = "https://www.statefarm.com",
+        Description = "State Farm is a large group of insurance and financial services companies.",
+        Address = "Bloomington, Illinois, U.S.",
+        Location = londonLocation
+    }
+},
+new Company
+{
+    Name = "Rockstar Games",
+    Details = new CompanyDetails
+    {
+        Ceo = "Strauss Zelnick",
+        DateFounded = 1998,
+        CompanySize = CompanySizeEnum.Size_2501_5000,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Arts, Entertainment & Recreation"),
+        Link = "https://www.rockstargames.com",
+        Description = "Rockstar Games is an American video game publisher known for franchises like Grand Theft Auto and Red Dead Redemption.",
+        Address = "New York, NY, USA",
+        Location = bakuLocation 
+    }
+},
+new Company
+{
+    Name = "Ubisoft",
+    Details = new CompanyDetails
+    {
+        Ceo = "Yves Guillemot",
+        DateFounded = 1986,
+        CompanySize = CompanySizeEnum.Size_10000Plus,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Arts, Entertainment & Recreation"),
+        Link = "https://www.ubisoft.com",
+        Description = "Ubisoft is a French video game company known for titles like Assassin's Creed and Rainbow Six.",
+        Address = "Montreuil, France",
+        Location = londonLocation 
+    }
+},
+new Company
+{
+    Name = "CD Projekt",
+    Details = new CompanyDetails
+    {
+        Ceo = "Adam Kiciński",
+        DateFounded = 1994,
+        CompanySize = CompanySizeEnum.Size_2501_5000,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Arts, Entertainment & Recreation"),
+        Link = "https://www.cdprojekt.com",
+        Description = "CD Projekt is a Polish video game company famous for the Witcher series and Cyberpunk 2077.",
+        Address = "Warsaw, Poland",
+        Location = bakuLocation
+    }
+},
+
+new Company
+{
+    Name = "Icherisheher Art Gallery",
+    Details = new CompanyDetails
+    {
+        Ceo = "TBD",
+        DateFounded = 2001,
+        CompanySize = CompanySizeEnum.Size_1_50,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Arts, Entertainment & Recreation"),
+        Link = "http://example.com",
+        Description = "An art gallery located in the historic Icherisheher.",
+        Address = "Icherisheher, Baku, Azerbaijan",
+        Location = bakuLocation
+    }
+},
+new Company
+{
+    Name = "Balfour Beatty",
+    Details = new CompanyDetails
+    {
+        Ceo = "Leo Quinn",
+        DateFounded = 1909,
+        CompanySize = CompanySizeEnum.Size_10000Plus,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Construction, Repair & Maintenance Services"),
+        Link = "https://www.balfourbeatty.com",
+        Description = "Balfour Beatty is an infrastructure group.",
+        Address = "London, UK",
+        Location = londonLocation
+    }
+},
+
+new Company
+{
+    Name = "BP",
+    Details = new CompanyDetails
+    {
+        Ceo = "Bernard Looney",
+        DateFounded = 1909,
+        CompanySize = CompanySizeEnum.Size_10000Plus,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Energy, Mining & Utilities"),
+        Link = "https://www.bp.com",
+        Description = "BP is a British multinational oil and gas company.",
+        Address = "London, UK",
+        Location = bakuLocation
+    }
+},
+new Company
+{
+    Name = "SOCAR",
+    Details = new CompanyDetails
+    {
+        Ceo = "Rovshan Najaf",
+        DateFounded = 1993,
+        CompanySize = CompanySizeEnum.Size_10000Plus,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Energy, Mining & Utilities"),
+        Link = "https://www.socar.az",
+        Description = "SOCAR is the state oil company of Azerbaijan.",
+        Address = "Baku, Azerbaijan",
+        Location = bakuLocation
+    }
+},
+
+new Company
+{
+    Name = "Baker McKenzie",
+    Details = new CompanyDetails
+    {
+        Ceo = "Milton Cheng",
+        DateFounded = 1949,
+        CompanySize = CompanySizeEnum.Size_5001_10000,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Legal"),
+        Link = "https://www.bakermckenzie.com",
+        Description = "Baker McKenzie is an international law firm.",
+        Address = "Chicago, Illinois, U.S.",
+        Location = bakuLocation
+    }
+},
+new Company
+{
+    Name = "McKinsey & Company",
+    Details = new CompanyDetails
+    {
+        Ceo = "Kevin Sneader",
+        DateFounded = 1926,
+        CompanySize = CompanySizeEnum.Size_10000Plus,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Management & Consulting"),
+        Link = "https://www.mckinsey.com",
+        Description = "McKinsey is a management consulting firm.",
+        Address = "New York City, New York, U.S.",
+        Location = bakuLocation
+    }
+},
+new Company
+{
+    Name = "General Electric",
+    Details = new CompanyDetails
+    {
+        Ceo = "H. Lawrence Culp Jr.",
+        DateFounded = 1892,
+        CompanySize = CompanySizeEnum.Size_10000Plus,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Manufacturing"),
+        Link = "https://www.ge.com",
+        Description = "General Electric is a multinational conglomerate corporation.",
+        Address = "Boston, Massachusetts, U.S.",
+        Location = londonLocation
+    }
+},
+new Company
+{
+    Name = "BBC",
+    Details = new CompanyDetails
+    {
+        Ceo = "Tim Davie",
+        DateFounded = 1922,
+        CompanySize = CompanySizeEnum.Size_10000Plus,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Media & Communication"),
+        Link = "https://www.bbc.co.uk",
+        Description = "The BBC is a British public service broadcaster.",
+        Address = "London, UK",
+        Location = londonLocation
+    }
+},
+new Company
+{
+    Name = "UNICEF",
+    Details = new CompanyDetails
+    {
+        Ceo = "Henrietta H. Fore",
+        DateFounded = 1946,
+        CompanySize = CompanySizeEnum.Size_5001_10000,
+        Industry = await _context.Industries.FirstOrDefaultAsync(i => i.Name == "Nonprofit & NGO"),
+        Link = "https://www.unicef.org",
+        Description = "UNICEF works in some of the world’s toughest places to reach the most disadvantaged children and adolescents.",
+        Address = "New York City, New York, U.S.",
+        Location = londonLocation
+    }
+},
+            new Company
+            {
+                Name = "Starbucks",
+                Details = new CompanyDetails
+                {
+                    Ceo = "Kevin Johnson",
+                    DateFounded = 1971,
+                    CompanySize = CompanySizeEnum.Size_10000Plus,
+                    Industry = foodIndustry,
+                    Link = "https://www.starbucks.com",
+                    Description = "An American multinational chain of coffeehouses and roastery reserves.",
+                    Address = "Seattle, Washington, U.S.",
+                    Location = bakuLocation
+                }
+            },
+                 new Company
+            {
+                Name = "Starbucks",
+                Details = new CompanyDetails
+                {
+                    Ceo = "Kevin Johnson",
+                    DateFounded = 1971,
+                    CompanySize = CompanySizeEnum.Size_10000Plus,
+                    Industry = foodIndustry,
+                    Link = "https://www.starbucks.com",
+                    Description = "An American multinational chain of coffeehouses and roastery reserves.",
+                    Address = "Seattle, Washington, U.S.",
                     Location = londonLocation
                 }
             },
@@ -475,7 +734,6 @@ namespace CareerCompassAPI.Persistence.Contexts
             }
         };
 
-                // Add the companies along with their details
                 await _context.Companies.AddRangeAsync(companies);
                 await _context.SaveChangesAsync();
             }
