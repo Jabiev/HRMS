@@ -139,9 +139,9 @@ namespace CareerCompassAPI.API.Controllers
             return Ok(new { sessionId = sessionId });
         }
         [HttpGet("GetPayments/{userId}")]
-        public async Task<IActionResult> GetPayments([FromRoute]string userId)
+        public async Task<IActionResult> GetPayments([FromRoute]string userId, [FromQuery]  int currentPage = 1, [FromQuery] int pageSize = 10)
         {
-            var response = await _paymentsService.GetPaymentsByAppUserId(userId);
+            var response = await _paymentsService.GetPaymentsByAppUserId(userId, currentPage, pageSize);
             return Ok(response);
         }
     }

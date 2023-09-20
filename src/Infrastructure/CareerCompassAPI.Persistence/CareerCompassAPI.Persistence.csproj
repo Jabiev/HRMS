@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Exceptions\StorageExceptions\" />
     <Folder Include="Implementations\Services\Storage\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>

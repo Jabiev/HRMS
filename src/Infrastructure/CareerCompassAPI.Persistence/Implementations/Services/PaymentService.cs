@@ -2,6 +2,7 @@
 using CareerCompassAPI.Application.Abstraction.Repositories.IPaymentRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Payment_DTOs;
+using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
@@ -45,7 +46,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _paymentWriteRepository.SaveChangesAsync();
         }
 
-        public async Task<List<PaymentsGetDto>> GetPaymentsByAppUserId(string appUserId)
+        public async Task<PaginatedResponse<PaymentsGetDto>> GetPaymentsByAppUserId(string appUserId, int currentPage = 1, int pageSize = 10)
         {
             if (appUserId is null)
             {
@@ -53,20 +54,22 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
 
             AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == appUserId);
-            var paymentsQuery = _paymentReadRepository.GetAllByExpression(
-                                    p => p.AppUser == user,
-                                    take: 50,
-                                    skip: 0
-                                 );
+            var paymentsQuery = _context.Payments
+                                         .Where(p => p.AppUser.Id == appUserId); 
+            int totalCount = await paymentsQuery.CountAsync();
+            var paginatedPayments = await paymentsQuery
+                                        .Skip((currentPage - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToListAsync();
 
-            var payments = await paymentsQuery.ToListAsync();
-            List<PaymentsGetDto> dtoList = payments.Select(payment =>
-                    new PaymentsGetDto(
-                        payment.Amount,
-                        Enum.GetName(typeof(PaymentTypes), payment.Type),
-                        payment.DateCreated
-                    )).ToList();
-            return dtoList;
+            List<PaymentsGetDto> dtoList = paginatedPayments.Select(payment =>
+                new PaymentsGetDto(
+                    payment.Amount,
+                    Enum.GetName(typeof(PaymentTypes), payment.Type),
+                    payment.DateCreated)
+                ).ToList();
+
+            return new PaginatedResponse<PaymentsGetDto>(dtoList, totalCount);
         }
     }
 }
