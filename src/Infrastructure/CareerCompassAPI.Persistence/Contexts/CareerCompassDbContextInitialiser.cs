@@ -350,8 +350,6 @@ namespace CareerCompassAPI.Persistence.Contexts
             var marriott = await _context.Companies.FirstOrDefaultAsync(c => c.Name == "Marriott International");
             var socar = await _context.Companies.FirstOrDefaultAsync(c => c.Name == "SOCAR");
             var jpmorgan = await _context.Companies.FirstOrDefaultAsync(c => c.Name == "JPMorgan Chase");
-            Debug.Assert(google != null, "Google company is null");
-            Debug.Assert(jpmorgan != null, "JP Morgan company is null");
             List<Vacancy> vacancies = new List<Vacancy>
             {
                 new Vacancy
@@ -371,7 +369,6 @@ namespace CareerCompassAPI.Persistence.Contexts
                     ApplicationLimit = 50,
                     CurrentApplicationCount = 0
                 },
-
                 new Vacancy
                 {
                     JobTitle = "Software Engineer",
@@ -577,7 +574,10 @@ namespace CareerCompassAPI.Persistence.Contexts
             await _context.Vacancy.AddRangeAsync(vacancies);
             await _context.SaveChangesAsync();
         }
+        //public async Task SeedResumeStyles()
+        //{
 
+        ////}
         public async Task CompanySeedAsync()
         {
             if (!_context.CompanyDetails.Any())

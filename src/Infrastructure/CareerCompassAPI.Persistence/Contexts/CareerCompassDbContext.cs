@@ -29,6 +29,7 @@ namespace CareerCompassAPI.Persistence.Contexts
         public DbSet<JobLocation> JobLocations { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Vacancy> Vacancy { get; set; }
+        public DbSet<Resume> Resumes { get; set; }
         public DbSet<Domain.Entities.JobApplications> Applications { get; set; }
         public DbSet<EducationLevel> EducationLevels { get; set; }
         public DbSet<JobSeekerDetails> JobSeekerDetails { get; set; }

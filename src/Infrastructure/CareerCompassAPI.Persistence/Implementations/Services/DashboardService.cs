@@ -9,6 +9,7 @@ using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.ExperienceLevel_DTOs;
 using CareerCompassAPI.Application.DTOs.JobType_DTOs;
 using CareerCompassAPI.Application.DTOs.Location_DTOs;
+using CareerCompassAPI.Application.DTOs.Resume_DTOs;
 using CareerCompassAPI.Application.DTOs.Schedule_DTOs;
 using CareerCompassAPI.Application.DTOs.TeamMember_DTOs;
 using CareerCompassAPI.Domain.Concretes;
@@ -656,6 +657,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             ).ToList();
 
             return settings;
+        }
+
+        public async Task<List<ResumeGetDto>> GetAllResumes()
+        {
+            var resumeList = await _context.Resumes.ToListAsync();
+            if (resumeList.Count == 0)
+            {
+                throw new NotFoundException("Resumes do not exist");
+            }
+            List<ResumeGetDto> resumes = resumeList.Select(resume => new ResumeGetDto(resume.Id, resume.Name, resume.Price, resume.Description, resume.Structure)).ToList();    
+            return resumes;
         }
     }
 }

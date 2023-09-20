@@ -249,5 +249,11 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _dashboardService.GetAppSettingListAsync();
             return Ok(response);
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetResumes()
+        {
+            var response = await _dashboardService.GetAllResumes();
+            return Ok(response);    
+        }
     }
 }
