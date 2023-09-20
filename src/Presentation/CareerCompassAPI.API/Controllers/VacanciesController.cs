@@ -1,5 +1,6 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Vacancy_DTOs;
+using CareerCompassAPI.Domain.Concretes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,13 +33,14 @@ namespace CareerCompassAPI.API.Controllers
         [HttpGet("GetFilteredSearch")]
         [AllowAnonymous]
         public async Task<ActionResult<List<VacancyGetDetailsDto>>> GetFilteredSearch(
-          [FromQuery(Name = "job-title")] string? jobTitle,
-          [FromQuery(Name = "location-id")] Guid? locationId, [FromQuery] string sortOrder, [FromQuery] string? jobType, [FromQuery] decimal? minSalary,
-    [FromQuery]decimal? maxSalary)
+    [FromQuery(Name = "job-title")] string? jobTitle,
+    [FromQuery(Name = "location-id")] Guid? locationId, [FromQuery] string sortOrder, [FromQuery] string? jobType, [FromQuery] decimal? minSalary,
+[FromQuery] decimal? maxSalary)
         {
-            var vacancies = await _vacancyService.GetDetailsBySearch(jobTitle, locationId,sortOrder, jobType,minSalary,maxSalary);
+            var vacancies = await _vacancyService.GetDetailsBySearch(jobTitle, locationId, sortOrder, jobType, minSalary, maxSalary);
             return Ok(vacancies);
         }
+
 
         [HttpGet("[action]")]
         [AllowAnonymous]

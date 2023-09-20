@@ -5,6 +5,7 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositori
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Vacancy_DTOs;
+using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -140,9 +141,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 .ToListAsync();
             return _mapper.Map<List<VacancyGetDto>>(vacancies);
         }
-
         public async Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle, Guid? locationId, string sortOrder, string? jobType, decimal? minSalary,
-          decimal? maxSalary)
+           decimal? maxSalary)
         {
             IQueryable<Vacancy> query = _context.Vacancy
                 .Include(v => v.Company)
@@ -192,6 +192,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 v.CurrentApplicationCount
             )).ToList();
         }
+
 
         public async Task<List<VacancyGetByIdDto>> GetVacancyByRecruiterId(Guid id)
         {

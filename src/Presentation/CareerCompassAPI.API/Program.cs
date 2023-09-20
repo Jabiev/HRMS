@@ -96,7 +96,7 @@ using (var scope = app.Services.CreateScope())
     await instance.SeedJobSeekersAsync();
     await instance.SeedRecruitersAsync();
     await instance.SeedReviewsAsync();
-    //await instance.SeedVacanciesAsync();
+    await instance.SeedVacanciesAsync();
     await instance.UserSeedAsync();
 }
 if (app.Environment.IsDevelopment())
