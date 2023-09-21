@@ -126,6 +126,8 @@ RecurringJob.AddOrUpdate("delete-old-messages", () => app.Services.CreateScope()
 RecurringJob.AddOrUpdate("delete-old-notifications", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteOldNotifications(), "0 0 * * *");
 RecurringJob.AddOrUpdate("delete-declined-applications", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteDeclinedApplications(), "0 0 * * *");
 RecurringJob.AddOrUpdate("delete-declined-reviews", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteDeclinedReviews(), "0 0 * * *");
+RecurringJob.AddOrUpdate("delete-full-vacancies", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteFullVacancies(), "0 0 * * *");
+RecurringJob.AddOrUpdate("delete-old-vacancies", () => app.Services.CreateScope().ServiceProvider.GetRequiredService<IHangFireService>().DeleteOldVacancies(), "0 0 * * *");
 
 
 

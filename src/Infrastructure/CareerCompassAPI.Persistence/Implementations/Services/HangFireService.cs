@@ -72,6 +72,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteFullVacancies()
+        {
+            var daysSetting = await _context.Settings
+                .Where(s => s.SettingName == "DaysToDeleteFullVacancies")
+                .FirstOrDefaultAsync();
+            int daysToDeleteFullVacancies = daysSetting != null ? int.Parse(daysSetting.SettingValue) : 3;
+            var olderThan = DateTime.UtcNow.AddDays(-daysToDeleteFullVacancies);
+            var fullVacancies = await _context.Vacancy
+                .Where(v => v.ApplicationLimit == v.CurrentApplicationCount && v.DateCreated <= olderThan)
+                .ToListAsync(); 
+            _context.Vacancy.RemoveRange(fullVacancies);
+            await _context.SaveChangesAsync();  
+        }
 
         public async Task DeleteOldMessages()
         {
@@ -103,6 +116,23 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 _context.Notifications.RemoveRange(oldNotifications);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task DeleteOldVacancies()
+        {
+            var daysSetting = await _context.Settings
+                .Where(s => s.SettingName == "DaysToDeleteOldVacancies")
+                .FirstOrDefaultAsync();
+            int daysToDeleteOldVacancies = daysSetting != null ? int.Parse(daysSetting.SettingValue) : 30;
+            var cutoffDate = DateTime.Now.AddDays(-daysToDeleteOldVacancies);
+            var oldVacancies = await _context.Vacancy
+                .Where(v => v.DateCreated <= cutoffDate && !v.IsDeleted)
+                .ToListAsync();
+            foreach (var vacancy in oldVacancies)
+            {
+                vacancy.IsDeleted = true;
+            }
+            await _context.SaveChangesAsync();
         }
 
     }

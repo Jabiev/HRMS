@@ -5,11 +5,9 @@ using CareerCompassAPI.Application.Abstraction.Repositories.IRecruiterRepositori
 using CareerCompassAPI.Application.Abstraction.Repositories.IVacancyRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Vacancy_DTOs;
-using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
-using MimeKit;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
 {
@@ -129,7 +127,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 throw new InvalidOperationException("Vacancy does not exist");
             }
             vacancy.IsDeleted = true;
-            _context.Vacancy.Update(vacancy);
             await _context.SaveChangesAsync();
         }
 
@@ -199,7 +196,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var list = await _context.Vacancy
                             .Include(v => v.Company)
                             .Include(v => v.JobLocation)
-                            .Where(v => v.Recruiter.Id == id && v.IsDeleted == false)
+                            .Where(v => v.Recruiter.Id == id)
                             .ToListAsync();
 
             var mappedList = list.Select(vacancy => new VacancyGetByIdDto(

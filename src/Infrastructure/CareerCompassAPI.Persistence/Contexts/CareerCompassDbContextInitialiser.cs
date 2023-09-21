@@ -1,12 +1,10 @@
-﻿using Bogus;
-using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository;
+﻿using CareerCompassAPI.Application.Abstraction.Repositories.ISubscriptionRepository;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Diagnostics;
 
 namespace CareerCompassAPI.Persistence.Contexts
 {
@@ -996,6 +994,8 @@ new Company
                 new AppSetting {SettingName = "DaysToDeleteOldNotifications", SettingValue ="3"},
                 new AppSetting {SettingName = "DaysToDeleteDeclinedApplications", SettingValue="7"},
                 new AppSetting {SettingName = "DaysToDeleteDeclinedReviews", SettingValue="3"},
+                new AppSetting {SettingName = "DaysToDeleteFullVacancies", SettingValue = "3"},
+                new AppSetting {SettingName = "DaysToDeleteOldVacancies", SettingValue ="30"},
              };
 
             foreach (var defaultSetting in defaultSettings)

@@ -7,5 +7,7 @@
         Task DeleteOldNotifications();
         Task DeleteDeclinedApplications();
         Task DeleteDeclinedReviews();
+        Task DeleteFullVacancies();
+        Task DeleteOldVacancies();
     }
 }
