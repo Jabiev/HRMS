@@ -1,4 +1,5 @@
-﻿using CareerCompassAPI.Application.DTOs.Recruiter_DTOs;
+﻿using CareerCompassAPI.Application.DTOs.FeatureAccess_DTO;
+using CareerCompassAPI.Application.DTOs.Recruiter_DTOs;
 using CareerCompassAPI.Domain.Entities;
 
 namespace CareerCompassAPI.Application.Abstraction.Services
@@ -6,6 +7,8 @@ namespace CareerCompassAPI.Application.Abstraction.Services
     public interface IRecruiterService
     {
         Task<RecruiterGetDto> GetRecruiterByUserId(Guid userId);
-        bool IsSubscriptionActive(Recruiter recruiter);
+        Task<Subscriptions> GetSubscriptionForRecruiter(Guid appUserId);
+        Task<FeatureAccessGetDto> GetAvailableFeaturesForRecruiter(Guid recruiterId);
+
     }
 }
