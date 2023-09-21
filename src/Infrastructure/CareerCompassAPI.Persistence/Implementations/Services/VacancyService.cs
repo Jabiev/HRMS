@@ -196,7 +196,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var list = await _context.Vacancy
                             .Include(v => v.Company)
                             .Include(v => v.JobLocation)
-                            .Where(v => v.Recruiter.Id == id)
+                            .Where(v => v.Recruiter.Id == id && v.IsDeleted == false)
                             .ToListAsync();
 
             var mappedList = list.Select(vacancy => new VacancyGetByIdDto(

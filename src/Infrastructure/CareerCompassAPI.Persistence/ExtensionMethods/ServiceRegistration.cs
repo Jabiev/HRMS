@@ -43,6 +43,9 @@ using CareerCompassAPI.Persistence.Implementations.Repositories.FeedbackReposito
 using CareerCompassAPI.Application.Abstraction.Repositories.ITeamRepositories;
 using CareerCompassAPI.Persistence.Implementations.Repositories.TeamRepositories;
 using CareerCompassAPI.Services;
+using CareerCompassAPI.Application.Abstraction.Repositories.IEventRepositories;
+using CareerCompassAPI.Persistence.Implementations.Repositories.EventRepositories;
+using EventService = CareerCompassAPI.Persistence.Implementations.Services.EventService;
 
 namespace CareerCompassAPI.Persistence.ExtensionMethods
 {
@@ -59,6 +62,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IRecruiterService, RecruiterService>();
+            services.AddScoped<IEventService, EventService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IExperienceLevelService, ExperienceLevelService>();
@@ -114,6 +118,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IFeedbackReadRepository, FeedbackReadRepository>();
             services.AddScoped<IFileReadRepository, FileReadRepository>();
             services.AddScoped<ITeamReadRepository, TeamReadRepository>();
+            services.AddScoped<IEventReadRepository, EventReadRepository>();
             services.AddScoped<IJobApplicationReadRepository, JobApplicationReadRepository>();
             services.AddScoped<IMessageReadRepository, MessageReadRepository>();
             services.AddScoped<IReviewReadRepository, ReviewReadRepository>();
@@ -134,6 +139,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IPaymentWriteRepository, PaymentWriteRepository>();
             services.AddScoped<IFeedbackWriteRepository, FeedbackWriteRepository>();
             services.AddScoped<IFileWriteRepository, FileWriteRepository>();
+            services.AddScoped<IEventWriteRepository, EventWriteRepository>();
             services.AddScoped<ITeamWriteRepository, TeamWriteRepository>();
             services.AddScoped<IJobApplicationWriteRepository, JobApplicationWriteRepository>();
             services.AddScoped<IMessageWriteRepository, MessageWriteRepository>();

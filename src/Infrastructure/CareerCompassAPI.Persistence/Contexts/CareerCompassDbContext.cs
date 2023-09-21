@@ -37,6 +37,7 @@ namespace CareerCompassAPI.Persistence.Contexts
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Follower> Followers { get; set; }
         public DbSet<TeamMember> Members { get; set; }
+        public DbSet<Event> Events { get; set; }
         public DbSet<TestimonialFeedback> TestimonialFeedbacks { get; set; }
         public DbSet<Domain.Entities.Message> Messages { get; set; }
         public DbSet<Domain.Entities.File> Files { get; set; }

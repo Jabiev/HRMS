@@ -140,6 +140,41 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.ToTable("EducationLevels");
                 });
 
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Event", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Events");
+                });
+
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.ExperienceLevel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1114,6 +1149,15 @@ namespace CareerCompassAPI.Persistence.Migrations
                     b.Navigation("Industry");
 
                     b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Event", b =>
+                {
+                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.File", b =>
