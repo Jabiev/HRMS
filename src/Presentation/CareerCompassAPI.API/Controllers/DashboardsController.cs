@@ -22,11 +22,12 @@ namespace CareerCompassAPI.API.Controllers
             _dashboardService = dashboardService;
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] string? searchQuery)
+        public async Task<IActionResult> GetAllUsers([FromQuery] string? searchQuery, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var response = await _dashboardService.GetAllAsync(searchQuery);
+            var response = await _dashboardService.GetAllAsync(searchQuery, pageNumber, pageSize);
             return Ok(response);
         }
+
         [HttpDelete("[action]")]
         public async Task<IActionResult> RemoveUser([FromQuery] string appUserId)
         {

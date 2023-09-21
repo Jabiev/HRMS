@@ -187,7 +187,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _teamWriteRepository.SaveChangesAsync();
             return newMember.Id;
         }
-        public async Task<List<AppUserGetDto>> GetAllAsync(string searchQuery = "")
+        public async Task<PaginatedResponse<AppUserGetDto>> GetAllAsync(string searchQuery = "", int pageNumber = 1, int pageSize = 10)
         {
             var appUsers = new List<AppUserGetDto>();
             IQueryable<AppUser> queryableUsers = _userManager.Users;
@@ -197,12 +197,15 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 queryableUsers = queryableUsers.Where(
                     u => u.Id.Contains(searchQuery) ||
                     u.UserName.ToLower().Contains(searchQuery.ToLower()) ||
-                         u.Email.ToLower().Contains(searchQuery.ToLower()) ||
-                         u.PhoneNumber.ToLower().Contains(searchQuery.ToLower())
+                    u.Email.ToLower().Contains(searchQuery.ToLower()) ||
+                    u.PhoneNumber.ToLower().Contains(searchQuery.ToLower())
                 );
             }
-
-            var users = await queryableUsers.ToListAsync();
+            int totalItems = queryableUsers.Count();
+            var users = await queryableUsers
+                                .Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
 
             foreach (var user in users)
             {
@@ -215,8 +218,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                     roles.FirstOrDefault() ?? "No Role Assigned"
                 ));
             }
-            return appUsers;
+
+            return new PaginatedResponse<AppUserGetDto>(appUsers, totalItems);
         }
+
         public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders, string? searchQuery)
         {
 
