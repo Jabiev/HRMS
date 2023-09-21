@@ -3,6 +3,7 @@ using CareerCompassAPI.Application.DTOs.Event_DTOs;
 using CareerCompassAPI.Domain.Entities;
 using CareerCompassAPI.Persistence.Contexts;
 using CareerCompassAPI.Persistence.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services
@@ -41,6 +42,20 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _context.Events.Add(newEvent);
             await _context.SaveChangesAsync();
             return newEvent.Id;
+        }
+
+        public async Task<List<EventGetDto>> GetEventsByUserId(string appUserId)
+        {
+            if (appUserId is null)
+            {
+                throw new ArgumentNullException("Argument passed in may not contain null values");
+            }
+            var events = await _context.Events
+             .Where(e => e.User.Id == appUserId)
+             .Select(e => new EventGetDto(e.Id, e.Title, e.Start, e.End))
+             .ToListAsync();
+
+            return events;
         }
     }
 }

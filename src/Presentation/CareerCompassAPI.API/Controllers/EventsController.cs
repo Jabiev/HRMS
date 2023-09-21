@@ -20,5 +20,11 @@ namespace CareerCompassAPI.API.Controllers
             var eventId = await _eventService.Create(eventCreateDto);
             return Ok(eventId);
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetEvents([FromQuery] string userId)
+        {
+            var response = await _eventService.GetEventsByUserId(userId);
+            return Ok(response);
+        }
     }
 }
