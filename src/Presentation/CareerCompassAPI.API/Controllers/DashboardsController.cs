@@ -256,5 +256,11 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _dashboardService.GetAllResumes();
             return Ok(response);    
         }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveResume([FromQuery] Guid resumeId)
+        {
+            await _dashboardService.RemoveResume(resumeId);
+            return Ok();
+        }
     }
 }

@@ -51,5 +51,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<List<TeamMembersGetDto>> GetAllTeamMembers();
         Task<List<AppSettingGetDto>> GetAppSettingListAsync();
         Task<List<ResumeGetDto>> GetAllResumes();
+        Task RemoveResume(Guid resumeId);
     }
 }

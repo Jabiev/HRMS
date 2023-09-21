@@ -674,5 +674,16 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             List<ResumeGetDto> resumes = resumeList.Select(resume => new ResumeGetDto(resume.Id, resume.Name, resume.Price, resume.Description, resume.Structure)).ToList();    
             return resumes;
         }
+
+        public async Task RemoveResume(Guid resumeId)
+        {
+            if (resumeId == Guid.Empty)
+            {
+                throw new ArgumentNullException("Argument passed in may not contain null values");
+            }
+            Resume resume = await _context.Resumes.FirstOrDefaultAsync(r => r.Id == resumeId);
+            _context.Remove(resume);
+            _context.SaveChangesAsync();
+        }
     }
 }
