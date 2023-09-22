@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CareerCompassAPI.Application.Abstraction.Repositories.IPaymentRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
+using CareerCompassAPI.Application.DTOs.Dashboard_DTOs;
 using CareerCompassAPI.Application.DTOs.Payment_DTOs;
 using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Entities;
@@ -70,6 +71,25 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 ).ToList();
 
             return new PaginatedResponse<PaymentsGetDto>(dtoList, totalCount);
+        }
+
+        public async Task<List<PaymentStatDto>> GetPaymentsStatsAsync(DateTime startDate, DateTime endDate)
+        {
+            var query = _context.Payments.AsQueryable();
+
+            query = query.Where(p => p.DateCreated >= startDate && p.DateCreated <= endDate);
+
+            var payments = await query.ToListAsync();
+
+            return payments
+                .GroupBy(p => p.DateCreated.Date)
+                .Select(g => new PaymentStatDto(
+                    Date: g.Key,
+                    subscriptionCount: g.Count(p => p.Type == PaymentTypes.Subscription),
+                    resumeCount: g.Count(p => p.Type == PaymentTypes.Resume)
+                ))
+                .OrderBy(x => x.Date)
+                .ToList();
         }
     }
 }

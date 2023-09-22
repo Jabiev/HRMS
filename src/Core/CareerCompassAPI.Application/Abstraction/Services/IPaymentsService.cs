@@ -7,5 +7,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
     {
         Task CreateAsync(PaymentCreateDto paymentCreateDto);
         Task<PaginatedResponse<PaymentsGetDto>> GetPaymentsByAppUserId(string appUserId, int currentPage, int pageSize);
+        Task<List<PaymentStatDto>> GetPaymentsStatsAsync(DateTime startDate, DateTime endDate);
     }
 }

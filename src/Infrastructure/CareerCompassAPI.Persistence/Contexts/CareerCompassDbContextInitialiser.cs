@@ -5,6 +5,7 @@ using CareerCompassAPI.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace CareerCompassAPI.Persistence.Contexts
 {
@@ -16,13 +17,15 @@ namespace CareerCompassAPI.Persistence.Contexts
         private readonly IConfiguration _configuration;
         private readonly ISubscriptionReadRepository _subscriptionReadRepository;
         private readonly ISubscriptionWriteRepository _subscriptionWriteRepository;
+        private readonly ILogger<CareerCompassDbContextInitialiser> _logger;
 
         public CareerCompassDbContextInitialiser(CareerCompassDbContext context,
                                                  UserManager<AppUser> userManager,
                                                  RoleManager<IdentityRole> roleManager,
                                                  IConfiguration configuration,
                                                  ISubscriptionReadRepository subscriptionReadRepository,
-                                                 ISubscriptionWriteRepository subscriptionWriteRepository)
+                                                 ISubscriptionWriteRepository subscriptionWriteRepository,
+                                                 ILogger<CareerCompassDbContextInitialiser> logger)
         {
             _context = context;
             _userManager = userManager;
@@ -30,6 +33,7 @@ namespace CareerCompassAPI.Persistence.Contexts
             _configuration = configuration;
             _subscriptionReadRepository = subscriptionReadRepository;
             _subscriptionWriteRepository = subscriptionWriteRepository;
+            _logger = logger;
         }
         public async Task InitialiseAsync()
         {
@@ -236,7 +240,7 @@ namespace CareerCompassAPI.Persistence.Contexts
         {
             Random rand = new Random();
             List<JobSeeker> jobSeekers = new List<JobSeeker>();
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 550; i++)
             {
                 string email = $"user{i}@example.com";
                 var user = new AppUser
@@ -280,7 +284,7 @@ namespace CareerCompassAPI.Persistence.Contexts
 
             var companies = await _context.Companies.ToListAsync();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 200; i++)
             {
                 string email = $"recruiter{i}@example.com";
                 var user = new AppUser
@@ -572,10 +576,6 @@ namespace CareerCompassAPI.Persistence.Contexts
             await _context.Vacancy.AddRangeAsync(vacancies);
             await _context.SaveChangesAsync();
         }
-        //public async Task SeedResumeStyles()
-        //{
-
-        ////}
         public async Task CompanySeedAsync()
         {
             if (!_context.CompanyDetails.Any())
@@ -1012,6 +1012,74 @@ new Company
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task PaymentsSeedAsync()
+        {
+            try
+            {
+                _logger.LogInformation("Starting PaymentsSeedAsync");
+
+                var random = new Random();
+                var paymentTypes = Enum.GetValues(typeof(PaymentTypes)).Cast<PaymentTypes>().ToList();
+
+                _logger.LogInformation("Fetching app users...");
+                var appUsers = await _context.Users.ToListAsync();
+
+                if (appUsers == null || appUsers.Count == 0)
+                {
+                    _logger.LogWarning("No app users found. Exiting PaymentsSeedAsync.");
+                    return;
+                }
+
+                _logger.LogInformation($"Fetched {appUsers.Count} app users");
+
+                var payments = new List<Payments>();
+
+                foreach (var appUser in appUsers)
+                {
+                    _logger.LogInformation($"Creating payments for user: {appUser.Id}");
+
+                    for (int i = 0; i < random.Next(1, 6); i++)
+                    {
+                        var paymentType = paymentTypes[random.Next(paymentTypes.Count)];
+                        _logger.LogInformation($"Selected payment type: {paymentType}");
+
+                        var amount = paymentType switch
+                        {
+                            PaymentTypes.Resume => 14.99M,
+                            PaymentTypes.Subscription => random.Next(0, 2) == 0 ? 149M : 349M,
+                            _ => throw new InvalidOperationException("Unknown payment type"),
+                        };
+
+                        _logger.LogInformation($"Generated payment amount: {amount}");
+
+                        payments.Add(new Payments
+                        {
+                            AppUser = appUser,
+                            Type = paymentType,
+                            Amount = amount
+                        });
+
+                        _logger.LogInformation($"Added payment for user {appUser.Id} with type {paymentType} and amount {amount}");
+                    }
+                }
+
+                _logger.LogInformation("Adding generated payments to context...");
+                await _context.Payments.AddRangeAsync(payments);
+
+                _logger.LogInformation("Saving changes...");
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Successfully completed PaymentsSeedAsync");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while seeding Payments: {ex}");
+            }
+        }
+
+
+
 
     }
 }

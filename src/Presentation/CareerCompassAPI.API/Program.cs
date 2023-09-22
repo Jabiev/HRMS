@@ -98,6 +98,7 @@ using (var scope = app.Services.CreateScope())
     await instance.SeedReviewsAsync();
     await instance.SeedVacanciesAsync();
     await instance.UserSeedAsync();
+    //await instance.PaymentsSeedAsync();
 }
 if (app.Environment.IsDevelopment())
 {

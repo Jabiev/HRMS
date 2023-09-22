@@ -35,6 +35,5 @@ namespace CareerCompassAPI.API.Controllers
             var resume = await _resumeService.GetResumeById(id);
             return Ok(resume);
         }
-
     }
 }

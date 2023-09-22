@@ -42,7 +42,7 @@ namespace CareerCompassAPI.API.Controllers
         }
 
         [HttpGet("[action]")]
-        [AllowAnonymous]
+ 
         public async Task<IActionResult> GetAllCompanies(
     [FromQuery] string? sortOrder,
     [FromQuery] string? searchQuery,
@@ -154,8 +154,8 @@ namespace CareerCompassAPI.API.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateJobType(JobTypeCreateDto jobTypeCreateDto)
         {
-            await _dashboardService.CreateJobType(jobTypeCreateDto);
-            return Ok();
+            var responseId = await _dashboardService.CreateJobType(jobTypeCreateDto);
+            return Ok(responseId);
         }
         [HttpDelete("[action]")]
         public async Task<IActionResult> RemoveJobType([FromQuery] Guid jobTypeId)

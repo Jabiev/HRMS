@@ -4,6 +4,7 @@ using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Payment_DTOs;
 using CareerCompassAPI.Domain.Enums;
 using CareerCompassAPI.Domain.Stripe;
+using CareerCompassAPI.Persistence.Implementations.Services;
 using CareerCompassAPI.SignalR.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -144,5 +145,32 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _paymentsService.GetPaymentsByAppUserId(userId, currentPage, pageSize);
             return Ok(response);
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetPaymentStats([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            if (startDate == DateTime.MinValue || endDate == DateTime.MinValue)
+            {
+                return BadRequest("Invalid date range provided.");
+            }
+
+            if (endDate < startDate)
+            {
+                return BadRequest("End date should be greater than or equal to start date.");
+            }
+
+
+            List<PaymentStatDto> paymentStats;
+            try
+            {
+                paymentStats = await _paymentsService.GetPaymentsStatsAsync(startDate, endDate);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+
+            return Ok(paymentStats);
+        }
+
     }
 }
