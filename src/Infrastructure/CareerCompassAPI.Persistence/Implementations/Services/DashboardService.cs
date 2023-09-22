@@ -222,26 +222,63 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return new PaginatedResponse<AppUserGetDto>(appUsers, totalItems);
         }
 
-        public async Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders, string? searchQuery)
+        public async Task<PaginatedResponse<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders, string? searchQuery, int page = 1, int pageSize = 10)
         {
-
-            var companiesQuery = await _context.Companies
+            var companiesQuery = _context.Companies
                 .Include(c => c.Followers)
                 .Include(c => c.Reviews)
                 .Include(c => c.Details)
                     .ThenInclude(cd => cd.Location)
-                 .Where(c => c.IsDeleted == false)
-                .ToListAsync();
+                .Where(c => c.IsDeleted == false);
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 companiesQuery = companiesQuery.Where(c =>
                     c.Name.ToLower().Contains(searchQuery.ToLower()) ||
                     c.Details.Location.Location.ToLower().Contains(searchQuery.ToLower())
-                ).ToList();
+                );
             }
 
-            List<CompaniesListGetDto> sortedCompanies = companiesQuery
+            int totalItems = await companiesQuery.CountAsync();
+
+            if (!string.IsNullOrEmpty(sortOrders))
+            {
+                var sorts = sortOrders.Split('|');
+                foreach (var sort in sorts)
+                {
+                    var parts = sort.Split('_');
+                    if (parts.Length != 2)
+                    {
+                        continue;
+                    }
+
+                    var field = parts[0].ToLower();
+                    var direction = parts[1].ToLower();
+
+                    switch (field)
+                    {
+                        case "followers":
+                            companiesQuery = direction == "asc" ?
+                                companiesQuery.OrderBy(c => c.Followers.Count) :
+                                companiesQuery.OrderByDescending(c => c.Followers.Count);
+                            break;
+                        case "reviews":
+                            companiesQuery = direction == "asc" ?
+                                companiesQuery.OrderBy(c => c.Reviews.Count) :
+                                companiesQuery.OrderByDescending(c => c.Reviews.Count);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            var paginatedCompanies = await companiesQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            List<CompaniesListGetDto> sortedCompanies = paginatedCompanies
                 .Select(c => new CompaniesListGetDto(
                     c.Id,
                     c.Name,
@@ -251,40 +288,9 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 ))
                 .ToList();
 
-            if (string.IsNullOrEmpty(sortOrders))
-            {
-                return sortedCompanies;
-            }
-            var sorts = sortOrders.Split('|');
-            foreach (var sort in sorts)
-            {
-                var parts = sort.Split('_');
-                if (parts.Length != 2)
-                {
-                    continue;
-                }
-
-                var field = parts[0].ToLower();
-                var direction = parts[1].ToLower();
-
-                switch (field)
-                {
-                    case "followers":
-                        sortedCompanies = direction == "asc" ?
-                            sortedCompanies.OrderBy(c => c.followersCount).ToList() :
-                            sortedCompanies.OrderByDescending(c => c.followersCount).ToList();
-                        break;
-                    case "reviews":
-                        sortedCompanies = direction == "asc" ?
-                            sortedCompanies.OrderBy(c => c.reviewsCount).ToList() :
-                            sortedCompanies.OrderByDescending(c => c.reviewsCount).ToList();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return sortedCompanies;
+            return new PaginatedResponse<CompaniesListGetDto>(sortedCompanies, totalItems);
         }
+
 
         public async Task<List<EducationLevelsGetDto>> GetAllEducationLevelsAsync()
         {

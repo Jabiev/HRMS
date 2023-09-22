@@ -18,7 +18,7 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<PaginatedResponse<AppUserGetDto>> GetAllAsync(string searchQuery, int pageNumber, int pageSize);
         Task RemoveUser(string appUserId);
         Task ChangeUserRole(ChangeUserRoleDto changeUserRoleDto);
-        Task<List<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrder, string? searchQuery);
+        Task<PaginatedResponse<CompaniesListGetDto>> GetAllCompaniesAsync(string? sortOrders, string? searchQuery, int page, int pageSize);
         Task RemoveCompany(Guid companyId);
         Task<List<PendingReviewsDto>> GetAllPendingReviews();
         Task UpdateReviewStatus(Guid reviewId, ReviewStatus newStatus);

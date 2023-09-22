@@ -40,13 +40,19 @@ namespace CareerCompassAPI.API.Controllers
             await _dashboardService.ChangeUserRole(changeUserRoleDto);
             return Ok(new { Message = "User role updated successfully" });
         }
+
         [HttpGet("[action]")]
-     
-        public async Task<IActionResult> GetAllCompanies([FromQuery] string? sortOrder, [FromQuery] string? searchQuery)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllCompanies(
+    [FromQuery] string? sortOrder,
+    [FromQuery] string? searchQuery,
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10)
         {
-            var response = await _dashboardService.GetAllCompaniesAsync(sortOrder, searchQuery);
+            var response = await _dashboardService.GetAllCompaniesAsync(sortOrder, searchQuery, page, pageSize);
             return Ok(response);
         }
+
         [HttpDelete("[action]")]
         public async Task<IActionResult> RemoveCompany([FromQuery] Guid companyId)
         {
@@ -60,7 +66,7 @@ namespace CareerCompassAPI.API.Controllers
             return Ok(response);
         }
         [HttpPatch("[action]")]
-      
+
         public async Task<IActionResult> UpdateReviewStatus([FromQuery] Guid reviewId, [FromBody] int newStatus)
         {
             if (Enum.IsDefined(typeof(ReviewStatus), newStatus))
@@ -254,7 +260,7 @@ namespace CareerCompassAPI.API.Controllers
         public async Task<IActionResult> GetResumes()
         {
             var response = await _dashboardService.GetAllResumes();
-            return Ok(response);    
+            return Ok(response);
         }
         [HttpDelete("[action]")]
         public async Task<IActionResult> RemoveResume([FromQuery] Guid resumeId)
