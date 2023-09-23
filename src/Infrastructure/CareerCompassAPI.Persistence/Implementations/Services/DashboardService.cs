@@ -472,7 +472,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
         public async Task<List<TeamMembersGetDto>> GetAllTeamMembers()
         {
-            var teamMembers = await _context.Members.Where(m => m.IsDeleted == false).ToListAsync();
+            var teamMembers = await _context.Members
+                .Where(m => m.IsDeleted == false)
+                .ToListAsync();
+
             if (teamMembers.Count == 0)
             {
                 throw new NotFoundException("Team Members do not exist");
@@ -689,6 +692,17 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             Resume resume = await _context.Resumes.FirstOrDefaultAsync(r => r.Id == resumeId);
             _context.Remove(resume);
+            _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveTeamMember(Guid memberId)
+        {
+            if (memberId == Guid.Empty)
+            {
+                throw new ArgumentNullException("Empty values may not be passed in as an argument");
+            }
+            TeamMember member = await _context.Members.FirstOrDefaultAsync(tm => tm.Id == memberId);
+            member.IsDeleted = true;
             _context.SaveChangesAsync();
         }
     }

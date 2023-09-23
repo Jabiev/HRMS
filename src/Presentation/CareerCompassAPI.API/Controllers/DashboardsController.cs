@@ -268,5 +268,11 @@ namespace CareerCompassAPI.API.Controllers
             await _dashboardService.RemoveResume(resumeId);
             return Ok();
         }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> RemoveMember([FromQuery] Guid memberId)
+        {
+            await _dashboardService.RemoveTeamMember(memberId);
+            return Ok();
+        }
     }
 }

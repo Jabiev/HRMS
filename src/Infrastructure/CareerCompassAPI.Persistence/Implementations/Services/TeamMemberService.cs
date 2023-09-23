@@ -1,6 +1,8 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Repositories.ITeamRepositories;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.TeamMember_DTOs;
+using CareerCompassAPI.Persistence.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace CareerCompassAPI.Services
 {
@@ -18,28 +20,33 @@ namespace CareerCompassAPI.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<TeamMembersGetDto>> GetMembers()
+        public async Task<List<TeamMembersGetDto>> GetMembers()
         {
-            var membersFromRepo = _teamReadRepository.GetAll();
+            var membersFromRepo = await _teamReadRepository.GetAllByExpression(
+                m => m.IsDeleted == false,
+                9,  
+                0   
+            ).ToListAsync();
 
-            List<TeamMembersGetDto> teamMembers = new List<TeamMembersGetDto>();
-
-            foreach (var member in membersFromRepo)
+            if (!membersFromRepo.Any())
             {
-                var dto = new TeamMembersGetDto(
+                throw new NotFoundException("Team Members do not exist");
+            }
+
+            List<TeamMembersGetDto> teamMembers = membersFromRepo.Select(member =>
+                new TeamMembersGetDto(
                     member.Id,
                     member.FirstName,
                     member.LastName,
                     member.Position,
                     member.Description,
                     member.ImageUrl
-                );
+                )
+            ).ToList();
 
-                teamMembers.Add(dto);
-            }
-
-            return Task.FromResult(teamMembers);
+            return teamMembers;
         }
+
 
     }
 }

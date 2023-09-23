@@ -83,6 +83,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IFollowerService, FollowerService>();
             services.AddScoped<ITeamMemberService, TeamMemberService>();
+            services.AddScoped<IContactService, ContactService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IResumeService, ResumeService>();
             services.AddScoped<IReviewService, Implementations.Services.ReviewService>();

@@ -996,6 +996,7 @@ new Company
                 new AppSetting {SettingName = "DaysToDeleteDeclinedReviews", SettingValue="3"},
                 new AppSetting {SettingName = "DaysToDeleteFullVacancies", SettingValue = "3"},
                 new AppSetting {SettingName = "DaysToDeleteOldVacancies", SettingValue ="30"},
+                new AppSetting {SettingName = "ContactMainEmail", SettingValue ="infoccompass@gmail.com"},
              };
 
             foreach (var defaultSetting in defaultSettings)
