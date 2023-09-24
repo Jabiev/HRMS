@@ -89,7 +89,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
             var applications = await _jobApplicationReadRepository
                 .GetAllByExpression(
-                    ja => ja.Vacancy.Recruiter.Id == recruiter.Id,
+                    ja => ja.Vacancy.Recruiter.Id == recruiter.Id && ja.Status == ApplicationStatus.Pending,
                     50,
                     0
                 )
@@ -102,7 +102,14 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             foreach (var application in applications)
             {
                 var jobSeekerAppUserId = application.JobSeeker.AppUserId;
-                var file = await _context.Files.FirstOrDefaultAsync(f => f.User.Id == jobSeekerAppUserId);
+
+                var lowerBound = application.DateCreated.AddMilliseconds(-50);
+                var upperBound = application.DateCreated.AddMilliseconds(50);
+
+                var file = await _context.Files
+                    .Where(f => f.User.Id == jobSeekerAppUserId && f.DateCreated >= lowerBound && f.DateCreated <= upperBound)
+                    .OrderByDescending(f => f.DateCreated)
+                    .FirstOrDefaultAsync();
 
                 dtos.Add(new ApplicantsGetDto(
                     application.Id,
@@ -113,6 +120,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                     application.Status
                 ));
             }
+
+
             return dtos;
         }
 
