@@ -80,19 +80,18 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
         public async Task<List<CompanyDetailsGetDto>> GetCompanyBySearchAsync(string companyName)
         {
-            IQueryable<Company> query = _context.Companies
+            if (string.IsNullOrEmpty(companyName))
+            {
+                return new List<CompanyDetailsGetDto>();
+            }
+            var lowerCaseCompanyName = companyName.ToLower();
+            var query = _context.Companies
+                .Where(c => !c.IsDeleted && c.Name.ToLower().Contains(lowerCaseCompanyName))
                 .Include(c => c.Details)
                     .ThenInclude(d => d.Location)
                 .Include(c => c.Details)
                     .ThenInclude(d => d.Industry)
-                .Include(c => c.Reviews)
-                .Where(c => c.IsDeleted == false);
-
-
-            if (!string.IsNullOrEmpty(companyName))
-            {
-                query = query.Where(c => c.Name.ToLower().Contains(companyName.ToLower()));
-            }
+                .Take(10);
 
             var companies = await query.ToListAsync();
 
@@ -109,6 +108,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                  c.LogoUrl
                  )).ToList();
         }
+
 
 
         public async Task<CompanyGetDto> GetCompanyDetailsById(Guid companyId)
@@ -132,28 +132,37 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
         public async Task<List<HighestRatedCompanyGetDto>> GetHighestRated()
         {
-            var companiesWithReviews = await _companyReadRepository.GetAll(isTracking: false, includes: new[] { "Reviews" })
-                                    .Select(c => new
-                                     {
-                                        c.Id,
-                                        c.Name,
-                                        c.LogoUrl,
-                                        Reviews = c.Reviews.Select(r => r.Rating)
-                                                       })
-                                                       .ToListAsync();
-            var highestRatedCompanies = companiesWithReviews.Select(c => new HighestRatedCompanyGetDto(
-                                       c.Id,  
-                                       c.Name,
-                                       c.LogoUrl,
-                                       c.Reviews.Count(),
-                                       c.Reviews.Any() ? c.Reviews.Average() : 0
-                                                            ))
-                                                        .OrderByDescending(dto => dto.reviewsCount)
-                                      .ThenByDescending(dto => dto.rating)
-                                      .Take(9)
-                                      .ToList();
+            //var companiesWithReviews = await _companyReadRepository.GetAll(isTracking: false, includes: new[] { "Reviews" })
+            //                        .Select(c => new
+            //                         {
+            //                            c.Id,
+            //                            c.Name,
+            //                            c.LogoUrl,
+            //                            Reviews = c.Reviews.Select(r => r.Rating)
+            //                                           })
+            //                                           .ToListAsync();
+            var highestRatedCompanies = await _context.Companies 
+        .Select(c => new
+        {
+            c.Id,
+            c.Name,
+            c.LogoUrl,
+            ReviewCount = c.Reviews.Count(),
+            AverageRating = c.Reviews.Average(r => r.Rating)
+        })
+        .OrderByDescending(dto => dto.ReviewCount)
+        .ThenByDescending(dto => dto.AverageRating)
+        .Take(9)
+        .ToListAsync();
+            var result = highestRatedCompanies.Select(c => new HighestRatedCompanyGetDto(
+                c.Id,
+                c.Name,
+                c.LogoUrl,
+                c.ReviewCount,
+                c.AverageRating
+            )).ToList();
 
-                return highestRatedCompanies;
+            return result;
         }
         public async Task Remove(Guid companyId)
         {
