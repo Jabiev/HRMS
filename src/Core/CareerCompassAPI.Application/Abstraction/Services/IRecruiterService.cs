@@ -9,6 +9,7 @@ namespace CareerCompassAPI.Application.Abstraction.Services
         Task<RecruiterGetDto> GetRecruiterByUserId(Guid userId);
         Task<Subscriptions> GetSubscriptionForRecruiter(Guid appUserId);
         Task<FeatureAccessGetDto> GetAvailableFeaturesForRecruiter(Guid recruiterId);
+        Task<GetRecruiterNameDto> GetRecruiterName(string appUserId);
 
     }
 }

@@ -15,8 +15,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 builder.Services.AddControllers();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
@@ -28,6 +26,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
     identityOption.User.RequireUniqueEmail = true;
     identityOption.Password.RequiredLength = 8;
     identityOption.Lockout.MaxFailedAccessAttempts = 3;
+    //identityOption.SignIn.RequireConfirmedEmail = true;
 })
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<CareerCompassDbContext>();
@@ -40,6 +39,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
 }).AddJwtBearer(o =>
 {
     o.TokenValidationParameters = new TokenValidationParameters
@@ -111,7 +111,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
-//app.UseCustomExceptionHandler();
+app.UseCustomExceptionHandler();
 app.MapControllers();
 app.UseEndpoints(endpoints =>
 {

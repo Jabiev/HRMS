@@ -55,6 +55,25 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var subscription = await GetSubscriptionForRecruiter(appUserId);
             return new FeatureAccessGetDto(subscription.isPlannerAvailable, subscription.isVideoAvailable, subscription.isChatAvailable);
         }
+        public async Task<GetRecruiterNameDto> GetRecruiterName(string appUserId)
+        {
+            if (string.IsNullOrEmpty(appUserId))
+            {
+                throw new ArgumentNullException("Parameters passed in may not contain null or empty values");
+            }
+
+            var recruiter = await _context.Recruiters
+                .SingleOrDefaultAsync(r => r.AppUserId == appUserId);
+
+            if (recruiter == null)
+            {
+                return null;
+            }
+
+            GetRecruiterNameDto callerRecruiter = new(recruiter.FirstName, recruiter.LastName);
+            return callerRecruiter;
+        }
+
 
     }
 }

@@ -25,5 +25,11 @@ namespace CareerCompassAPI.API.Controllers
             var featureAccess = await _recruiterService.GetAvailableFeaturesForRecruiter(appUserId);
             return Ok(featureAccess);
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetRecruiterName([FromQuery] string appUserId)
+        {
+            var response = await _recruiterService.GetRecruiterName(appUserId);
+            return Ok(response);
+        }
     }
 }
