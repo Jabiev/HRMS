@@ -6,5 +6,6 @@ namespace CareerCompassAPI.Application.Abstraction.Services
     {
         Task<Guid> Create(EventCreateDto eventCreateDto);
         Task<List<EventGetDto>> GetEventsByUserId(string appUserId);
+        Task UpdateEvent(EventUpdateDto eventUpdateDto);    
     }
 }

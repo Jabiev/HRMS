@@ -38,6 +38,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 Title = eventCreateDto.title,
                 Start = eventCreateDto.startDate,
                 End = eventCreateDto.endDate,
+                Importance = eventCreateDto.importance
             };
             _context.Events.Add(newEvent);
             await _context.SaveChangesAsync();
@@ -52,10 +53,20 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             }
             var events = await _context.Events
              .Where(e => e.User.Id == appUserId)
-             .Select(e => new EventGetDto(e.Id, e.Title, e.Start, e.End))
+             .Select(e => new EventGetDto(e.Id, e.Title, e.Start, e.End, e.Importance))
              .ToListAsync();
 
             return events;
+        }
+
+        public async Task UpdateEvent(EventUpdateDto eventUpdateDto)
+        {
+            var existingEvent = await _context.Events.SingleOrDefaultAsync(e => e.Id == eventUpdateDto.id);
+            if (existingEvent != null) { return; }
+            existingEvent.Start = eventUpdateDto.start;
+            existingEvent.End = eventUpdateDto.end;
+            _context.Events.Update(existingEvent);
+            _context.SaveChangesAsync();
         }
     }
 }

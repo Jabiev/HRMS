@@ -26,5 +26,11 @@ namespace CareerCompassAPI.API.Controllers
             var response = await _eventService.GetEventsByUserId(userId);
             return Ok(response);
         }
+        [HttpPut("[action]")]
+        public async Task<IActionResult> UpdateEvent(EventUpdateDto eventUpdateDto)
+        {
+            await _eventService.UpdateEvent(eventUpdateDto);
+            return Ok();
+        }
     }
 }
