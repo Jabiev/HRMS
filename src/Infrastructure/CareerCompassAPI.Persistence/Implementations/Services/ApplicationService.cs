@@ -64,6 +64,12 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new NotFoundException("The specified job seeker does not exist.");
             }
+            var existingApplication = await _context.Applications
+      .AnyAsync(j => j.Vacancy.Id == applicationCreateDto.vacancyId && j.JobSeekerId == applicationCreateDto.jobSeekerId);
+            if (existingApplication)
+            {
+                throw new DuplicateApplicationException("You've already applied for this position.");
+            }
 
             JobApplications newJobApplication = new()
             {
