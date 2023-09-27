@@ -36,6 +36,26 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _mapper = mapper;
             _recruiterWriteRepository = recruiterWriteRepository;
         }
+
+        public async Task CompanyDetailsUpdate(CompanyDetailsUpdateDto companyDetailsUpdateDto)
+        {
+            var existingCompany = await _context.Companies
+                .Include(c => c.Details)  
+                .FirstOrDefaultAsync(c => c.Id == companyDetailsUpdateDto.id);
+
+            if (existingCompany == null) { return; }
+
+            existingCompany.Details.Ceo = companyDetailsUpdateDto.ceoName;
+            existingCompany.Details.Link = companyDetailsUpdateDto.webLink;
+            existingCompany.Name = companyDetailsUpdateDto.companyName;
+            existingCompany.Details.Description = companyDetailsUpdateDto.description;
+            existingCompany.Details.Address = companyDetailsUpdateDto.address;
+
+            _context.Companies.Update(existingCompany);
+            await _context.SaveChangesAsync();
+        }
+
+
         public async Task CreateAsync(CompanyCreateDto companyCreateDto, string userId)
         {
             if (companyCreateDto is null)

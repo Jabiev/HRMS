@@ -12,9 +12,11 @@ namespace CareerCompassAPI.API.Controllers
     public class CompaniesController : ControllerBase
     {
         private readonly ICompanyService _companyService;
-        public CompaniesController(ICompanyService companyService)
+        private readonly ILogger<CompaniesController> _logger;
+        public CompaniesController(ICompanyService companyService, ILogger<CompaniesController> logger)
         {
             _companyService = companyService;
+            _logger = logger;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] CompanyCreateDto companyCreateDto, [FromQuery] string userId)
@@ -55,6 +57,13 @@ namespace CareerCompassAPI.API.Controllers
         {
             var response = await _companyService.GetHighestRated();
             return Ok(response);
+        }
+        [HttpPut("[action]")]
+
+        public async Task<IActionResult> UpdateDetails(CompanyDetailsUpdateDto companyDetailsUpdateDto)
+        {
+            await _companyService.CompanyDetailsUpdate(companyDetailsUpdateDto);
+            return Ok();
         }
     }
 }
