@@ -238,6 +238,11 @@ namespace CareerCompassAPI.Persistence.Contexts
         }
         public async Task SeedJobSeekersAsync()
         {
+            if (await _context.JobSeekers.AnyAsync())
+            {
+                return; 
+            }
+
             Random rand = new Random();
             List<JobSeeker> jobSeekers = new List<JobSeeker>();
             for (int i = 0; i < 550; i++)
@@ -274,6 +279,10 @@ namespace CareerCompassAPI.Persistence.Contexts
         }
         public async Task SeedRecruitersAsync()
         {
+            if (await _context.Recruiters.AnyAsync())
+            {
+                return; 
+            }
             Random rand = new Random();
             List<Recruiter> recruiters = new List<Recruiter>();
 
@@ -329,6 +338,11 @@ namespace CareerCompassAPI.Persistence.Contexts
         }
         public async Task SeedVacanciesAsync()
         {
+            if (await _context.Vacancy.AnyAsync())
+            {
+                return; 
+            }
+            var allShiftsAndSchedules = await _context.ShiftAndSchedules.ToListAsync();
             Random rand = new Random();
 
             var recruiters = await _context.Recruiters.ToListAsync();
@@ -369,7 +383,11 @@ namespace CareerCompassAPI.Persistence.Contexts
                     Description = "Responsible for managing the financial aspects of our London branch.",
                     Company = jpmorgan,
                     ApplicationLimit = 50,
-                    CurrentApplicationCount = 0
+                    CurrentApplicationCount = 0,
+                    ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[0],
+                    }
                 },
                 new Vacancy
                 {
@@ -386,7 +404,13 @@ namespace CareerCompassAPI.Persistence.Contexts
                     Description = "Software Engineer position in the Baku office focusing on web technologies.",
                     Company = google,
                     ApplicationLimit = 100,
-                    CurrentApplicationCount = 0
+                    CurrentApplicationCount = 0,
+                     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[1],
+                        allShiftsAndSchedules[2],
+                        allShiftsAndSchedules[3],
+                    }
                 },
                 new Vacancy
                 {
@@ -399,10 +423,15 @@ namespace CareerCompassAPI.Persistence.Contexts
                         internship,
                     },
                     JobLocation = baku,
-                    Description = "Description = \"We are looking for enthusiastic and motivated Intern Engineers to join our team at SOCAR. As an Intern Engineer, you will have the opportunity to gain hands-on experience in various aspects of engineering within our dynamic organization. This internship program is designed to provide you with valuable skills and knowledge that will kickstart your career in the engineering field.\"\r\n\r\nJob Responsibilities:\r\n- Collaborate with experienced engineers on projects and tasks.\r\n- Assist in research, design, and development activities.\r\n- Participate in problem-solving and troubleshooting.\r\n- Learn and apply engineering principles in real-world scenarios.\r\n- Contribute to team meetings and discussions.\r\n- Take initiative in learning and adapting to new technologies and tools.\r\n\r\nQualifications:\r\n- Pursuing a degree in Engineering or a related field.\r\n- Strong passion for engineering and a desire to learn.\r\n- Excellent problem-solving and analytical skills.\r\n- Good communication and teamwork abilities.\r\n- Eagerness to take on challenges and grow professionally.\r\n\r\nBenefits:\r\n- Hands-on experience in a leading engineering organization.\r\n- Mentorship and guidance from experienced engineers.\r\n- Exposure to cutting-edge technologies and projects.\r\n- Competitive compensation and potential for future opportunities.\r\n- Networking and career development opportunities.",
+                    Description = " \"We are looking for enthusiastic and motivated Intern Engineers to join our team at SOCAR. As an Intern Engineer, you will have the opportunity to gain hands-on experience in various aspects of engineering within our dynamic organization. This internship program is designed to provide you with valuable skills and knowledge that will kickstart your career in the engineering field.\"\r\n\r\nJob Responsibilities:\r\n- Collaborate with experienced engineers on projects and tasks.\r\n- Assist in research, design, and development activities.\r\n- Participate in problem-solving and troubleshooting.\r\n- Learn and apply engineering principles in real-world scenarios.\r\n- Contribute to team meetings and discussions.\r\n- Take initiative in learning and adapting to new technologies and tools.\r\n\r\nQualifications:\r\n- Pursuing a degree in Engineering or a related field.\r\n- Strong passion for engineering and a desire to learn.\r\n- Excellent problem-solving and analytical skills.\r\n- Good communication and teamwork abilities.\r\n- Eagerness to take on challenges and grow professionally.\r\n\r\nBenefits:\r\n- Hands-on experience in a leading engineering organization.\r\n- Mentorship and guidance from experienced engineers.\r\n- Exposure to cutting-edge technologies and projects.\r\n- Competitive compensation and potential for future opportunities.\r\n- Networking and career development opportunities.",
                     Company = socar,
                     ApplicationLimit = 50,
-                    CurrentApplicationCount= 0
+                    CurrentApplicationCount= 0,
+                     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[0],
+                        allShiftsAndSchedules[2],
+                    }
                 },
                 new Vacancy
                 {
@@ -416,10 +445,14 @@ namespace CareerCompassAPI.Persistence.Contexts
                     Recruiter = recruiters[rand.Next(recruiters.Count)],
                     Salary = 1000.00M,
                     JobLocation = baku,
-                    Description = "Description = \"Are you a passionate gamer with a knack for game development? Rockstar Games is seeking a Junior Game Developer to join our team at our Baku office. As a Junior Game Developer, you'll have the exciting opportunity to contribute to the creation of immersive and innovative gaming experiences that captivate players worldwide.\"\r\n\r\nJob Responsibilities:\r\n- Collaborate with the game development team to design and implement game features.\r\n- Assist in coding, debugging, and optimizing game systems.\r\n- Work on gameplay mechanics, graphics, and user interface elements.\r\n- Participate in brainstorming sessions and contribute creative ideas.\r\n- Help create and maintain game documentation.\r\n- Adapt to and learn new technologies and tools in the gaming industry.\r\n\r\nQualifications:\r\n- A passion for video games and a desire to work in the gaming industry.\r\n- Strong programming skills in languages like C++, C#, or similar.\r\n- Basic knowledge of game development concepts and tools.\r\n- Creativity and problem-solving skills.\r\n- Effective communication and teamwork abilities.\r\n- Willingness to learn and adapt to a fast-paced environment.\r\n\r\nBenefits:\r\n- Hands-on experience in game development with a renowned industry leader.\r\n- Mentorship and guidance from experienced game developers.\r\n- Exposure to cutting-edge game development technologies.\r\n- Competitive salary and potential for career growth.\r\n- A collaborative and fun work environment for gaming enthusiasts.\r\n\r\nIf you're an aspiring game developer looking to kickstart your career in the gaming industry and want to be part of exciting projects at Rockstar Games, we encourage you to apply for this Junior Game Developer position today. Join us in creating the next gaming masterpiece!\"\r\n\r\nFeel free to tailor this description to fit Rockstar's specific culture and requirements. If you have any further questions or need more assistance, Rahil, don't hesitate to ask. We're here to optimize and improve your code and project together, like two friends working on it!\r\n",
+                    Description = " \"Are you a passionate gamer with a knack for game development? Rockstar Games is seeking a Junior Game Developer to join our team at our Baku office. As a Junior Game Developer, you'll have the exciting opportunity to contribute to the creation of immersive and innovative gaming experiences that captivate players worldwide.\"\r\n\r\nJob Responsibilities:\r\n- Collaborate with the game development team to design and implement game features.\r\n- Assist in coding, debugging, and optimizing game systems.\r\n- Work on gameplay mechanics, graphics, and user interface elements.\r\n- Participate in brainstorming sessions and contribute creative ideas.\r\n- Help create and maintain game documentation.\r\n- Adapt to and learn new technologies and tools in the gaming industry.\r\n\r\nQualifications:\r\n- A passion for video games and a desire to work in the gaming industry.\r\n- Strong programming skills in languages like C++, C#, or similar.\r\n- Basic knowledge of game development concepts and tools.\r\n- Creativity and problem-solving skills.\r\n- Effective communication and teamwork abilities.\r\n- Willingness to learn and adapt to a fast-paced environment.\r\n\r\nBenefits:\r\n- Hands-on experience in game development with a renowned industry leader.\r\n- Mentorship and guidance from experienced game developers.\r\n- Exposure to cutting-edge game development technologies.\r\n- Competitive salary and potential for career growth.\r\n- A collaborative and fun work environment for gaming enthusiasts.\r\n\r\nIf you're an aspiring game developer looking to kickstart your career in the gaming industry and want to be part of exciting projects at Rockstar Games, we encourage you to apply for this Junior Game Developer position today. Join us in creating the next gaming masterpiece!\"\r\n\r\nFeel free to tailor this description to fit Rockstar's specific culture and requirements. If you have any further questions or need more assistance, Rahil, don't hesitate to ask. We're here to optimize and improve your code and project together, like two friends working on it!\r\n",
                     Company = rockstar,
                     ApplicationLimit = 10,
-                    CurrentApplicationCount = 0
+                    CurrentApplicationCount = 0,
+                     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[0],
+                    }
                 },
                 new Vacancy
                 {
@@ -433,10 +466,17 @@ namespace CareerCompassAPI.Persistence.Contexts
                         contract,
                     },
                     JobLocation = baku,
-                    Description= "Description = \"Join the Starbucks team in Baku as a Barista and become a part of a global coffeehouse chain that's known for its commitment to quality and customer service. As a Barista at Starbucks, you'll play a crucial role in creating exceptional coffee and beverage experiences for our customers.\"\r\n\r\nJob Responsibilities:\r\n- Prepare and serve a variety of coffee and beverage orders with precision and care.\r\n- Maintain a clean and organized work environment.\r\n- Provide friendly and efficient customer service.\r\n- Educate customers about our coffee offerings and menu options.\r\n- Handle cash register transactions accurately.\r\n- Ensure that Starbucks' high-quality standards are consistently met.\r\n\r\nQualifications:\r\n- Previous experience as a Barista or in a similar role is a plus but not required.\r\n- Passion for coffee and a desire to learn about coffee preparation.\r\n- Excellent customer service and communication skills.\r\n- Ability to work in a fast-paced environment.\r\n- Strong attention to detail and cleanliness.\r\n- Positive attitude and a team player mentality.\r\n\r\nBenefits:\r\n- Comprehensive training in coffee preparation and customer service.\r\n- Competitive salary and tips.\r\n- Opportunities for career advancement within Starbucks.\r\n- A friendly and inclusive work environment.\r\n- Discounts on Starbucks products.\r\n- Flexible scheduling options.\r\n\r\nIf you have a passion for coffee and enjoy creating memorable experiences for customers, we invite you to apply for the Barista position at Starbucks. Join us in the art of crafting exceptional coffee moments!\"\r\n\r\nFeel free to customize this description to align with Starbucks' specific requirements and company culture. If you have any more questions or need further assistance, Rahil, just let me know. We're here to help you optimize your project, and you can count on me as your coding buddy!\r\n",
+                    Description= " \"Join the Starbucks team in Baku as a Barista and become a part of a global coffeehouse chain that's known for its commitment to quality and customer service. As a Barista at Starbucks, you'll play a crucial role in creating exceptional coffee and beverage experiences for our customers.\"\r\n\r\nJob Responsibilities:\r\n- Prepare and serve a variety of coffee and beverage orders with precision and care.\r\n- Maintain a clean and organized work environment.\r\n- Provide friendly and efficient customer service.\r\n- Educate customers about our coffee offerings and menu options.\r\n- Handle cash register transactions accurately.\r\n- Ensure that Starbucks' high-quality standards are consistently met.\r\n\r\nQualifications:\r\n- Previous experience as a Barista or in a similar role is a plus but not required.\r\n- Passion for coffee and a desire to learn about coffee preparation.\r\n- Excellent customer service and communication skills.\r\n- Ability to work in a fast-paced environment.\r\n- Strong attention to detail and cleanliness.\r\n- Positive attitude and a team player mentality.\r\n\r\nBenefits:\r\n- Comprehensive training in coffee preparation and customer service.\r\n- Competitive salary and tips.\r\n- Opportunities for career advancement within Starbucks.\r\n- A friendly and inclusive work environment.\r\n- Discounts on Starbucks products.\r\n- Flexible scheduling options.\r\n\r\nIf you have a passion for coffee and enjoy creating memorable experiences for customers, we invite you to apply for the Barista position at Starbucks. Join us in the art of crafting exceptional coffee moments!\"\r\n\r\nFeel free to customize this description to align with Starbucks' specific requirements and company culture. If you have any more questions or need further assistance, Rahil, just let me know. We're here to help you optimize your project, and you can count on me as your coding buddy!\r\n",
                     Company = starbucks,
                     ApplicationLimit = 20,
-                    CurrentApplicationCount = 0
+                    CurrentApplicationCount = 0,
+                     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[0],
+                        allShiftsAndSchedules[7],
+                        allShiftsAndSchedules[8],
+                    }
+
                 },
                 new Vacancy
                 {
@@ -445,10 +485,16 @@ namespace CareerCompassAPI.Persistence.Contexts
                     Recruiter = recruiters[rand.Next(recruiters.Count)],
                     Salary = 5500,
                     JobLocation = baku,
-                    Description= "Description = \"Join Starbucks as a Store Manager and lead a team of passionate coffee enthusiasts at our Baku location. As a Store Manager, you will be responsible for the overall management and success of the store, ensuring that every customer enjoys an exceptional Starbucks experience.\"\r\n\r\nJob Responsibilities:\r\n- Lead and inspire a team of baristas and shift supervisors.\r\n- Oversee daily store operations, including staffing, scheduling, and inventory management.\r\n- Create a welcoming and customer-focused atmosphere in the store.\r\n- Maintain Starbucks' high standards of product quality and customer service.\r\n- Drive sales and meet store performance targets.\r\n- Foster a positive and inclusive work environment.\r\n- Ensure compliance with company policies and procedures.\r\n\r\nQualifications:\r\n- Previous experience in retail or restaurant management is preferred.\r\n- Strong leadership and team management skills.\r\n- Excellent customer service and communication abilities.\r\n- Problem-solving and decision-making skills.\r\n- Financial acumen for managing store budgets and expenses.\r\n- A passion for coffee and Starbucks' mission.\r\n- Willingness to work flexible hours, including weekends and evenings.\r\n\r\nBenefits:\r\n- Competitive salary and performance-based bonuses.\r\n- Comprehensive training and career development opportunities.\r\n- Medical, dental, and vision benefits.\r\n- 401(k) retirement savings plan.\r\n- Paid time off and vacation benefits.\r\n- A supportive and collaborative work environment.\r\n- Discounts on Starbucks products.\r\n\r\nIf you're a dynamic and experienced leader looking to take your career to the next level with a globally recognized brand like Starbucks, we encourage you to apply for the Store Manager position. Join us in delivering the Starbucks experience and making every visit memorable for our customers!\"\r\n\r\nFeel free to adjust this description to align with Starbucks' specific expectations and company culture. If you have any more questions or need further assistance, Rahil, don't hesitate to ask. We're here to help you optimize your project and code, just like two friends working together!\r\n",
+                    Description= " \"Join Starbucks as a Store Manager and lead a team of passionate coffee enthusiasts at our Baku location. As a Store Manager, you will be responsible for the overall management and success of the store, ensuring that every customer enjoys an exceptional Starbucks experience.\"\r\n\r\nJob Responsibilities:\r\n- Lead and inspire a team of baristas and shift supervisors.\r\n- Oversee daily store operations, including staffing, scheduling, and inventory management.\r\n- Create a welcoming and customer-focused atmosphere in the store.\r\n- Maintain Starbucks' high standards of product quality and customer service.\r\n- Drive sales and meet store performance targets.\r\n- Foster a positive and inclusive work environment.\r\n- Ensure compliance with company policies and procedures.\r\n\r\nQualifications:\r\n- Previous experience in retail or restaurant management is preferred.\r\n- Strong leadership and team management skills.\r\n- Excellent customer service and communication abilities.\r\n- Problem-solving and decision-making skills.\r\n- Financial acumen for managing store budgets and expenses.\r\n- A passion for coffee and Starbucks' mission.\r\n- Willingness to work flexible hours, including weekends and evenings.\r\n\r\nBenefits:\r\n- Competitive salary and performance-based bonuses.\r\n- Comprehensive training and career development opportunities.\r\n- Medical, dental, and vision benefits.\r\n- 401(k) retirement savings plan.\r\n- Paid time off and vacation benefits.\r\n- A supportive and collaborative work environment.\r\n- Discounts on Starbucks products.\r\n\r\nIf you're a dynamic and experienced leader looking to take your career to the next level with a globally recognized brand like Starbucks, we encourage you to apply for the Store Manager position. Join us in delivering the Starbucks experience and making every visit memorable for our customers!\"\r\n\r\nFeel free to adjust this description to align with Starbucks' specific expectations and company culture. If you have any more questions or need further assistance, Rahil, don't hesitate to ask. We're here to help you optimize your project and code, just like two friends working together!\r\n",
                     Company = starbucks,
                     ApplicationLimit = 20,
-                    CurrentApplicationCount = 0
+                    CurrentApplicationCount = 0,
+                     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[0],
+                        allShiftsAndSchedules[6],
+                        allShiftsAndSchedules[4],
+                    }
                 },
                 new Vacancy
                 {
@@ -465,7 +511,12 @@ namespace CareerCompassAPI.Persistence.Contexts
                 Description = "Join Microsoft's London office as a Software Engineer and be part of          a dynamic team working on cutting-edge software projects. As a Software Engineer           , you'll have the opportunity to design, develop, and maintain software solutions that impact millions of users worldwide.",
                  Company = microsoft,
                  ApplicationLimit = 30,
-                 CurrentApplicationCount = 0
+                 CurrentApplicationCount = 0,
+                  ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[0],
+                        allShiftsAndSchedules[2],
+                    }
                 },
                 new Vacancy
 {
@@ -482,7 +533,12 @@ namespace CareerCompassAPI.Persistence.Contexts
     Description = "Microsoft's London office is seeking a talented Data Scientist to join our team. As a Data Scientist, you will leverage data analytics and machine learning techniques to extract valuable insights and drive data-driven decision-making within the company.",
     Company = microsoft,
     ApplicationLimit = 25,
-    CurrentApplicationCount = 0
+    CurrentApplicationCount = 0,
+     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[4],
+                        allShiftsAndSchedules[7],
+                    }
 },
                 new Vacancy
 {
@@ -499,7 +555,12 @@ namespace CareerCompassAPI.Persistence.Contexts
     Description = "Microsoft's Baku office is looking for a Cloud Solutions Architect to lead the design and implementation of cloud-based solutions for our clients. As a Cloud Solutions Architect, you'll collaborate with customers to define cloud strategies and deliver innovative solutions.",
     Company = microsoft,
     ApplicationLimit = 20,
-    CurrentApplicationCount = 0
+    CurrentApplicationCount = 0,
+     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[0],
+                        allShiftsAndSchedules[8],
+                    }
 },
                 new Vacancy
 {
@@ -516,7 +577,12 @@ namespace CareerCompassAPI.Persistence.Contexts
     Description = "Join Microsoft's Baku office as a Product Manager and take ownership of the product development lifecycle. As a Product Manager, you will define product roadmaps, gather user feedback, and collaborate with cross-functional teams to deliver exceptional software products.",
     Company = microsoft,
     ApplicationLimit = 15,
-    CurrentApplicationCount = 0
+    CurrentApplicationCount = 0,
+     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[0],
+                        allShiftsAndSchedules[2],
+                    }
 },
                 new Vacancy
                 {
@@ -529,6 +595,11 @@ namespace CareerCompassAPI.Persistence.Contexts
     Company = marriott,
     ApplicationLimit = 20,
     CurrentApplicationCount = 0,
+     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[1],
+                        allShiftsAndSchedules[7],
+                    },
     JobType = new List<JobType> { fullTime }
                 },
                 new Vacancy
@@ -542,6 +613,11 @@ namespace CareerCompassAPI.Persistence.Contexts
     Company = marriott,
     ApplicationLimit = 15, 
     CurrentApplicationCount = 0,
+     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[1],
+                        allShiftsAndSchedules[2],
+                    },
     JobType = new List<JobType> { contract }
                 },
                 new Vacancy
@@ -568,7 +644,12 @@ namespace CareerCompassAPI.Persistence.Contexts
     Company = fedex,
     ApplicationLimit = 10, 
     CurrentApplicationCount = 0,
-    JobType = new List<JobType> { fullTime }
+    JobType = new List<JobType> { fullTime },
+     ShiftAndSchedules = new List<ShiftAndSchedule>
+                    {
+                        allShiftsAndSchedules[0],
+                        allShiftsAndSchedules[2],
+                    }
                 }
             };
 
@@ -947,6 +1028,10 @@ new Company
 
         public async Task SeedReviewsAsync()
         {
+            if (await _context.Reviews.AnyAsync())
+            {
+                return;
+            }
             List<Review> reviews = new List<Review>();
             Random rand = new Random();
 

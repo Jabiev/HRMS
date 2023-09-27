@@ -62,7 +62,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         public async Task UpdateEvent(EventUpdateDto eventUpdateDto)
         {
             var existingEvent = await _context.Events.SingleOrDefaultAsync(e => e.Id == eventUpdateDto.id);
-            if (existingEvent != null) { return; }
+            if (existingEvent == null) { return; }
             existingEvent.Start = eventUpdateDto.start;
             existingEvent.End = eventUpdateDto.end;
             _context.Events.Update(existingEvent);
