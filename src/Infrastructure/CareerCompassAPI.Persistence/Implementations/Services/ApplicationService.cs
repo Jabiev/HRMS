@@ -96,7 +96,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             var applications = await _jobApplicationReadRepository
                 .GetAllByExpression(
                     ja => ja.Vacancy.Recruiter.Id == recruiter.Id && ja.Status == ApplicationStatus.Pending,
-                    50,
+                    200,
                     0
                 )
                 .Include(ja => ja.JobSeeker)
@@ -109,8 +109,8 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 var jobSeekerAppUserId = application.JobSeeker.AppUserId;
 
-                var lowerBound = application.DateCreated.AddMilliseconds(-50);
-                var upperBound = application.DateCreated.AddMilliseconds(50);
+                var lowerBound = application.DateCreated.AddMilliseconds(-2000);
+                var upperBound = application.DateCreated.AddMilliseconds(2000);
 
                 var file = await _context.Files
                     .Where(f => f.User.Id == jobSeekerAppUserId && f.DateCreated >= lowerBound && f.DateCreated <= upperBound)
