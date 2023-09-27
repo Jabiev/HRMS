@@ -12,6 +12,7 @@ namespace CareerCompassAPI.Application.Abstraction.Services
 
         Task<List<VacancyGetByIdDto>> GetVacancyByRecruiterId(Guid id);
         Task DeleteVacancyById(Guid id);
+        Task UpdateVacancy(VacancyUpdateDto vacancyUpdateDto);
 
     }
 }

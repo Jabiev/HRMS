@@ -56,5 +56,12 @@ namespace CareerCompassAPI.API.Controllers
             await _vacancyService.DeleteVacancyById(id);
             return NoContent();
         }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> UpdateExistingVacancy(VacancyUpdateDto vacancyUpdateDto)
+        {
+            await _vacancyService.UpdateVacancy(vacancyUpdateDto);
+            return Ok(vacancyUpdateDto);
+        }
     }
 }

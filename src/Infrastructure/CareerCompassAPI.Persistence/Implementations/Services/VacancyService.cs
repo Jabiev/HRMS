@@ -203,9 +203,23 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 vacancy.Id,
                 vacancy.JobTitle,
                 vacancy.Company.Name,
-                vacancy.JobLocation.Location
+                vacancy.JobLocation.Location,
+                vacancy.Salary,
+                vacancy.Description
             )).ToList();
             return mappedList;
+        }
+
+
+        public async Task UpdateVacancy(VacancyUpdateDto vacancyUpdateDto)
+        {
+            var existingVacancy = await _vacancyReadRepository.GetByIdAsync(vacancyUpdateDto.id);
+            if (existingVacancy == null) { return; }
+            existingVacancy.JobTitle = vacancyUpdateDto.jobTitle;
+            existingVacancy.Description = vacancyUpdateDto.description;
+            existingVacancy.Salary = vacancyUpdateDto.salary;
+            _vacancyWriteRepository.Update(existingVacancy);
+            await _vacancyWriteRepository.SaveChangesAsync();
         }
     }
 }
