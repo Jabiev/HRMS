@@ -71,6 +71,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _context.Reviews.RemoveRange(reviewsToDelete);
             await _context.SaveChangesAsync();
         }
+      
 
         public async Task DeleteFullVacancies()
         {

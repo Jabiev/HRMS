@@ -611,10 +611,18 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             {
                 throw new NotFoundException("Feedback does not exist");
             }
-            TestimonialFeedback feedback = await _context.TestimonialFeedbacks.FirstOrDefaultAsync(tf => tf.Id ==  feedbackId);
-            feedback.isActive = true;
-            _context.SaveChangesAsync();
+
+            TestimonialFeedback feedback = await _context.TestimonialFeedbacks.FirstOrDefaultAsync(tf => tf.Id == feedbackId);
+            if (feedback == null)
+            {
+                throw new NotFoundException("Feedback does not exist");
+            }
+
+            feedback.isActive = !feedback.isActive; 
+            await _context.SaveChangesAsync();
         }
+
+
 
         public async Task UpdateEducationLevel(EducationLevelUpdateDto updateEducationLevelDto)
         {

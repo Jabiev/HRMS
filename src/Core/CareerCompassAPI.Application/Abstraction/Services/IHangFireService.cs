@@ -9,5 +9,6 @@
         Task DeleteDeclinedReviews();
         Task DeleteFullVacancies();
         Task DeleteOldVacancies();
+       
     }
 }
