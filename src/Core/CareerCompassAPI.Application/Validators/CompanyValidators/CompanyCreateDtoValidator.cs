@@ -24,7 +24,7 @@ namespace CareerCompassAPI.Application.Validators.CompanyValidators
 
             RuleFor(x => x.dateFounded)
                 .GreaterThan(1900).WithMessage("Please enter a valid year")
-                .LessThanOrEqualTo(DateTime.Now.Year).WithMessage("Date founded cannot be after the current year")
+                .LessThanOrEqualTo(DateTime.UtcNow.Year).WithMessage("Date founded cannot be after the current year")
                 .NotEmpty().WithMessage("Date founded is required");
 
             RuleFor(x => x.address)

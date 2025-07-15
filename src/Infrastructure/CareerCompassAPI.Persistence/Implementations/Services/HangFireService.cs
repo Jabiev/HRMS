@@ -28,7 +28,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
             foreach (var recruiter in recruiters)
             {
-                if (recruiter.SubscriptionStartDate.AddDays(30) < DateTime.Now)
+                if (recruiter.SubscriptionStartDate.AddDays(30) < DateTime.UtcNow)
                 {
                     recruiter.CurrentPostCount = 0;
                     recruiter.Subscription = freeSubscription; 
@@ -47,7 +47,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 .FirstOrDefaultAsync();
             if (daysSetting != null && int.TryParse(daysSetting.SettingValue, out int days))
             {
-                DateTime cutoffDate = DateTime.Now.AddDays(-days);
+                DateTime cutoffDate = DateTime.UtcNow.AddDays(-days);
                 var declinedApplications = await _context.Applications
                     .Where(ja => ja.Status == ApplicationStatus.Declined && ja.DateCreated < cutoffDate)
                     .ToListAsync();
@@ -96,7 +96,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             if (daysSetting != null)
             {
                 int daysToDeleteOldMessages = int.Parse(daysSetting.SettingValue); 
-                var olderThan = DateTime.Now.AddDays(-daysToDeleteOldMessages);
+                var olderThan = DateTime.UtcNow.AddDays(-daysToDeleteOldMessages);
                 var oldMessages = await _context.Messages.Where(m => m.DateCreated <= olderThan).ToListAsync();
                 _context.Messages.RemoveRange(oldMessages);
                 await _context.SaveChangesAsync();
@@ -112,7 +112,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             if (daysSetting != null)
             {
                 int daysToDeleteOldNotifications = int.Parse(daysSetting.SettingValue); 
-                var olderThan = DateTime.Now.AddDays(-daysToDeleteOldNotifications);
+                var olderThan = DateTime.UtcNow.AddDays(-daysToDeleteOldNotifications);
                 var oldNotifications = await _context.Notifications.Where(n => n.DateCreated <= olderThan).ToListAsync();
                 _context.Notifications.RemoveRange(oldNotifications);
                 await _context.SaveChangesAsync();
@@ -125,7 +125,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 .Where(s => s.SettingName == "DaysToDeleteOldVacancies")
                 .FirstOrDefaultAsync();
             int daysToDeleteOldVacancies = daysSetting != null ? int.Parse(daysSetting.SettingValue) : 30;
-            var cutoffDate = DateTime.Now.AddDays(-daysToDeleteOldVacancies);
+            var cutoffDate = DateTime.UtcNow.AddDays(-daysToDeleteOldVacancies);
             var oldVacancies = await _context.Vacancy
                 .Where(v => v.DateCreated <= cutoffDate && !v.IsDeleted)
                 .ToListAsync();

@@ -151,7 +151,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             if (recruiter.Subscription != null && recruiter.SubscriptionStartDate != default(DateTime))
             {
                 var subscriptionEndDate = recruiter.SubscriptionStartDate.AddDays(30);
-                if (DateTime.Now < subscriptionEndDate)
+                if (DateTime.UtcNow < subscriptionEndDate)
                 {
                     throw new InvalidOperationException("The user is already subscribed, and the subscription is not yet expired.");
                 }
@@ -162,7 +162,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             if (subscription == null) throw new InvalidOperationException("Subscription object not found.");
 
             recruiter.Subscription = subscription;
-            recruiter.SubscriptionStartDate = DateTime.Now;
+            recruiter.SubscriptionStartDate = DateTime.UtcNow;
 
             _recruiterWriteRepository.Update(recruiter);
             await _recruiterWriteRepository.SaveChangesAsync();

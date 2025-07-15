@@ -56,7 +56,7 @@ namespace CareerCompassAPI.Infrastructure.Services.Token
             string refreshToken = GenerateRefeshToken();
 
             // add expiration 
-            DateTime refreshTokenExpiration = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["RefreshToken:EXPIRATION_MINUTES"]));
+            DateTime refreshTokenExpiration = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["RefreshToken:EXPIRATION_MINUTES"]));
             return new TokenResponseDto(token, jwtExpiration, refreshToken, refreshTokenExpiration);
         }
 
