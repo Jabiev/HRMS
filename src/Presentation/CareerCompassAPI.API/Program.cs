@@ -79,27 +79,27 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var instance = scope.ServiceProvider.GetRequiredService<CareerCompassDbContextInitialiser>();
-    await instance.InitialiseAsync();
-    await instance.SettingsSeed();
-    await instance.EducationLevelsSeed();
-    await instance.RoleSeedAsync();
-    await instance.SubscriptionsSeedAsync();
-    await instance.IndustrySeed();
-    await instance.LocationsSeed();
-    await instance.JobTypeSeed();
-    await instance.ExperienceLevelSeed();
-    await instance.ShiftAndScheduleSeed();
-    await instance.CompanySeedAsync();
-    await instance.SeedJobSeekersAsync();
-    await instance.SeedRecruitersAsync();
-    await instance.SeedReviewsAsync();
-    await instance.SeedVacanciesAsync();
-    await instance.UserSeedAsync();
-    //await instance.PaymentsSeedAsync();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var instance = scope.ServiceProvider.GetRequiredService<CareerCompassDbContextInitialiser>();
+//    await instance.InitialiseAsync();
+//    await instance.SettingsSeed();
+//    await instance.EducationLevelsSeed();
+//    await instance.RoleSeedAsync();
+//    await instance.SubscriptionsSeedAsync();
+//    await instance.IndustrySeed();
+//    await instance.LocationsSeed();
+//    await instance.JobTypeSeed();
+//    await instance.ExperienceLevelSeed();
+//    await instance.ShiftAndScheduleSeed();
+//    await instance.CompanySeedAsync();
+//    await instance.SeedJobSeekersAsync();
+//    await instance.SeedRecruitersAsync();
+//    await instance.SeedReviewsAsync();
+//    await instance.SeedVacanciesAsync();
+//    await instance.UserSeedAsync();
+//    //await instance.PaymentsSeedAsync();
+//}
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

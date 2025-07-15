@@ -72,7 +72,7 @@ namespace CareerCompassAPI.API.Controllers
                     WebhookSecret
                 );
 
-                if (stripeEvent.Type == Events.CheckoutSessionCompleted)
+                if (stripeEvent.Type == "checkout.session.completed")
                 {
                     var session = stripeEvent.Data.Object as Session;
                     if (session != null)

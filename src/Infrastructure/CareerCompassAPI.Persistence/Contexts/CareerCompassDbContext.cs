@@ -1,8 +1,7 @@
 ﻿using CareerCompassAPI.Domain.Entities;
-using CareerCompassAPI.Domain.Entities.Common;
 using CareerCompassAPI.Domain.Identity;
 using CareerCompassAPI.Persistence.Configurations;
-using CareerCompassAPI.Persistence.Migrations;
+using CareerCompassAPI.Persistence.Interceptors;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using File = CareerCompassAPI.Domain.Entities.File;
@@ -13,10 +12,15 @@ namespace CareerCompassAPI.Persistence.Contexts
 {
     public class CareerCompassDbContext : IdentityDbContext<AppUser>, ICareerCompassDbContext
     {
+        private readonly AuditInterceptor _auditInterceptor;
         public CareerCompassDbContext() : base()
         {
         }
         public CareerCompassDbContext(DbContextOptions<CareerCompassDbContext> options) : base(options) { }
+        public CareerCompassDbContext(DbContextOptions<CareerCompassDbContext> options, AuditInterceptor auditInterceptor) : base(options)
+        {
+            _auditInterceptor = auditInterceptor;
+        }
         public DbSet<Subscriptions> Subscriptions { get; set; }
         public DbSet<JobSeeker> JobSeekers { get; set; }
         public DbSet<Recruiter> Recruiters { get; set; }
@@ -43,28 +47,6 @@ namespace CareerCompassAPI.Persistence.Contexts
         public DbSet<Domain.Entities.File> Files { get; set; }
         public DbSet<Domain.Entities.AppSetting> Settings { get; set; }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var datas = ChangeTracker.Entries<BaseEntity>();
-
-            foreach (var data in datas)
-            {
-                switch (data.State)
-                {
-                    case EntityState.Added:
-                        data.Entity.DateCreated = DateTime.UtcNow;
-                        data.Entity.DateModified = DateTime.UtcNow;
-                        break;
-
-                    case EntityState.Modified:
-                        data.Entity.DateModified = DateTime.UtcNow;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return await base.SaveChangesAsync(cancellationToken);
-        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -99,6 +81,11 @@ namespace CareerCompassAPI.Persistence.Contexts
             modelBuilder.ApplyConfiguration(new JobApplicationConfiguration());
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
 
+            optionsBuilder.AddInterceptors(_auditInterceptor);
+        }
     }
 }
