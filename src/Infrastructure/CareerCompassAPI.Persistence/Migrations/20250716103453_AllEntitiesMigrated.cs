@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CareerCompassAPI.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class allEntitiesMigrating : Migration
+    public partial class AllEntitiesMigrated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

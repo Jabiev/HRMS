@@ -55,7 +55,7 @@ namespace CareerCompassAPI.Persistence.ExtensionMethods
     {
         public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddScoped<CareerCompassDbContextInitialiser>();
+            services.AddScoped<CareerCompassDbContextInitialiser>();
             AddReadRepositories(services);
             AddWriteRepositories(services);
             services.AddScoped<ISubscriptionService, Implementations.Services.SubscriptionService>();

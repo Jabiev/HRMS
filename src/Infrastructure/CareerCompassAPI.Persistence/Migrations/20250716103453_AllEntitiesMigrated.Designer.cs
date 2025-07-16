@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CareerCompassAPI.Persistence.Migrations
 {
     [DbContext(typeof(CareerCompassDbContext))]
-    [Migration("20250715090638_allEntitiesMigrating")]
-    partial class allEntitiesMigrating
+    [Migration("20250716103453_AllEntitiesMigrated")]
+    partial class AllEntitiesMigrated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
