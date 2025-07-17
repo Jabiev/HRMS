@@ -1,4 +1,3 @@
-using CareerCompassAPI.API.Middlewares;
 using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Domain.Concretes;
 using CareerCompassAPI.Domain.Identity;
@@ -11,6 +10,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddSignalRServices();
-builder.Services.AddStorage<AzureStorage>(); 
+builder.Services.AddStorage<AzureStorage>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
 {
@@ -38,23 +38,39 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
-}).AddJwtBearer(o =>
+}).AddJwtBearer(options =>
 {
-    o.TokenValidationParameters = new TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidIssuer = builder.Configuration["Jwt:issuer"],
-        ValidAudience = builder.Configuration["Jwt:audience"],
-        IssuerSigningKey = new SymmetricSecurityKey
-        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"])),
-        LifetimeValidator = (_, expire, _, _) => expire > DateTime.UtcNow,
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ValidateIssuerSigningKey = true
+        ValidateIssuerSigningKey = true,
+        LifetimeValidator = (_, expire, _, _) => expire > DateTime.UtcNow,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecurityKey"])),
+        ClockSkew = TimeSpan.Zero,
+
+        NameClaimType = ClaimTypes.Name,
+        RoleClaimType = ClaimTypes.Role
     };
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireMaster", policy => policy.RequireRole("Master"));
+    options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("RequireRecruiter", policy => policy.RequireRole("Recruiter"));
+    options.AddPolicy("RequireJobSeeker", policy => policy.RequireRole("JobSeeker"));
+
+    options.AddPolicy("RequireAdminOrRecruiter", policy => policy.RequireRole("Admin", "Recruiter"));
+    options.AddPolicy("RequireMasterOrAdmin", policy => policy.RequireRole("Master", "Admin"));
+    options.AddPolicy("RequireMasterAdminRecruiter", policy => policy.RequireRole("Master", "Admin", "Recruiter"));
+});
+
 builder.Services.AddFluentValidationValidators();
 var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
@@ -70,7 +86,7 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-            .WithOrigins("http://localhost:3000") 
+            .WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();

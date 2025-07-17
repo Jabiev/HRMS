@@ -1,42 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\",
+  "WorkspaceRootPath": "C:\\Users\\HP\\Desktop\\HRMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F19ABA3E-DCF0-420A-BC62-974528F8ED3E}|src\\Infrastructure\\CareerCompassAPI.Persistence\\CareerCompassAPI.Persistence.csproj|c:\\users\\hp\\desktop\\careercompassapi\\src\\infrastructure\\careercompassapi.persistence\\contexts\\careercompassdbcontextinitialiser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F19ABA3E-DCF0-420A-BC62-974528F8ED3E}|src\\Infrastructure\\CareerCompassAPI.Persistence\\CareerCompassAPI.Persistence.csproj|solutionrelative:src\\infrastructure\\careercompassapi.persistence\\contexts\\careercompassdbcontextinitialiser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{127811B7-F424-4DFB-9F8B-27564E980870}|src\\Presentation\\CareerCompassAPI.API\\CareerCompassAPI.API.csproj|c:\\users\\hp\\desktop\\careercompassapi\\src\\presentation\\careercompassapi.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{127811B7-F424-4DFB-9F8B-27564E980870}|src\\Presentation\\CareerCompassAPI.API\\CareerCompassAPI.API.csproj|c:\\users\\hp\\desktop\\hrms\\src\\presentation\\careercompassapi.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{127811B7-F424-4DFB-9F8B-27564E980870}|src\\Presentation\\CareerCompassAPI.API\\CareerCompassAPI.API.csproj|solutionrelative:src\\presentation\\careercompassapi.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F19ABA3E-DCF0-420A-BC62-974528F8ED3E}|src\\Infrastructure\\CareerCompassAPI.Persistence\\CareerCompassAPI.Persistence.csproj|c:\\users\\hp\\desktop\\careercompassapi\\src\\infrastructure\\careercompassapi.persistence\\contexts\\careercompassdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F19ABA3E-DCF0-420A-BC62-974528F8ED3E}|src\\Infrastructure\\CareerCompassAPI.Persistence\\CareerCompassAPI.Persistence.csproj|solutionrelative:src\\infrastructure\\careercompassapi.persistence\\contexts\\careercompassdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AE6EE52E-7DA3-457D-9B52-5B47616A4E0B}|tests\\CareerCompass.UnitTests\\CareerCompass.UnitTests.csproj|c:\\users\\hp\\desktop\\careercompassapi\\tests\\careercompass.unittests\\services\\applicationservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AE6EE52E-7DA3-457D-9B52-5B47616A4E0B}|tests\\CareerCompass.UnitTests\\CareerCompass.UnitTests.csproj|solutionrelative:tests\\careercompass.unittests\\services\\applicationservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F19ABA3E-DCF0-420A-BC62-974528F8ED3E}|src\\Infrastructure\\CareerCompassAPI.Persistence\\CareerCompassAPI.Persistence.csproj|c:\\users\\hp\\desktop\\careercompassapi\\src\\infrastructure\\careercompassapi.persistence\\interceptors\\auditinterceptor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F19ABA3E-DCF0-420A-BC62-974528F8ED3E}|src\\Infrastructure\\CareerCompassAPI.Persistence\\CareerCompassAPI.Persistence.csproj|solutionrelative:src\\infrastructure\\careercompassapi.persistence\\interceptors\\auditinterceptor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{127811B7-F424-4DFB-9F8B-27564E980870}|src\\Presentation\\CareerCompassAPI.API\\CareerCompassAPI.API.csproj|c:\\users\\hp\\desktop\\careercompassapi\\src\\presentation\\careercompassapi.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{127811B7-F424-4DFB-9F8B-27564E980870}|src\\Presentation\\CareerCompassAPI.API\\CareerCompassAPI.API.csproj|solutionrelative:src\\presentation\\careercompassapi.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{63A10F6A-529F-48E5-9273-C68506CBF6CB}|src\\Core\\CareerCompassAPI.Domain\\CareerCompassAPI.Domain.csproj|c:\\users\\hp\\desktop\\careercompassapi\\src\\core\\careercompassapi.domain\\identity\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{63A10F6A-529F-48E5-9273-C68506CBF6CB}|src\\Core\\CareerCompassAPI.Domain\\CareerCompassAPI.Domain.csproj|solutionrelative:src\\core\\careercompassapi.domain\\identity\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{63A10F6A-529F-48E5-9273-C68506CBF6CB}|src\\Core\\CareerCompassAPI.Domain\\CareerCompassAPI.Domain.csproj|c:\\users\\hp\\desktop\\careercompassapi\\src\\core\\careercompassapi.domain\\entities\\jobapplications.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{63A10F6A-529F-48E5-9273-C68506CBF6CB}|src\\Core\\CareerCompassAPI.Domain\\CareerCompassAPI.Domain.csproj|solutionrelative:src\\core\\careercompassapi.domain\\entities\\jobapplications.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{63A10F6A-529F-48E5-9273-C68506CBF6CB}|src\\Core\\CareerCompassAPI.Domain\\CareerCompassAPI.Domain.csproj|c:\\users\\hp\\desktop\\careercompassapi\\src\\core\\careercompassapi.domain\\entities\\vacancy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{63A10F6A-529F-48E5-9273-C68506CBF6CB}|src\\Core\\CareerCompassAPI.Domain\\CareerCompassAPI.Domain.csproj|solutionrelative:src\\core\\careercompassapi.domain\\entities\\vacancy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -71,118 +39,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CareerCompassDbContextInitialiser.cs",
-              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Infrastructure\\CareerCompassAPI.Persistence\\Contexts\\CareerCompassDbContextInitialiser.cs",
-              "RelativeDocumentMoniker": "src\\Infrastructure\\CareerCompassAPI.Persistence\\Contexts\\CareerCompassDbContextInitialiser.cs",
-              "ToolTip": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Infrastructure\\CareerCompassAPI.Persistence\\Contexts\\CareerCompassDbContextInitialiser.cs",
-              "RelativeToolTip": "src\\Infrastructure\\CareerCompassAPI.Persistence\\Contexts\\CareerCompassDbContextInitialiser.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T09:29:36.532Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ApplicationServiceTests.cs",
-              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\tests\\CareerCompass.UnitTests\\Services\\ApplicationServiceTests.cs",
-              "RelativeDocumentMoniker": "tests\\CareerCompass.UnitTests\\Services\\ApplicationServiceTests.cs",
-              "ToolTip": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\tests\\CareerCompass.UnitTests\\Services\\ApplicationServiceTests.cs",
-              "RelativeToolTip": "tests\\CareerCompass.UnitTests\\Services\\ApplicationServiceTests.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAuwC0AAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T09:23:42.826Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AuditInterceptor.cs",
-              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Infrastructure\\CareerCompassAPI.Persistence\\Interceptors\\AuditInterceptor.cs",
-              "RelativeDocumentMoniker": "src\\Infrastructure\\CareerCompassAPI.Persistence\\Interceptors\\AuditInterceptor.cs",
-              "ToolTip": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Infrastructure\\CareerCompassAPI.Persistence\\Interceptors\\AuditInterceptor.cs",
-              "RelativeToolTip": "src\\Infrastructure\\CareerCompassAPI.Persistence\\Interceptors\\AuditInterceptor.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAAwBYAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T09:18:13.914Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CareerCompassDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Infrastructure\\CareerCompassAPI.Persistence\\Contexts\\CareerCompassDbContext.cs",
-              "RelativeDocumentMoniker": "src\\Infrastructure\\CareerCompassAPI.Persistence\\Contexts\\CareerCompassDbContext.cs",
-              "ToolTip": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Infrastructure\\CareerCompassAPI.Persistence\\Contexts\\CareerCompassDbContext.cs",
-              "RelativeToolTip": "src\\Infrastructure\\CareerCompassAPI.Persistence\\Contexts\\CareerCompassDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAACJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T09:17:07.217Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Presentation\\CareerCompassAPI.API\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\HRMS\\src\\Presentation\\CareerCompassAPI.API\\Program.cs",
               "RelativeDocumentMoniker": "src\\Presentation\\CareerCompassAPI.API\\Program.cs",
-              "ToolTip": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Presentation\\CareerCompassAPI.API\\Program.cs",
+              "ToolTip": "C:\\Users\\HP\\Desktop\\HRMS\\src\\Presentation\\CareerCompassAPI.API\\Program.cs",
               "RelativeToolTip": "src\\Presentation\\CareerCompassAPI.API\\Program.cs",
-              "ViewState": "AgIAADgAAAAAAAAAAAAvwFYAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAADIAAAAAAAAAAAAUwH4AAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-15T08:19:36.06Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Presentation\\CareerCompassAPI.API\\appsettings.json",
-              "RelativeDocumentMoniker": "src\\Presentation\\CareerCompassAPI.API\\appsettings.json",
-              "ToolTip": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Presentation\\CareerCompassAPI.API\\appsettings.json",
-              "RelativeToolTip": "src\\Presentation\\CareerCompassAPI.API\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAB+AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-07-15T08:21:08.753Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Vacancy.cs",
-              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Core\\CareerCompassAPI.Domain\\Entities\\Vacancy.cs",
-              "RelativeDocumentMoniker": "src\\Core\\CareerCompassAPI.Domain\\Entities\\Vacancy.cs",
-              "ToolTip": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Core\\CareerCompassAPI.Domain\\Entities\\Vacancy.cs",
-              "RelativeToolTip": "src\\Core\\CareerCompassAPI.Domain\\Entities\\Vacancy.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T21:05:35.127Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "JobApplications.cs",
-              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Core\\CareerCompassAPI.Domain\\Entities\\JobApplications.cs",
-              "RelativeDocumentMoniker": "src\\Core\\CareerCompassAPI.Domain\\Entities\\JobApplications.cs",
-              "ToolTip": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Core\\CareerCompassAPI.Domain\\Entities\\JobApplications.cs",
-              "RelativeToolTip": "src\\Core\\CareerCompassAPI.Domain\\Entities\\JobApplications.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T21:05:20.393Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AppUser.cs",
-              "DocumentMoniker": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Core\\CareerCompassAPI.Domain\\Identity\\AppUser.cs",
-              "RelativeDocumentMoniker": "src\\Core\\CareerCompassAPI.Domain\\Identity\\AppUser.cs",
-              "ToolTip": "C:\\Users\\HP\\Desktop\\CareerCompassAPI\\src\\Core\\CareerCompassAPI.Domain\\Identity\\AppUser.cs",
-              "RelativeToolTip": "src\\Core\\CareerCompassAPI.Domain\\Identity\\AppUser.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAwwBgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T20:19:03.593Z",
               "EditorCaption": ""
             }
           ]
