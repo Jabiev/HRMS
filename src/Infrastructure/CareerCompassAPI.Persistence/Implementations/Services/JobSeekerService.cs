@@ -55,10 +55,10 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
         public async Task<List<JobseekerApprovedGetDto>> GetApprovedPositionsByAppUserId(string appUserId)
         {
             var jobSeeker = await _context.JobSeekers
-                .Include(js => js.JobApplications) 
-                .ThenInclude(ja => ja.Vacancy)    
-                .ThenInclude(v => v.Recruiter)  
-                .ThenInclude(r => r.Company)    
+                .Include(js => js.JobApplications)
+                .ThenInclude(ja => ja.Vacancy)
+                .ThenInclude(v => v.Recruiter)
+                .ThenInclude(r => r.Company)
                 .FirstOrDefaultAsync(js => js.AppUserId == appUserId);
 
             if (jobSeeker is not JobSeeker)
