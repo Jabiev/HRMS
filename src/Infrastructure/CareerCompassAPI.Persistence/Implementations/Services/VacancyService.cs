@@ -89,7 +89,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _recruiterWriteRepository.SaveChangesAsync();
 
             var followers = await _followerService.GetAllFollowersByCompanyId(companyId);
-            int batchSize = 50; 
+            int batchSize = 50;
             int totalFollowers = followers.Count;
 
             for (int i = 0; i < totalFollowers; i += batchSize)
@@ -99,7 +99,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
                 foreach (var follower in currentBatch)
                 {
-                    var subject = $"New job vacancy posted by {company.Name}"; 
+                    var subject = $"New job vacancy posted by {company.Name}";
                     var content = $"Check out the new job vacancy for the role of {vacancyCreateDto.jobTitle}.";
 
                     Message message = new Message(new List<string> { follower.email }, subject, content);
@@ -109,11 +109,11 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 }
                 try
                 {
-                    await Task.WhenAll(tasks); 
+                    await Task.WhenAll(tasks);
                 }
                 catch (Exception ex)
                 {
-                   //TODO: Exception Handling
+                    //TODO: Exception Handling
                 }
             }
 
@@ -130,7 +130,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             await _context.SaveChangesAsync();
         }
 
-
         public async Task<List<VacancyGetDto>> GetBySearch(string jobTitle)
         {
             var vacancies = await _context.Vacancy
@@ -138,58 +137,60 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
                 .ToListAsync();
             return _mapper.Map<List<VacancyGetDto>>(vacancies);
         }
-        public async Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle, Guid? locationId, string sortOrder, string? jobType, decimal? minSalary,
+
+        public async Task<List<VacancyGetDetailsDto>> GetDetailsBySearch(string? jobTitle,
+            Guid? locationId,
+            string sortOrder,
+            string? jobType,
+            decimal? minSalary,
            decimal? maxSalary)
         {
-            IQueryable<Vacancy> query = _context.Vacancy
-                .Include(v => v.Company)
-                    .ThenInclude(c => c.Details)
-                .Include(v => v.JobLocation)
-                .Include(v => v.JobType)
-                .Include(v => v.ShiftAndSchedules)
-                .Where(v => v.IsDeleted == false);
+            var normalizedJobTitle = jobTitle?.ToLower();
+            var normalizedJobType = jobType?.ToLower();
 
-            if (!string.IsNullOrEmpty(jobTitle))
-            {
-                query = query.Where(v => v.JobTitle.ToLower().Contains(jobTitle.ToLower()));
-            }
+            var query = _context.Vacancy
+                .AsNoTrackingWithIdentityResolution()
+                .AsSplitQuery()
+                .Where(v => !v.IsDeleted);
+
+            if (!string.IsNullOrWhiteSpace(normalizedJobTitle))
+                query = query.Where(v => v.JobTitle.ToLower().Contains(normalizedJobTitle));
 
             if (locationId.HasValue)
-            {
                 query = query.Where(v => v.JobLocationId == locationId.Value);
-            }
-            if (!string.IsNullOrEmpty(jobType) && jobType != "All")
-            {
-                query = query.Where(v => v.JobType.Any(jt => jt.TypeName.ToLower() == jobType.ToLower()));
-            }
 
+            if (!string.IsNullOrWhiteSpace(normalizedJobType) && normalizedJobType != "all")
+                query = query.Where(v => v.JobType.Any(jt => jt.TypeName.ToLower() == normalizedJobType));
 
-            if (sortOrder == "asc")
-            {
-                query = query.OrderBy(v => v.DateCreated);
-            }
-            else if (sortOrder == "desc")
-            {
-                query = query.OrderByDescending(v => v.DateCreated);
-            }
-            var vacancies = await query.ToListAsync();
+            if (minSalary.HasValue)
+                query = query.Where(v => v.Salary >= minSalary.Value);
 
-            return vacancies.Select(v => new VacancyGetDetailsDto(
-                v.Id,
-                v.JobTitle,
-                v.Company.Name,
-                v.JobLocation.Location,
-                v.Salary,
-                v.JobType.Select(jt => jt.TypeName).ToList(),
-                v.ShiftAndSchedules.Select(ss => ss.ShiftName).ToList(),
-                v.Description,
-                v.Company.Details.Link,
-                v.DateCreated,
-                v.ApplicationLimit,
-                v.CurrentApplicationCount
-            )).ToList();
+            if (maxSalary.HasValue)
+                query = query.Where(v => v.Salary <= maxSalary.Value);
+
+            query = sortOrder?.ToLower() switch
+            {
+                "asc" => query.OrderBy(v => v.DateCreated),
+                "desc" => query.OrderByDescending(v => v.DateCreated),
+                _ => query.OrderByDescending(v => v.DateCreated)
+            };
+
+            var result = await query.Select(v => new VacancyGetDetailsDto(v.Id,
+                    v.JobTitle,
+                    v.Company != null ? v.Company.Name : string.Empty,
+                    v.JobLocation != null ? v.JobLocation.Location : string.Empty,
+                    v.Salary,
+                    v.JobType.Select(jt => jt.TypeName).ToList(),
+                    v.ShiftAndSchedules.Select(ss => ss.ShiftName).ToList(),
+                    v.Description,
+                    v.Company != null && v.Company.Details != null ? v.Company.Details.Link : string.Empty,
+                    v.DateCreated,
+                    v.ApplicationLimit,
+                    v.CurrentApplicationCount))
+            .ToListAsync();
+
+            return result;
         }
-
 
         public async Task<List<VacancyGetByIdDto>> GetVacancyByRecruiterId(Guid id)
         {
@@ -209,7 +210,6 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             )).ToList();
             return mappedList;
         }
-
 
         public async Task UpdateVacancy(VacancyUpdateDto vacancyUpdateDto)
         {

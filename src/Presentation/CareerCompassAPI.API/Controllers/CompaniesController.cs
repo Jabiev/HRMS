@@ -39,7 +39,6 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> GetDetails([FromQuery] Guid companyId)
     {
         CompanyGetDto response = await _companyService.GetCompanyDetailsById(companyId);

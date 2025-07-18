@@ -14,6 +14,7 @@ using CareerCompassAPI.Persistence.Exceptions.AuthExceptions;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Text;
 
 namespace CareerCompassAPI.Persistence.Implementations.Services;
@@ -65,6 +66,15 @@ public class AuthService : IAuthService
         AppUser user = await _userManager.FindByEmailAsync(userSignInDto.email);
         if (user is null)
             throw new SignInFailureException("Failed to sign in");
+
+        if (!user.EmailConfirmed)
+        {
+            var userId = Guid.Parse(user.Id);
+            var title = "Email didn't confirmed";
+            var message = "Please check your inbox.";
+            BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(userId, title, message), TimeSpan.FromSeconds(5));
+            throw new SignInFailureException("Email didn't confirmed. Please check your inbox.");
+        }
 
         SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, userSignInDto.password, true);
         if (!result.Succeeded)
@@ -128,6 +138,9 @@ public class AuthService : IAuthService
             }
             throw new UserRegistrationException(errorMessage.ToString());
         }
+
+        //await SendConfirmationEmailAsync(appUser);//TODO: THEN LOOK AT THIS
+
         if (userRegisterDto.role == Roles.JobSeeker)
         {
             JobSeeker jobSeeker = new()
@@ -161,6 +174,8 @@ public class AuthService : IAuthService
             var message = "Please register your company's name before proceeding to post any job vacancies.";
             BackgroundJob.Schedule<INotificationService>(x => x.CreateAsync(userId, title, message), TimeSpan.FromSeconds(10));
         }
+
+        await SendConfirmationEmailAsync(appUser);
     }
 
     public async Task ResetPassword(ResetPasswordDto resetPasswordDto, string userId, string token)
@@ -211,10 +226,34 @@ public class AuthService : IAuthService
         return tokenResponse;
     }
 
+    public async Task ConfirmEmailAsync(string userId, string token)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+            throw new NotFoundException("User can not be found.");
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        if (!result.Succeeded)
+            throw new InvalidOperationException("Email confirmation failed.");
+    }
+
+    #region Private Methods
+
+    private async Task SendConfirmationEmailAsync(AppUser user)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var encodedToken = WebUtility.UrlEncode(token);
+        var confirmationLink = $"https://localhost:7013/api/Accounts/ConfirmEmail?userId={user.Id}&token={encodedToken}";
+
+        await _mailService.SendEmailConfirmationAsync(user, confirmationLink);
+    }
+
     private string GenerateResetPasswordUrl(string userId, string token)
     {
         var baseUrl = "http://localhost:3000";
         var resetPasswordPath = $"/passwordreset?userId={userId}&token={token}";
         return baseUrl + resetPasswordPath;
     }
+
+    #endregion
 }

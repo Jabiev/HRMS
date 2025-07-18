@@ -92,4 +92,105 @@ public class AccountsController : ControllerBase
             return BadRequest("Something went wrong");
         }
     }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> ConfirmEmail([FromQuery] string userId,
+       [FromQuery] string token)
+    {
+        await _authService.ConfirmEmailAsync(userId, token);
+        return Content(GetEmailConfirmedHtml(), "text/html");
+    }
+
+    #region Private
+
+    private string GetEmailConfirmedHtml()
+    {
+        return @"<!DOCTYPE html>
+        <html lang=""en"">
+        <head>
+          <meta charset=""UTF-8"" />
+          <meta name=""viewport"" content=""width=device-width, initial-scale=1.0""/>
+          <title>Email Confirmed</title>
+          <link rel=""icon"" href=""https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/2705.svg"" type=""image/svg+xml"">
+          <style>
+            body {
+              margin: 0;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+              color: white;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+              overflow: hidden;
+              text-align: center;
+            }
+
+            .logo {
+              max-width: 150px;
+              margin-bottom: 20px;
+            }
+
+            .card {
+              background: rgba(255, 255, 255, 0.05);
+              padding: 40px;
+              border-radius: 16px;
+              box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+              backdrop-filter: blur(12px);
+              max-width: 400px;
+            }
+
+            .card h1 {
+              font-size: 2em;
+              margin-bottom: 10px;
+              color: #ffcc00;
+            }
+
+            .card p {
+              font-size: 1.1em;
+              color: #ddd;
+            }
+
+            .success-icon {
+              font-size: 4em;
+              color: #00ff99;
+              margin-bottom: 20px;
+              animation: pop 0.6s ease-out;
+            }
+
+            @keyframes pop {
+              0% { transform: scale(0); opacity: 0; }
+              60% { transform: scale(1.2); opacity: 1; }
+              100% { transform: scale(1); }
+            }
+
+            .footer {
+              position: absolute;
+              bottom: 20px;
+              font-size: 0.9em;
+              color: #aaa;
+            }
+
+            @media (max-width: 500px) {
+              .card {
+                margin: 0 20px;
+                padding: 30px 20px;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class=""card"">
+            <div class=""success-icon"">✅</div>
+            <h1>Email Confirmed!</h1>
+            <p>Thank you for verifying your email.<br/>You can now begin!</p>
+          </div>
+
+          <div class=""footer"">© 2025 by 𝕵 𝐀 𝕭 𝐈 𝕰 𝐕 and L E O. All rights reserved.</div>
+        </body>
+        </html>";
+    }
+
+    #endregion
 }

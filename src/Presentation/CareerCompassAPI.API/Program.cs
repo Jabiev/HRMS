@@ -26,7 +26,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(identityOption =>
     identityOption.User.RequireUniqueEmail = true;
     identityOption.Password.RequiredLength = 8;
     identityOption.Lockout.MaxFailedAccessAttempts = 3;
-    //identityOption.SignIn.RequireConfirmedEmail = true;
+    identityOption.SignIn.RequireConfirmedEmail = true;
 })
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<CareerCompassDbContext>();
