@@ -81,15 +81,19 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
 
         public async Task<JobSeekerGetDto> GetByUserId(Guid userId)
         {
-            var response = await _jobSeekerReadRepository.GetByUserIdAsync(userId);
-            var userResponse = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId.ToString());
-            JobSeekerGetDto jobSeeker = new(
-                id: response.Id,
-                firstName: response.FirstName,
-                lastName: response.LastName,
-                email: userResponse.Email,
-                phoneNumber: userResponse.PhoneNumber);
-            return jobSeeker;
+            var jobSeeker = await _jobSeekerReadRepository.GetByUserIdAsync(userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId.ToString());
+
+            if (jobSeeker is null || user is null)
+                throw new NotFoundException("Jobseeker or user cannot be found");
+
+            var result = new JobSeekerGetDto(jobSeeker.Id, 
+                jobSeeker.FirstName,
+                jobSeeker.LastName,
+                user.Email,
+                user.PhoneNumber);
+
+            return result;
         }
 
         public async Task UploadLogoAsync(string appUserId, JobseekerAvatarUploadDto avatarUploadDto)

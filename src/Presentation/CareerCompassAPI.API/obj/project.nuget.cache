@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Hs/fkrvBC+k=",
+  "dgSpecHash": "Yh5btlKjEbM=",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\Desktop\\HRMS\\src\\Presentation\\CareerCompassAPI.API\\CareerCompassAPI.API.csproj",
   "expectedPackageFiles": [
@@ -15,10 +15,10 @@
     "C:\\Users\\HP\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.1\\fluentvalidation.aspnetcore.11.3.1.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.0.0\\fluentvalidation.dependencyinjectionextensions.12.0.0.nupkg.sha512",
-    "C:\\Users\\HP\\.nuget\\packages\\hangfire.aspnetcore\\1.8.17\\hangfire.aspnetcore.1.8.17.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\hangfire.aspnetcore\\1.8.20\\hangfire.aspnetcore.1.8.20.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\hangfire.core\\1.8.20\\hangfire.core.1.8.20.nupkg.sha512",
-    "C:\\Users\\HP\\.nuget\\packages\\hangfire.netcore\\1.8.17\\hangfire.netcore.1.8.17.nupkg.sha512",
-    "C:\\Users\\HP\\.nuget\\packages\\hangfire.postgresql\\1.20.10\\hangfire.postgresql.1.20.10.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\hangfire.netcore\\1.8.20\\hangfire.netcore.1.8.20.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\hangfire.postgresql\\1.20.12\\hangfire.postgresql.1.20.12.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\mailkit\\3.2.0\\mailkit.3.2.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.0\\microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",
@@ -74,18 +74,5 @@
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.12\\microsoft.aspnetcore.app.ref.8.0.12.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.12\\microsoft.netcore.app.host.win-x64.8.0.12.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1608",
-      "level": "Warning",
-      "message": "Detected package version outside of dependency constraint: Hangfire.NetCore 1.8.17 requires Hangfire.Core (= 1.8.17) but version Hangfire.Core 1.8.20 was resolved.",
-      "projectPath": "C:\\Users\\HP\\Desktop\\HRMS\\src\\Presentation\\CareerCompassAPI.API\\CareerCompassAPI.API.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\HP\\Desktop\\HRMS\\src\\Presentation\\CareerCompassAPI.API\\CareerCompassAPI.API.csproj",
-      "libraryId": "Hangfire.Core",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }

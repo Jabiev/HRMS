@@ -1227,11 +1227,11 @@
             },
             "Hangfire.AspNetCore": {
               "target": "Package",
-              "version": "[1.8.17, )"
+              "version": "[1.8.20, )"
             },
             "Hangfire.PostgreSql": {
               "target": "Package",
-              "version": "[1.20.10, )"
+              "version": "[1.20.12, )"
             },
             "Microsoft.AspNetCore.Identity": {
               "target": "Package",

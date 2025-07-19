@@ -19,23 +19,20 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             _recruiterReadRepository = recruiterReadRepository;
             _context = context;
         }
+
         public async Task<RecruiterGetDto> GetRecruiterByUserId(Guid userId)
         {
             Recruiter recruiter = await _recruiterReadRepository.GetByUserIdAsync(userId);
-            if (recruiter is not Recruiter)
-            {
-                throw new ArgumentNullException();
-            }
-            Guid subscriptionId = recruiter.Subscription.Id;
+            if (recruiter is null)
+                throw new Exception("Recruiter can not be found for given user id.");
 
-            RecruiterGetDto recruiterGetDto = new(
-                id: recruiter.Id,
-                AppUserId: recruiter.AppUserId,
-                CompanyId: recruiter.CompanyId,
-                FirstName: recruiter.FirstName,
-                LastName: recruiter.LastName,
-                SubscriptionId: subscriptionId,
-                SubscriptionStartDate: recruiter.SubscriptionStartDate
+            RecruiterGetDto recruiterGetDto = new(recruiter.Id, 
+                recruiter.AppUserId,
+                recruiter.CompanyId,
+                recruiter.FirstName,
+                recruiter.LastName,
+                recruiter.Subscription?.Id ?? Guid.Empty,
+                recruiter.SubscriptionStartDate
             );
             return recruiterGetDto;
         }

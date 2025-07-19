@@ -166,10 +166,10 @@
           }
         }
       },
-      "Hangfire.AspNetCore/1.8.17": {
+      "Hangfire.AspNetCore/1.8.20": {
         "type": "package",
         "dependencies": {
-          "Hangfire.NetCore": "[1.8.17]"
+          "Hangfire.NetCore": "[1.8.20]"
         },
         "compile": {
           "lib/netcoreapp3.0/Hangfire.AspNetCore.dll": {
@@ -245,10 +245,10 @@
           }
         }
       },
-      "Hangfire.NetCore/1.8.17": {
+      "Hangfire.NetCore/1.8.20": {
         "type": "package",
         "dependencies": {
-          "Hangfire.Core": "[1.8.17]"
+          "Hangfire.Core": "[1.8.20]"
         },
         "compile": {
           "lib/netstandard2.1/Hangfire.NetCore.dll": {
@@ -261,7 +261,7 @@
           }
         }
       },
-      "Hangfire.PostgreSql/1.20.10": {
+      "Hangfire.PostgreSql/1.20.12": {
         "type": "package",
         "dependencies": {
           "Dapper": "2.0.123",
@@ -1286,8 +1286,8 @@
           "CareerCompassAPI.Infrastructure": "1.0.0",
           "FluentValidation.AspNetCore": "11.3.1",
           "FluentValidation.DependencyInjectionExtensions": "12.0.0",
-          "Hangfire.AspNetCore": "1.8.17",
-          "Hangfire.PostgreSql": "1.20.10",
+          "Hangfire.AspNetCore": "1.8.20",
+          "Hangfire.PostgreSql": "1.20.12",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.0",
           "Stripe.net": "48.3.0"
@@ -1516,10 +1516,10 @@
         "lib/net8.0/FluentValidation.DependencyInjectionExtensions.xml"
       ]
     },
-    "Hangfire.AspNetCore/1.8.17": {
-      "sha512": "6sFVmIySXX4n8GDrXYRxlXdFzsF6H+q5WPeDDBIQ2qiGDIEzMQvO8P01s3Kq9rRL3YwPuwjhrVcLI6c+ESIVig==",
+    "Hangfire.AspNetCore/1.8.20": {
+      "sha512": "OoVxOZanKlnpyAuCAYWKGztQHYw6GTQxQD/W3bfOfFsD+8fYp7FEDKbMEsrrMvAtF+gLiY1HNk9xYjUpNnSxGA==",
       "type": "package",
-      "path": "hangfire.aspnetcore/1.8.17",
+      "path": "hangfire.aspnetcore/1.8.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1529,7 +1529,7 @@
         "LICENSE_ROYALTYFREE",
         "LICENSE_STANDARD",
         "NOTICES",
-        "hangfire.aspnetcore.1.8.17.nupkg.sha512",
+        "hangfire.aspnetcore.1.8.20.nupkg.sha512",
         "hangfire.aspnetcore.nuspec",
         "icon.png",
         "lib/net451/Hangfire.AspNetCore.dll",
@@ -1627,10 +1627,10 @@
         "lib/netstandard2.0/zh/Hangfire.Core.resources.dll"
       ]
     },
-    "Hangfire.NetCore/1.8.17": {
-      "sha512": "COFpdp1JOMj9gd76NObq0ejZv0UAfpa6d3uKdtc96+NT/PhjXVOT5im2Mff3jqBdwEcQodw2xS8oFUs863clvw==",
+    "Hangfire.NetCore/1.8.20": {
+      "sha512": "QCMoUaOokUsScJIyyo9SDVaAOpPIaIpBhGzN7M9GgZI9Kzetd7Y+hmFlQUTpROi7bcASIGoTOPnPoqdNA///Rw==",
       "type": "package",
-      "path": "hangfire.netcore/1.8.17",
+      "path": "hangfire.netcore/1.8.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1640,7 +1640,7 @@
         "LICENSE_ROYALTYFREE",
         "LICENSE_STANDARD",
         "NOTICES",
-        "hangfire.netcore.1.8.17.nupkg.sha512",
+        "hangfire.netcore.1.8.20.nupkg.sha512",
         "hangfire.netcore.nuspec",
         "icon.png",
         "lib/net451/Hangfire.NetCore.dll",
@@ -1655,15 +1655,15 @@
         "lib/netstandard2.1/Hangfire.NetCore.xml"
       ]
     },
-    "Hangfire.PostgreSql/1.20.10": {
-      "sha512": "Nn/88KoBvmy/xyopC9s+lXkwxQ6VB+RKyM8tjX3EgfSARDFxl2sEsFu0lw7WrjFdosg+E3naGzM5MzyiiL5i6w==",
+    "Hangfire.PostgreSql/1.20.12": {
+      "sha512": "KvozigeVgbYSinFmaj5qQWRaBG7ey/S73UP6VLIOPcP1UrZO0/6hSw4jN53TKpWP2UsiMuYONRmQbFDxGAi4ug==",
       "type": "package",
-      "path": "hangfire.postgresql/1.20.10",
+      "path": "hangfire.postgresql/1.20.12",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.md",
-        "hangfire.postgresql.1.20.10.nupkg.sha512",
+        "hangfire.postgresql.1.20.12.nupkg.sha512",
         "hangfire.postgresql.nuspec",
         "lib/netstandard2.0/Hangfire.PostgreSql.dll",
         "lib/netstandard2.0/Hangfire.PostgreSql.xml"
@@ -3885,17 +3885,5 @@
         }
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1608",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package version outside of dependency constraint: Hangfire.NetCore 1.8.17 requires Hangfire.Core (= 1.8.17) but version Hangfire.Core 1.8.20 was resolved.",
-      "libraryId": "Hangfire.Core",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  }
 }
