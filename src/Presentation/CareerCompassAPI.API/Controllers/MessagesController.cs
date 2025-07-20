@@ -10,7 +10,6 @@ namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class MessagesController : ControllerBase
 {
     private readonly IMessageService _messageService;

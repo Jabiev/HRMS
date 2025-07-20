@@ -22,7 +22,6 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> Create([FromBody] CompanyCreateDto companyCreateDto, [FromQuery] string userId)
     {
         await _companyService.CreateAsync(companyCreateDto, userId);
@@ -31,7 +30,6 @@ public class CompaniesController : ControllerBase
 
 
     [HttpDelete("[action]/{companyId}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> Remove(Guid companyId)
     {
         await _companyService.Remove(companyId);
@@ -55,7 +53,6 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> UploadLogo([FromQuery] Guid companyId, CompanyLogoUploadDto companyLogoUploadDto)
     {
         await _companyService.UploadLogoAsync(companyId, companyLogoUploadDto);
@@ -71,7 +68,6 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPut("[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> UpdateDetails(CompanyDetailsUpdateDto companyDetailsUpdateDto)
     {
         await _companyService.CompanyDetailsUpdate(companyDetailsUpdateDto);

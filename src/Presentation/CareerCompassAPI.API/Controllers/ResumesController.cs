@@ -8,7 +8,6 @@ namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ResumesController : ControllerBase
 {
     private readonly IResumeService _resumeService;

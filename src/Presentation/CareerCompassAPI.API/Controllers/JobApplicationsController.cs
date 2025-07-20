@@ -10,7 +10,6 @@ namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class JobApplicationsController : ControllerBase
 {
     private readonly IApplicationService _applicationService;
@@ -35,7 +34,6 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> GetApplicants([FromQuery] string appUserId)
     {
         var response = await _applicationService.GetApplicationsByAppUserId(appUserId);
@@ -43,7 +41,6 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpGet("[action]/{appUserId}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> GetApprovedApplicants([FromRoute] string appUserId)
     {
         var response = await _applicationService.GetApprovedApplicantsByAppUserId(appUserId);
@@ -51,7 +48,6 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpPut("[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> UpdateStatus([FromBody] ApplicationStatusUpdateDto applicationStatusUpdateDto)
     {
         await _applicationService.UpdateAsync(applicationStatusUpdateDto);
@@ -59,7 +55,6 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpGet("[action]/{appUserId}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> GetApprovedPositions([FromRoute] string appUserId)
     {
         var response = await _jobSeekerService.GetApprovedPositionsByAppUserId(appUserId);

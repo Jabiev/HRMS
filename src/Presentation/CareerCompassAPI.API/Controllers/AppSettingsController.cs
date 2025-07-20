@@ -8,7 +8,6 @@ namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterOrAdmin")]
 public class AppSettingsController : ControllerBase
 {
     private readonly IAppSettingService _settingService;

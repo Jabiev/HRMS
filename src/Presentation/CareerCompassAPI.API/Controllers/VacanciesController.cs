@@ -8,7 +8,6 @@ namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-
 public class VacanciesController : ControllerBase
 {
     private readonly IVacancyService _vacancyService;
@@ -19,7 +18,6 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> Post(VacancyCreateDto vacancyCreateDto, [FromQuery] string userId, [FromQuery] Guid companyId)
     {
         await _vacancyService.Create(vacancyCreateDto, userId, companyId);
@@ -27,6 +25,7 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpGet("[action]")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetBySearch(string jobTitle)
     {
         var response = await _vacancyService.GetBySearch(jobTitle);
@@ -34,6 +33,7 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpGet("GetFilteredSearch")]
+    [AllowAnonymous]
     public async Task<ActionResult<List<VacancyGetDetailsDto>>> GetFilteredSearch([FromQuery(Name = "job-title")] string? jobTitle,
         [FromQuery(Name = "location-id")] Guid? locationId,
         [FromQuery] string sortOrder,
@@ -47,6 +47,7 @@ public class VacanciesController : ControllerBase
 
 
     [HttpGet("[action]")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetVacanciesById(Guid id)
     {
         var response = await _vacancyService.GetVacancyByRecruiterId(id);
@@ -54,7 +55,6 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> DeleteVacancy(Guid id)
     {
         await _vacancyService.DeleteVacancyById(id);
@@ -62,7 +62,6 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpPut("[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> UpdateExistingVacancy(VacancyUpdateDto vacancyUpdateDto)
     {
         await _vacancyService.UpdateVacancy(vacancyUpdateDto);

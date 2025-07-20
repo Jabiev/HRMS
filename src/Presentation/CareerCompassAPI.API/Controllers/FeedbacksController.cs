@@ -8,7 +8,6 @@ namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class FeedbacksController : ControllerBase
 {
     private readonly IFeedbackService _feedbackService;

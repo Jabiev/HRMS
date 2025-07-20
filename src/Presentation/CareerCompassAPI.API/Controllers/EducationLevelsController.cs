@@ -7,7 +7,6 @@ namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class EducationLevelsController : ControllerBase
 {
     private readonly IEducationLevelService _educationLevelService;
