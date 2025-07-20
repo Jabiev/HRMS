@@ -1,11 +1,14 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Storage.Azure;
 using CareerCompassAPI.Application.DTOs.File_DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class FilesController : ControllerBase
 {
     private readonly IAzureStorage _azureStorage;
@@ -24,6 +27,7 @@ public class FilesController : ControllerBase
     }
 
     [HttpGet("[action]")]
+    [AllowAnonymous]
     public IActionResult ListFiles(string containerName)
     {
         var files = _azureStorage.GetFiles(containerName);

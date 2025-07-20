@@ -9,7 +9,8 @@ namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Master,Admin")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
+
 public class IndustriesController : ControllerBase
 {
     private readonly IIndustryService _industryService;
@@ -34,7 +35,6 @@ public class IndustriesController : ControllerBase
     }
 
     [HttpDelete("[action]/{industryId}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterOrAdmin")]
     public async Task<IActionResult> Remove([FromRoute] Guid industryId)
     {
         await _industryService.Remove(industryId);

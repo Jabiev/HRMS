@@ -1,12 +1,14 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Resume_DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ResumesController : ControllerBase
 {
     private readonly IResumeService _resumeService;

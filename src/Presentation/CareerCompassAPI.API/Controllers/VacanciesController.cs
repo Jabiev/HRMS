@@ -19,7 +19,7 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterOrAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> Post(VacancyCreateDto vacancyCreateDto, [FromQuery] string userId, [FromQuery] Guid companyId)
     {
         await _vacancyService.Create(vacancyCreateDto, userId, companyId);
@@ -54,7 +54,7 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterOrAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> DeleteVacancy(Guid id)
     {
         await _vacancyService.DeleteVacancyById(id);
@@ -62,7 +62,7 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpPut("[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterOrAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
     public async Task<IActionResult> UpdateExistingVacancy(VacancyUpdateDto vacancyUpdateDto)
     {
         await _vacancyService.UpdateVacancy(vacancyUpdateDto);

@@ -57,6 +57,7 @@ public class DashboardsController : ControllerBase
     }
 
     [HttpDelete("[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMaster")]
     public async Task<IActionResult> RemoveCompany([FromQuery] Guid companyId)
     {
         await _dashboardService.RemoveCompany(companyId);
@@ -195,6 +196,7 @@ public class DashboardsController : ControllerBase
     }
 
     [HttpDelete("[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMaster")]
     public async Task<IActionResult> RemoveSubscription([FromQuery] Guid subscriptionId)
     {
         await _dashboardService.RemoveSubscription(subscriptionId);
@@ -202,6 +204,7 @@ public class DashboardsController : ControllerBase
     }
 
     [HttpPut("[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMaster")]
     public async Task<IActionResult> UpdateSubscription(SubscriptionUpdateDto subscriptionUpdateDto)
     {
         await _dashboardService.UpdateSubscription(subscriptionUpdateDto);
@@ -293,6 +296,7 @@ public class DashboardsController : ControllerBase
     }
 
     [HttpDelete("[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMaster")]
     public async Task<IActionResult> RemoveResume([FromQuery] Guid resumeId)
     {
         await _dashboardService.RemoveResume(resumeId);

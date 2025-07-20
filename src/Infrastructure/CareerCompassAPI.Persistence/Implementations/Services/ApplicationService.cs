@@ -160,7 +160,7 @@ namespace CareerCompassAPI.Persistence.Implementations.Services
             return approvedApplicantDtos;
         }
 
-        public async Task Remove(Guid applicationId)
+        public async Task Remove(Guid applicationId)//TODO: LOOK AT THIS FOR PENDING and others
         {
             var application = await _jobApplicationReadRepository.GetByIdAsync(applicationId);
             if (application is null)

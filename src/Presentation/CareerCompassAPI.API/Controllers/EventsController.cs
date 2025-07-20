@@ -1,11 +1,14 @@
 ﻿using CareerCompassAPI.Application.Abstraction.Services;
 using CareerCompassAPI.Application.DTOs.Event_DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareerCompassAPI.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireMasterAdminRecruiter")]
 public class EventsController : ControllerBase
 {
     private readonly IEventService _eventService;
@@ -23,6 +26,7 @@ public class EventsController : ControllerBase
     }
 
     [HttpGet("[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetEvents([FromQuery] string userId)
     {
         var response = await _eventService.GetEventsByUserId(userId);
